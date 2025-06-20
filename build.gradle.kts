@@ -10,6 +10,7 @@ description = "Bounce"
 dependencies {
     implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
+    implementation(project(":common"))
     implementation(libs.adventure)
 
     compileOnly(libs.minestom)
