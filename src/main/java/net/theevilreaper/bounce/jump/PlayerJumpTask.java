@@ -13,6 +13,7 @@ import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.event.ScoreDeathUpdateEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -46,41 +47,64 @@ public class PlayerJumpTask {
 
     private void onTick() {
         Instance instance = player.getInstance();
-        Pos playerPos = player.getPosition();
-        Pos blockPos = playerPos.sub(0, 1, 0);
-        Block blockBelow = instance.getBlock(blockPos);
+        List<int[]> checkPositions = getCheckPositions();
 
-        //System.out.printf("Player %s is on block: %s at position %s%n", player.getUsername(), blockBelow, blockPos);
+        Block foundJumpBlock = null;
 
-        if (blockBelow.isAir()) {
-            lastBlockBelow = Block.AIR; // reset when in air
-            return;
-        }
+        for (int[] pos : checkPositions) {
+            Block block = instance.getBlock(pos[0], pos[1], pos[2]);
 
-        if (blockBelow == Block.REDSTONE_BLOCK) {
-            player.teleport(map.getGameSpawn());
-            EventDispatcher.call(new ScoreDeathUpdateEvent(player));
-            lastBlockBelow = blockBelow;
-            return;
-        }
+            if (block == Block.REDSTONE_BLOCK) {
+                player.teleport(map.getGameSpawn());
+                EventDispatcher.call(new ScoreDeathUpdateEvent(player));
+                lastBlockBelow = block;
+                return;
+            }
 
-        if (!blockBelow.compare(lastBlockBelow) && blockPushMap.containsKey(blockBelow)) {
-            // Only push if player is falling
-            if (player.getVelocity().y() < 0) {
-                long now = System.currentTimeMillis();
-                if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
-                    Function<GameMap, Double> pushFunc = blockPushMap.get(blockBelow);
-                    double pushStrength = pushFunc.apply(map) * 10;
+            if (block == Block.LAVA) {
+                player.teleport(map.getGameSpawn());
+                lastBlockBelow = block;
+                return;
+            }
 
-                    Vec push = new Vec(0, pushStrength, 0); // Only push upwards
-                    player.setVelocity(push);
-
-                    lastPushTime = now;
-                }
+            if (blockPushMap.containsKey(block) && !block.compare(lastBlockBelow)) {
+                foundJumpBlock = block;
             }
         }
 
-        lastBlockBelow = blockBelow; // Important!
+        if (foundJumpBlock == null) {
+            lastBlockBelow = Block.AIR;
+            return;
+        }
+        if (player.getVelocity().y() < 0) {
+            long now = System.currentTimeMillis();
+            if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
+                Function<GameMap, Double> pushFunc = blockPushMap.get(foundJumpBlock);
+                double pushStrength = pushFunc.apply(map) * 10;
+                Vec push = new Vec(0, pushStrength, 0); // Only push upwards
+                player.setVelocity(push);
+                lastPushTime = now;
+            }
+        }
+        lastBlockBelow = foundJumpBlock;
+    }
+
+    private @NotNull List<int[]> getCheckPositions() {
+        Pos playerPos = player.getPosition();
+        double halfWidth = 0.3;
+        double minX = playerPos.x() - halfWidth;
+        double maxX = playerPos.x() + halfWidth;
+        double minZ = playerPos.z() - halfWidth;
+        double maxZ = playerPos.z() + halfWidth;
+        int y = (int) Math.floor(playerPos.y() - 1);
+
+        return List.of(
+                new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(playerPos.z())}, // center
+                new int[]{(int) Math.floor(minX), y, (int) Math.floor(playerPos.z())},         // minX
+                new int[]{(int) Math.floor(maxX), y, (int) Math.floor(playerPos.z())},         // maxX
+                new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(minZ)},         // minZ
+                new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(maxZ)}          // maxZ
+        );
     }
 
     public void cancel() {
