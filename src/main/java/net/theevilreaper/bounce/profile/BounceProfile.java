@@ -1,27 +1,32 @@
 package net.theevilreaper.bounce.profile;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.Bounce;
-import net.theevilreaper.bounce.map.BounceMap;
-import net.theevilreaper.bounce.util.PlayerJumpRunnable;
-import de.icevizion.api.profile.PlayerProfile;
-import de.icevizion.api.title.TitleManager;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
+import net.theevilreaper.bounce.common.map.GameMap;
+import net.theevilreaper.bounce.jump.PlayerJumpTask;
+import net.theevilreaper.bounce.util.GameMessages;
+import org.jetbrains.annotations.NotNull;
 
-public class BounceProfile extends PlayerProfile {
+import java.util.Objects;
 
+public final class BounceProfile implements Comparable<BounceProfile> {
+
+    private final Player player;
     private Player lastDamager;
-    private int points, kills, deaths;
-    private PlayerJumpRunnable jumpRunnable;
+    private int points;
+    private int kills;
+    private int deaths;
+    private PlayerJumpTask jumpRunnable;
+    private long firstReachTimestamp;
 
-    public BounceProfile(Player player) {
-        super(player);
+    public BounceProfile(@NotNull Player player) {
+        this.player = player;
     }
 
-    public void registerJumpRunnable(Bounce game, BounceMap bounceMap) {
-        this.jumpRunnable = new PlayerJumpRunnable(bounceMap, this);
-        this.jumpRunnable.runTaskTimer(game, 0,3);
+    public void registerJumpRunnable() {
+        this.jumpRunnable = new PlayerJumpTask(player);
     }
 
     public void setLastDamager(Player paramPlayer) {
@@ -36,11 +41,23 @@ public class BounceProfile extends PlayerProfile {
         ++deaths;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof BounceProfile that)) return false;
+        return Objects.equals(player, that.player);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(player);
+    }
+
     public void addPoints(int paramPoints) {
         points += paramPoints;
+        firstReachTimestamp = System.nanoTime();
         addKill();
         updateScoreboard();
-        TitleManager.sendActionBar(getPlayer(), "§e+ §6" + paramPoints + " §7Punkte");
+        player.sendActionBar(GameMessages.getCoinComponent(paramPoints, true));
     }
 
     public void removePoints(int paramPoints) {
@@ -48,20 +65,38 @@ public class BounceProfile extends PlayerProfile {
         if (points > 0) {
             points -= paramPoints;
             updateScoreboard();
-            TitleManager.sendActionBar(getPlayer(), "§c- §6" + paramPoints + " §7Punkte");
+            player.sendActionBar(GameMessages.getCoinComponent(paramPoints, false));
         }
     }
 
     public void sendStats(boolean winner) {
-        getPlayer().sendMessage("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        getPlayer().sendMessage("");
-        getPlayer().sendMessage("§eStats dieser Runde");
-        getPlayer().sendMessage(winner ? "§7Gewonnen: §a✔" : "§7Gewonnen: §c✘");
-        getPlayer().sendMessage("§7Punkte: §c" + points);
-        getPlayer().sendMessage("§7Kills: §c" + kills);
-        getPlayer().sendMessage("§7Tode: §c" + deaths);
-        getPlayer().sendMessage("");
-        getPlayer().sendMessage("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        Component message = GameMessages.STATS_LINE
+                .append(Component.newline())
+                .append(Component.text("Round statistics", NamedTextColor.YELLOW))
+                .append(Component.newline())
+                .append(Component.text("Win: ", NamedTextColor.GRAY))
+                .append(Component.text(winner ? "✔" : "✘", winner ? NamedTextColor.GREEN : NamedTextColor.RED))
+                .append(Component.newline())
+                .append(Component.text("Points: ", NamedTextColor.GRAY)
+                        .append(Component.text(points, NamedTextColor.RED)))
+                .append(Component.newline())
+                .append(Component.text("Kills: ", NamedTextColor.GRAY)
+                        .append(Component.text(kills, NamedTextColor.RED)))
+                .append(Component.newline())
+                .append(Component.text("Tode: ", NamedTextColor.GRAY)
+                        .append(Component.text(deaths, NamedTextColor.RED)))
+                .append(Component.newline())
+                .append(GameMessages.STATS_LINE);
+
+        this.player.sendActionBar(message);
+    }
+
+    @Override
+    public int compareTo(@NotNull BounceProfile other) {
+        int pointComparison = Integer.compare(other.points, this.points); // Descending by points
+        if (pointComparison != 0) return pointComparison;
+
+        return Long.compare(this.firstReachTimestamp, other.firstReachTimestamp); // Ascending by timestamp
     }
 
     private void updateScoreboard() {
@@ -72,7 +107,11 @@ public class BounceProfile extends PlayerProfile {
         this.lastDamager = null;
     }
 
-    public PlayerJumpRunnable getJumpRunnable() {
+    public Player getPlayer() {
+        return player;
+    }
+
+    public PlayerJumpTask getJumpRunnable() {
         return jumpRunnable;
     }
 
