@@ -1,33 +1,44 @@
 package net.theevilreaper.bounce.listener;
 
-import net.theevilreaper.bounce.Bounce;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.theevilreaper.aves.util.functional.PlayerConsumer;
+import net.theevilreaper.bounce.timer.LobbyPhase;
+import net.theevilreaper.bounce.util.GameMessages;
+import net.theevilreaper.xerus.api.phase.Phase;
+import org.jetbrains.annotations.NotNull;
 
-public class PlayerJoinListener implements Listener {
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-    private final Bounce game;
+import static net.minestom.server.MinecraftServer.getConnectionManager;
 
-    public PlayerJoinListener(Bounce game) {
-        this.game = game;
+public class PlayerJoinListener implements Consumer<PlayerSpawnEvent> {
+
+    private final Supplier<Phase> phaseSupplier;
+    private final PlayerConsumer spawnConsumer;
+
+    public PlayerJoinListener(
+            @NotNull Supplier<Phase> phaseSupplier,
+            @NotNull PlayerConsumer spawnConsumer
+    ) {
+        this.phaseSupplier = phaseSupplier;
+        this.spawnConsumer = spawnConsumer;
     }
 
-    @EventHandler
-    public void on(PlayerJoinEvent event) {
-        final Player player = event.getPlayer();
+    @Override
+    public void accept(@NotNull PlayerSpawnEvent event) {
+        var player = event.getPlayer();
+        player.setDisplayName(Component.text(player.getUsername()));
 
-        player.getInventory().clear();
-        player.setScoreboard(game.getScoreboardUtil().getScoreboard());
+        Phase phase = phaseSupplier.get();
 
-        switch (game.getGameState()) {
-            case LOBBY:
-                event.setJoinMessage("§a● §r" + event.getPlayer().getDisplayName());
-                break;
-            default:
-                event.setJoinMessage(null);
-                break;
+        if (event.isFirstSpawn() && phase instanceof LobbyPhase lobbyPhase) {
+            Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getJoinMessage(player));
+            lobbyPhase.updatePlayerValues(player);
+            lobbyPhase.checkStartCondition();
+            this.spawnConsumer.accept(player);
         }
     }
 }

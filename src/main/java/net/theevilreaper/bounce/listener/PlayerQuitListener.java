@@ -3,19 +3,13 @@ package net.theevilreaper.bounce.listener;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.theevilreaper.bounce.Bounce;
-import net.theevilreaper.bounce.profile.BounceProfile;
+import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.timer.LobbyPhase;
+import net.theevilreaper.bounce.timer.PlayingPhase;
 import net.theevilreaper.bounce.util.GameMessages;
-import net.theevilreaper.xerus.api.phase.LinearPhaseSeries;
 import net.theevilreaper.xerus.api.phase.Phase;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -24,9 +18,11 @@ import static net.minestom.server.MinecraftServer.getConnectionManager;
 public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
 
     private final Supplier<Phase> phaseSupplier;
+    private final PlayerConsumer playerLeave;
 
-    public PlayerQuitListener(@NotNull Supplier<Phase> phaseSupplier) {
+    public PlayerQuitListener(@NotNull Supplier<Phase> phaseSupplier, @NotNull PlayerConsumer playerLeave) {
         this.phaseSupplier = phaseSupplier;
+        this.playerLeave = playerLeave;
     }
 
     @Override
@@ -34,8 +30,12 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
         Phase phase = phaseSupplier.get();
         Player player = event.getPlayer();
 
-        if (phase instanceof LobbyPhase lobbyPhase) {
-            this.handleLobbyQuit(lobbyPhase,player);
+        switch (phase) {
+            case LobbyPhase lobbyPhase -> handleLobbyQuit(lobbyPhase, player);
+            case PlayingPhase playingPhase -> handleGameQuit(playingPhase, player);
+            default -> {
+                Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
+            }
         }
     }
 
@@ -50,25 +50,13 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
         Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
     }
 
-    @EventHandler
-    public void on(PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
-        switch (game.getGameState()) {
-            case INGAME:
-                Optional<BounceProfile> profile = game.getProfileService().getProfile(player);
-                if (profile.isPresent()) {
-                    event.setQuitMessage("§c● §r" + player.getDisplayName());
-                    profile.get().getJumpRunnable().cancel();
-                    game.getScoreboardUtil().getScoreboard().resetScores(player.getDisplayName());
-                    game.getProfileService().removeProfile(player);
-                    game.getGameUtil().checkPlayer();
-                } else {
-                    event.setQuitMessage(null);
-                }
-                break;
-            default:
-                event.setQuitMessage("§c● §r" + player.getDisplayName());
-                break;
-        }
+    /**
+     * @param playingPhase
+     * @param player
+     */
+    private void handleGameQuit(@NotNull PlayingPhase playingPhase, @NotNull Player player) {
+        Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
+        playingPhase.handlePlayerCheck();
+        this.playerLeave.accept(player);
     }
 }
