@@ -4,6 +4,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
@@ -18,15 +19,22 @@ import static net.minestom.server.MinecraftServer.getConnectionManager;
 public class PlayingPhase extends TimedPhase {
 
     private final IntConsumer timeUpdater;
-
+    private final VoidConsumer startTrigger;
     private BounceGameFinishEvent.Reason reason;
 
-    public PlayingPhase(@NotNull IntConsumer timeUpdater) {
+    public PlayingPhase(@NotNull IntConsumer timeUpdater, @NotNull VoidConsumer startTrigger) {
         super("GamePhase", ChronoUnit.SECONDS, 1);
         this.setTickDirection(TickDirection.DOWN);
         this.setCurrentTicks(300);
 
         this.timeUpdater = timeUpdater;
+        this.startTrigger = startTrigger;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        startTrigger.apply();
     }
 
     @Override
@@ -38,7 +46,7 @@ public class PlayingPhase extends TimedPhase {
             case 2:
             case 1:
                 broadcast(Component.text("Works"));
-               // Bukkit.broadcastMessage(game.getPrefix() + "§cEs verbleiben noch §6" + getCurrentTime() + " §cSekunden");
+                // Bukkit.broadcastMessage(game.getPrefix() + "§cEs verbleiben noch §6" + getCurrentTime() + " §cSekunden");
                 break;
             default:
                 break;
@@ -56,7 +64,6 @@ public class PlayingPhase extends TimedPhase {
     }
 
 
-
     private void broadcast(@NotNull Component component) {
         Audience.audience(getConnectionManager().getOnlinePlayers())
                 .sendMessage(component);
@@ -65,16 +72,14 @@ public class PlayingPhase extends TimedPhase {
     public void handlePlayerCheck() {
         Collection<@NotNull Player> onlinePlayers = getConnectionManager().getOnlinePlayers();
 
-        if (onlinePlayers.isEmpty()) {
-            this.onSkip();
+        if (onlinePlayers.size() - 1 == 0) {
             this.reason = BounceGameFinishEvent.Reason.PLAYER_LEFT;
+            this.onSkip();
             return;
         }
 
-        if (onlinePlayers.size() == 1) {
-            setSkipping(true);
-            this.onSkip();
-            this.reason = BounceGameFinishEvent.Reason.ONE_PLAYER_LEFT;
-        }
+        setSkipping(true);
+        this.reason = BounceGameFinishEvent.Reason.ONE_PLAYER_LEFT;
+        this.onSkip();
     }
 }

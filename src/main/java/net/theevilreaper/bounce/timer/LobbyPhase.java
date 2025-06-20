@@ -2,7 +2,10 @@ package net.theevilreaper.bounce.timer;
 
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.sound.SoundEvent;
+import net.theevilreaper.bounce.event.GamePrepareEvent;
+import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
 import org.jetbrains.annotations.NotNull;
@@ -38,18 +41,10 @@ public class LobbyPhase extends TimedPhase {
     @Override
     public void onUpdate() {
         setLevel();
-       // this.timeUpdater.accept(getCurrentTicks());
-
-       // GameMapProvider gameMapProvider = (GameMapProvider) this.mapProvider;
         switch (getCurrentTicks()) {
             case 30, 20, 3, 1 -> broadcastTime();
-            case 10 -> {
+            case 10, 5 -> {
                 this.broadcastTime();
-               // gameMapProvider.loadGameChunks();
-            }
-            case 5 -> {
-                this.broadcastTime();
-               // gameMapProvider.triggerSpawnPlacement();
             }
             default -> {
                 // Nothing to do here
@@ -59,7 +54,7 @@ public class LobbyPhase extends TimedPhase {
 
     @Override
     protected void onFinish() {
-
+        EventDispatcher.call(new GamePrepareEvent());
     }
 
     private void setLevel() {
@@ -68,7 +63,7 @@ public class LobbyPhase extends TimedPhase {
 
     private void broadcastTime() {
         for (Player onlinePlayer : getConnectionManager().getOnlinePlayers()) {
-        //    onlinePlayer.sendMessage(GameMessages.getLobbyTime(getCurrentTicks()));
+            onlinePlayer.sendMessage(GameMessages.getLobbyTime(getCurrentTicks()));
             onlinePlayer.playSound(PLING, onlinePlayer.getPosition());
         }
     }
