@@ -14,10 +14,12 @@ import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.config.GameConfigReader;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
+import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.listener.PlayerJoinListener;
 import net.theevilreaper.bounce.listener.PlayerQuitListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
+import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
@@ -27,7 +29,7 @@ import net.theevilreaper.bounce.timer.RestartPhase;
 import net.theevilreaper.bounce.timer.TeleportPhase;
 import net.theevilreaper.bounce.util.ItemUtil;
 import net.theevilreaper.bounce.util.PlayerUtil;
-import net.theevilreaper.bounce.util.ScoreboardUtil;
+import net.theevilreaper.bounce.util.BounceScoreboard;
 import net.theevilreaper.xerus.api.phase.LinearPhaseSeries;
 import net.theevilreaper.xerus.api.phase.Phase;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +41,7 @@ public class Bounce implements ListenerHandling {
 
     private ProfileService profileService;
     private final GameConfig gameConfig;
-    private ScoreboardUtil scoreboardUtil;
+    private final BounceScoreboard scoreboard;
     private final ItemUtil itemUtil;
     private final MapProvider mapProvider;
     private final LinearPhaseSeries<Phase> phaseSeries;
@@ -53,23 +55,21 @@ public class Bounce implements ListenerHandling {
         this.phaseSeries = new LinearPhaseSeries<>();
         this.profileService = new ProfileService();
         this.playerUtil = new PlayerUtil(this.profileService);
-
-        this.registerCommands();
+        this.scoreboard = new BounceScoreboard();
         this.registerPhases();
     }
 
     public void load() {
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         registerCancelListener(globalEventHandler);
-        scoreboardUtil = new ScoreboardUtil();
-        registerCommands();
         registerListener(globalEventHandler);
-
+        registerGameListener(globalEventHandler);
+        this.registerCommands();
         this.phaseSeries.start();
+        this.scoreboard.initLobbyLayout(((BounceMapProvider) this.mapProvider).getMapName());
     }
 
     public void unload() {
-        scoreboardUtil = null;
         profileService.clear();
         profileService = null;
     }
@@ -99,6 +99,7 @@ public class Bounce implements ListenerHandling {
 
     private void registerGameListener(@NotNull EventNode<Event> node) {
         node.addListener(BounceGameFinishEvent.class, new GameFinishListener(playerUtil));
+        node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
     }
 
     private void registerCommands() {
@@ -111,9 +112,5 @@ public class Bounce implements ListenerHandling {
         if (profile == null) return;
 
         profile.getJumpRunnable().cancel();
-    }
-
-    public ScoreboardUtil getScoreboardUtil() {
-        return scoreboardUtil;
     }
 }
