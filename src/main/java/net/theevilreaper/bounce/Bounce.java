@@ -5,6 +5,7 @@ import io.github.togar2.pvp.events.FinalAttackEvent;
 import io.github.togar2.pvp.events.FinalDamageEvent;
 import io.github.togar2.pvp.feature.CombatFeatureSet;
 import io.github.togar2.pvp.feature.CombatFeatures;
+import io.github.togar2.pvp.utils.CombatVersion;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
@@ -19,6 +20,8 @@ import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.config.GameConfigReader;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
+import net.theevilreaper.bounce.event.GamePrepareEvent;
+import net.theevilreaper.bounce.event.ScoreDeathUpdateEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.listener.PlayerJoinListener;
@@ -27,6 +30,8 @@ import net.theevilreaper.bounce.listener.damage.AttackListener;
 import net.theevilreaper.bounce.listener.damage.DamageListener;
 import net.theevilreaper.bounce.listener.damage.KnockbackListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
+import net.theevilreaper.bounce.listener.game.GamePrepareListener;
+import net.theevilreaper.bounce.listener.game.ScoreUpdateDeathListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
 import net.theevilreaper.bounce.profile.BounceProfile;
@@ -78,8 +83,12 @@ public class Bounce implements ListenerHandling {
         this.phaseSeries.start();
         this.scoreboard.initLobbyLayout(((BounceMapProvider) this.mapProvider).getMapName());
 
-        CombatFeatureSet modern = CombatFeatures.modernVanilla();
-        globalEventHandler.addChild(modern.createNode());
+        CombatFeatureSet featureSet = CombatFeatures.empty()
+                .version(CombatVersion.MODERN)
+                .add(CombatFeatures.VANILLA_ATTACK)
+                .add(CombatFeatures.VANILLA_ATTACK_COOLDOWN)
+                .build();
+        globalEventHandler.addChild(featureSet.createNode());
     }
 
     public void unload() {
@@ -89,8 +98,10 @@ public class Bounce implements ListenerHandling {
 
     private void registerPhases() {
         this.phaseSeries.add(new LobbyPhase(this.gameConfig.minPlayers(), this.gameConfig.maxPlayers(), this.gameConfig.lobbyTime()));
-        this.phaseSeries.add(new TeleportPhase(this.itemUtil, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
-        this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName));
+        this.phaseSeries.add(new TeleportPhase(this.itemUtil, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
+        this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName, () -> {
+            this.profileService.start(((BounceMapProvider) this.mapProvider).getActiveMap(), scoreboard::createPlayerLine);
+        }));
         this.phaseSeries.add(new RestartPhase());
     }
 
@@ -100,13 +111,16 @@ public class Bounce implements ListenerHandling {
                 this.mapProvider.getActiveInstance(),
                 gameConfig.maxPlayers())
         );
-        node.addListener(PlayerSpawnEvent.class, new PlayerJoinListener(this.phaseSeries::getCurrentPhase, player -> {
-            this.mapProvider.teleportToSpawn(player, true);
-        }));
+        node.addListener(PlayerSpawnEvent.class, new PlayerJoinListener(
+                this.phaseSeries::getCurrentPhase,
+                this::handleGeneralJoin
+        ));
 
         node.addListener(PlayerDisconnectEvent.class, new PlayerQuitListener(
                 this.phaseSeries::getCurrentPhase, this::handleGameLeave
         ));
+
+        node.addListener(GamePrepareEvent.class, new GamePrepareListener(this.playerUtil));
     }
 
     private void registerGameListener(@NotNull EventNode<Event> node) {
@@ -115,6 +129,7 @@ public class Bounce implements ListenerHandling {
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener(this.profileService::get, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
         node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
+        node.addListener(ScoreDeathUpdateEvent.class, new ScoreUpdateDeathListener(this.phaseSeries::getCurrentPhase, this.profileService::get));
     }
 
     private void registerCommands() {
@@ -127,5 +142,11 @@ public class Bounce implements ListenerHandling {
         if (profile == null) return;
 
         profile.getJumpRunnable().cancel();
+        this.scoreboard.removeViewer(player);
+    }
+
+    private void handleGeneralJoin(@NotNull Player player) {
+        this.mapProvider.teleportToSpawn(player, false);
+        this.scoreboard.addViewer(player);
     }
 }
