@@ -7,11 +7,41 @@ rootProject.name = "Bounce"
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        maven {
+            name = "OneLiteFeatherRepository"
+            url = uri("https://repo.onelitefeather.dev/onelitefeather")
+            if (System.getenv("CI") != null) {
+                credentials {
+                    username = System.getenv("ONELITEFEATHER_MAVEN_USERNAME")
+                    password = System.getenv("ONELITEFEATHER_MAVEN_PASSWORD")
+                }
+            } else {
+                credentials(PasswordCredentials::class)
+                authentication {
+                    create<BasicAuthentication>("basic")
+                }
+            }
+        }
     }
 
     versionCatalogs {
         create("libs") {
-        //    from(files("../gradle/libs.versions.toml"))
+            version("bom", "1.2.3")
+            version("aonyx", "0.3.1")
+
+            library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
+            library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
+
+            library("minestom", "net.minestom", "minestom-snapshots").withoutVersion()
+            library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
+            library("cyano", "net.onelitefeather", "cyano").withoutVersion()
+            library("guira", "net.onelitefeather", "guira").withoutVersion()
+            library("junit.api", "org.junit.jupiter", "junit-jupiter-api").withoutVersion()
+            library("junit.engine", "org.junit.jupiter", "junit-jupiter-engine").withoutVersion()
+            library("junit.platform.launcher", "org.junit.platform", "junit-platform-launcher").withoutVersion()
+            library("junit.params", "org.junit.jupiter", "junit-jupiter-params").withoutVersion()
+            library("aves", "net.theevilreaper", "aves").withoutVersion()
+            library("xerus", "net.theevilreaper", "xerus").withoutVersion()
         }
     }
 }
