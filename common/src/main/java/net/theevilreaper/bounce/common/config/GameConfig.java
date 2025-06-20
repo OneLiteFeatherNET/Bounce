@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
 
+    String MAP_FILE = "map.json";
+
     int FORCE_START_TIME = 11;
 
     /**
