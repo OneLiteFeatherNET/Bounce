@@ -99,24 +99,10 @@ public final class GameConfigReader {
             maxGameTime = Integer.parseInt(properties.getProperty("gameTime"));
         }
 
-        int teamSize = internal.teamSize();
-
-        if (properties.containsKey("teamSize")) {
-            teamSize = Integer.parseInt(properties.getProperty("teamSize"));
-        }
-
-        int maxRounds = internal.maxRounds();
-
-        if (properties.containsKey("maxRounds")) {
-            maxRounds = Integer.parseInt(properties.getProperty("maxRounds"));
-        }
-
         configBuilder.minPlayers(minPlayers)
                 .maxPlayers(maxPlayers)
                 .lobbyTime(lobbyTime)
-                .gameTime(maxGameTime)
-                .teamSize(teamSize)
-                .maxRounds(maxRounds);
+                .gameTime(maxGameTime);
         return configBuilder.build();
     }
 }
