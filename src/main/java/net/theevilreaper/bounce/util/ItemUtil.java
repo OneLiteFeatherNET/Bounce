@@ -1,20 +1,32 @@
 package net.theevilreaper.bounce.util;
 
-import de.icevizion.api.item.ItemFactory;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemComponent;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
+import net.minestom.server.item.component.EnchantmentList;
+import net.minestom.server.item.enchant.Enchantment;
+import org.jetbrains.annotations.NotNull;
 
-public class ItemUtil {
-    
+public final class ItemUtil {
+
     private final ItemStack feather;
 
     public ItemUtil() {
-        feather = new ItemFactory(Material.FEATHER).setDisplayName("§5Rückstoßstoßender Rückstoßstoßer").addUnsafeEnchantment(Enchantment.KNOCKBACK, 2).build();
+        this.feather = ItemStack.builder(Material.FEATHER)
+                .customName(Component.text("Recoil-pushing recoil pusher", NamedTextColor.LIGHT_PURPLE))
+                .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Enchantment.KNOCKBACK, 1))
+                .build();
     }
 
-    public void setItem(Player paramPlayer) {
-        paramPlayer.getInventory().addItem(feather);
+    /**
+     * Set's the {@link ItemStack} which is required for the game into the {@link net.minestom.server.inventory.Inventory} of a player
+     *
+     * @param paramPlayer the player who should get the {@link ItemStack}
+     */
+    public void setItem(@NotNull Player paramPlayer) {
+        paramPlayer.getInventory().addItemStack(feather);
     }
 }
