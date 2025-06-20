@@ -1,6 +1,7 @@
 package net.theevilreaper.bounce.common.util;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Contract;
@@ -10,11 +11,11 @@ public abstract class Messages {
 
     public static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final Component PREFIX;
-    private static final Component SEPARATOR;
+    public static final Component SEPARATOR;
 
     static {
-        PREFIX = MINI_MESSAGE.deserialize("<gradient:#00ff33:#fffafe:0.2>Suicide<gradient:#fffafe:#ff0008>TNT</gradient></gradient>").append(Component.space());
-        SEPARATOR = Component.space().append(Component.text(">>")).append(Component.space());
+        SEPARATOR = Component.text("»", NamedTextColor.GRAY).append(Component.space());
+        PREFIX = Component.text("Bounce", NamedTextColor.DARK_AQUA).append(SEPARATOR);
     }
 
     protected Messages() { }
