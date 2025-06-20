@@ -58,20 +58,6 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
     int gameTime();
 
     /**
-     * Returns the size for each team.
-     *
-     * @return the given size
-     */
-    int teamSize();
-
-    /**
-     * Returns the maximum rounds for the game.
-     *
-     * @return the maximum rounds
-     */
-    int maxRounds();
-
-    /**
      * The {@link Builder} interface is used to create a new game configuration.
      * It provides methods to set the values for the configuration.
      *
@@ -113,22 +99,6 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
          * @return the builder instance
          */
         @NotNull Builder gameTime(int gameTime);
-
-        /**
-         * Sets the general size for each team.
-         *
-         * @param teamSize the size of the team
-         * @return the builder instance
-         */
-        @NotNull Builder teamSize(int teamSize);
-
-        /**
-         * Sets the maximum rounds for the game.
-         *
-         * @param maxRounds the maximum rounds
-         * @return the builder instance
-         */
-        @NotNull Builder maxRounds(int maxRounds);
 
         /**
          * Builds the game configuration.

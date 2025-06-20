@@ -9,8 +9,6 @@ public final class GameConfigBuilder implements GameConfig.Builder {
     private int maxPlayers;
     private int lobbyTime;
     private int maxGameTime;
-    private int teamSize;
-    private int maxRounds;
 
     @Override
     public GameConfig.@NotNull Builder minPlayers(int minPlayers) {
@@ -40,21 +38,7 @@ public final class GameConfigBuilder implements GameConfig.Builder {
     }
 
     @Override
-    public GameConfig.@NotNull Builder teamSize(int teamSize) {
-        this.teamSize = teamSize;
-        return this;
-    }
-
-    @Override
-    public GameConfig.@NotNull Builder maxRounds(int maxRounds) {
-        int defaultRounds = InternalGameConfig.defaultConfig().maxRounds();
-        Check.argCondition(maxRounds < defaultRounds, "The max rounds must be greater than " + defaultRounds);
-        this.maxRounds = maxRounds;
-        return this;
-    }
-
-    @Override
     public @NotNull GameConfig build() {
-        return new GameConfigImpl(minPlayers, maxPlayers, lobbyTime, maxGameTime, teamSize, maxRounds);
+        return new GameConfigImpl(minPlayers, maxPlayers, lobbyTime, maxGameTime);
     }
 }

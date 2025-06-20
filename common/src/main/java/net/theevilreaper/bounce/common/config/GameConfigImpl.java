@@ -9,7 +9,6 @@ package net.theevilreaper.bounce.common.config;
  * @param maxPlayers the maximum number of players allowed in the game
  * @param lobbyTime  the time in seconds before the game starts
  * @param gameTime   the maximum duration of a game in minutes
- * @param teamSize   the general size of each team
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
@@ -18,9 +17,7 @@ public record GameConfigImpl(
         int minPlayers,
         int maxPlayers,
         int lobbyTime,
-        int gameTime,
-        int teamSize,
-        int maxRounds
+        int gameTime
 ) implements GameConfig {
 
 }
