@@ -18,8 +18,7 @@ public class BounceMapProvider extends AbstractMapProvider {
 
     public BounceMapProvider(@NotNull Path path) {
         super(new GsonFileHandler(GsonUtil.GSON), MapFilters::filterMapsForGame);
-        this.loadMapEntries(path.resolve("maps"));
-
+        this.mapEntries = this.loadMapEntries(path.resolve("maps"));
         this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
         MapEntry mapEntry = this.getEntries().getFirst();
@@ -50,5 +49,12 @@ public class BounceMapProvider extends AbstractMapProvider {
 
     public String getMapName() {
         return this.activeMap.getName();
+    }
+
+    public @NotNull GameMap getActiveMap() {
+        if (!(this.activeMap instanceof GameMap gameMap)) {
+            throw new IllegalStateException("Active map is not a GameMap");
+        }
+        return gameMap;
     }
 }
