@@ -2,6 +2,7 @@ plugins {
     java
     `maven-publish`
     application
+    alias(libs.plugins.shadow)
 }
 
 group = "net.theevilreaper"
@@ -27,9 +28,27 @@ dependencies {
     testRuntimeOnly(libs.junit.engine)
 }
 
+application {
+    mainClass.set("net.theevilreaper.bounce.BounceServer")
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+tasks {
+    jar {
+        dependsOn("shadowJar")
+    }
+
+    test {
+        jvmArgs("-Dminestom.inside-test=true")
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
     }
 }
 

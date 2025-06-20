@@ -27,6 +27,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libs") {
+            version("shadow", "8.3.6")
             version("bom", "1.2.3")
             version("aonyx", "0.3.1")
             version("pvp", "dfb8f0c342")
@@ -45,6 +46,8 @@ dependencyResolutionManagement {
             library("junit.params", "org.junit.jupiter", "junit-jupiter-params").withoutVersion()
             library("aves", "net.theevilreaper", "aves").withoutVersion()
             library("xerus", "net.theevilreaper", "xerus").withoutVersion()
+
+            plugin("shadow", "com.gradleup.shadow").versionRef("shadow")
         }
     }
 }
