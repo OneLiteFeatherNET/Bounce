@@ -3,8 +3,8 @@ package net.theevilreaper.bounce.profile;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
-import net.theevilreaper.bounce.Bounce;
-import net.theevilreaper.bounce.common.map.GameMap;
+import net.minestom.server.event.EventDispatcher;
+import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.jump.PlayerJumpTask;
 import net.theevilreaper.bounce.util.GameMessages;
 import org.jetbrains.annotations.NotNull;
@@ -100,7 +100,7 @@ public final class BounceProfile implements Comparable<BounceProfile> {
     }
 
     private void updateScoreboard() {
-        getPlayer().getScoreboard().getObjective(DisplaySlot.SIDEBAR).getScore(getPlayer().getDisplayName()).setScore(points);
+        EventDispatcher.call(new ScoreUpdateEvent(player, points));
     }
 
     public void resetDamager() {
@@ -117,9 +117,5 @@ public final class BounceProfile implements Comparable<BounceProfile> {
 
     public Player getLastDamager() {
         return lastDamager;
-    }
-
-    public int getPoints() {
-        return points;
     }
 }
