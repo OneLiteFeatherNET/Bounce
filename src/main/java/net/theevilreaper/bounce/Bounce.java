@@ -1,5 +1,10 @@
 package net.theevilreaper.bounce;
 
+import io.github.togar2.pvp.events.EntityKnockbackEvent;
+import io.github.togar2.pvp.events.FinalAttackEvent;
+import io.github.togar2.pvp.events.FinalDamageEvent;
+import io.github.togar2.pvp.feature.CombatFeatureSet;
+import io.github.togar2.pvp.feature.CombatFeatures;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
@@ -18,6 +23,9 @@ import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.listener.PlayerJoinListener;
 import net.theevilreaper.bounce.listener.PlayerQuitListener;
+import net.theevilreaper.bounce.listener.damage.AttackListener;
+import net.theevilreaper.bounce.listener.damage.DamageListener;
+import net.theevilreaper.bounce.listener.damage.KnockbackListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
@@ -57,6 +65,8 @@ public class Bounce implements ListenerHandling {
         this.playerUtil = new PlayerUtil(this.profileService);
         this.scoreboard = new BounceScoreboard();
         this.registerPhases();
+
+        MinecraftServer.getSchedulerManager().buildShutdownTask(this::unload);
     }
 
     public void load() {
@@ -67,6 +77,9 @@ public class Bounce implements ListenerHandling {
         this.registerCommands();
         this.phaseSeries.start();
         this.scoreboard.initLobbyLayout(((BounceMapProvider) this.mapProvider).getMapName());
+
+        CombatFeatureSet modern = CombatFeatures.modernVanilla();
+        globalEventHandler.addChild(modern.createNode());
     }
 
     public void unload() {
@@ -77,8 +90,7 @@ public class Bounce implements ListenerHandling {
     private void registerPhases() {
         this.phaseSeries.add(new LobbyPhase(this.gameConfig.minPlayers(), this.gameConfig.maxPlayers(), this.gameConfig.lobbyTime()));
         this.phaseSeries.add(new TeleportPhase(this.itemUtil, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
-        this.phaseSeries.add(new PlayingPhase(value -> {
-        }));
+        this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName));
         this.phaseSeries.add(new RestartPhase());
     }
 
@@ -100,6 +112,9 @@ public class Bounce implements ListenerHandling {
     private void registerGameListener(@NotNull EventNode<Event> node) {
         node.addListener(BounceGameFinishEvent.class, new GameFinishListener(playerUtil));
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
+        node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
+        node.addListener(FinalDamageEvent.class, new DamageListener(this.profileService::get, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
+        node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
     }
 
     private void registerCommands() {
