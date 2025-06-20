@@ -1,6 +1,7 @@
 package net.theevilreaper.bounce.profile;
 
 import net.minestom.server.entity.Player;
+import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.map.GameMap;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,9 +32,10 @@ public class ProfileService {
         return this.profileMap.get(uuid);
     }
 
-    public void start(@NotNull GameMap gameMap) {
+    public void start(@NotNull GameMap gameMap, @NotNull PlayerConsumer consumer) {
         for (BounceProfile value : this.profileMap.values()) {
             value.getJumpRunnable().start(gameMap);
+            consumer.accept(value.getPlayer());
         }
     }
 

@@ -7,13 +7,16 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import net.theevilreaper.aves.util.Strings;
 import net.theevilreaper.aves.util.TimeFormat;
+import net.theevilreaper.bounce.common.util.Messages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
 public class BounceScoreboard {
 
-    private static final Component GAME_TITLE = Component.text("§bKnockouts §7|", NamedTextColor.AQUA)
+    private static final Component GAME_TITLE = Component.text("Knockouts", NamedTextColor.AQUA)
+            .append(Component.space())
+            .append(Component.text("|", NamedTextColor.GRAY))
             .append(Component.space());
     private final Sidebar sideBar;
 
@@ -25,11 +28,10 @@ public class BounceScoreboard {
         sideBar.setTitle(Component.text("Bounce", NamedTextColor.DARK_AQUA));
 
         sideBar.createLine(new Sidebar.ScoreboardLine("header", Component.space(), 3));
-        Component mapLine = Component.text("Map: ", NamedTextColor.YELLOW)
-                .append(Component.text(mapName, NamedTextColor.GRAY));
+        Component mapLine = Component.text("Map", NamedTextColor.YELLOW)
+                .append(Component.text(":", NamedTextColor.GRAY));
         sideBar.createLine(new Sidebar.ScoreboardLine("map_header", mapLine, 2));
-        Component mapComponent = Component.text("»", NamedTextColor.GRAY)
-                .append(Component.text())
+        Component mapComponent = Messages.SEPARATOR
                 .append(Component.text(mapName, NamedTextColor.GREEN));
         sideBar.createLine(new Sidebar.ScoreboardLine("map_name", mapComponent, 1));
     }
@@ -67,14 +69,16 @@ public class BounceScoreboard {
         this.sideBar.removeViewer(player);
     }
 
-    public void createPlayerLine() {
-        for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            this.sideBar.createLine(new Sidebar.ScoreboardLine(onlinePlayer.getUuid().toString(), onlinePlayer.getDisplayName(), 0));
-        }
+    public void createPlayerLine(@NotNull Player player) {
+        this.sideBar.createLine(new Sidebar.ScoreboardLine(player.getUuid().toString(), player.getDisplayName(), 100));
     }
 
     public void updatePlayerLine(@NotNull UUID uuid, int points) {
+        System.out.printf("Updating player line for UUID: %s with points: %d%n", uuid, points);
         this.sideBar.updateLineScore(uuid.toString(), points);
+
+        Sidebar.ScoreboardLine line = this.sideBar.getLine(uuid.toString());
+        System.out.printf("Current line: %s%n", line);
     }
 
     /**

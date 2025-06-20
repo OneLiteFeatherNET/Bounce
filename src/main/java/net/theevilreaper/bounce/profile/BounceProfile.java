@@ -23,6 +23,7 @@ public final class BounceProfile implements Comparable<BounceProfile> {
 
     public BounceProfile(@NotNull Player player) {
         this.player = player;
+        this.points = 0;
     }
 
     public void registerJumpRunnable() {
