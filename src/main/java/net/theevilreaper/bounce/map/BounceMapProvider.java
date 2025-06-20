@@ -47,4 +47,8 @@ public class BounceMapProvider extends AbstractMapProvider {
     public void teleportToGameSpawn(@NotNull Player player) {
         player.teleport(((GameMap) this.activeMap).getGameSpawn());
     }
+
+    public String getMapName() {
+        return this.activeMap.getName();
+    }
 }
