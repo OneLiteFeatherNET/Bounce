@@ -32,7 +32,8 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
         Player originPlayer = (Player) event.getEntity();
         CombatPlayer player = (CombatPlayer) event.getEntity();
 
-        if (type == DamageType.LAVA) {
+        /*if (type == DamageType.LAVA) {
+            System.out.printf("Player %s was damaged by lava%n", originPlayer.getUsername());
             player.setVelocityNoUpdate(vec -> Vec.ZERO);
             BounceProfile profile = profileFunction.apply(originPlayer);
             if (profile == null) return;
@@ -43,7 +44,7 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
                 profile.resetDamager();
             }
             this.spawnConsumer.accept(originPlayer);
-        }
+        }*/
 
         if (type == DamageType.ON_FIRE || type == DamageType.IN_FIRE) {
             originPlayer.setFireTicks(0);
