@@ -7,6 +7,7 @@ rootProject.name = "Bounce"
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        maven("https://jitpack.io")
         maven {
             name = "OneLiteFeatherRepository"
             url = uri("https://repo.onelitefeather.dev/onelitefeather")
@@ -28,10 +29,12 @@ dependencyResolutionManagement {
         create("libs") {
             version("bom", "1.2.3")
             version("aonyx", "0.3.1")
+            version("pvp", "dfb8f0c342")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
+            library("pvp", "com.github.TogAr2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom-snapshots").withoutVersion()
             library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
             library("cyano", "net.onelitefeather", "cyano").withoutVersion()

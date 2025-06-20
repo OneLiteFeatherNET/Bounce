@@ -1,6 +1,7 @@
 plugins {
     java
     `maven-publish`
+    application
 }
 
 group = "net.theevilreaper"
@@ -12,10 +13,10 @@ dependencies {
     implementation(platform(libs.aonyx.bom))
     implementation(project(":common"))
     implementation(libs.adventure)
-
-    compileOnly(libs.minestom)
-    compileOnly(libs.aves)
-    compileOnly(libs.xerus)
+    implementation(libs.pvp)
+    implementation(libs.minestom)
+    implementation(libs.aves)
+    implementation(libs.xerus)
 
     testImplementation(libs.minestom)
     testImplementation(libs.aves)
