@@ -51,33 +51,4 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
 
         event.setInvulnerabilityTicks(100);
     }
-
-    @EventHandler
-    public void on(EntityDamageEvent event) {
-        if (!(event.getEntityType() == EntityType.PLAYER)) return;
-        if (game.getGameState() != GameState.INGAME) {
-            event.setCancelled(true);
-        } else {
-            Player player = (Player) event.getEntity();
-            event.setCancelled(true);
-            switch (event.getCause()) {
-                case ENTITY_ATTACK:
-                    event.setDamage(0);
-                    event.setCancelled(false);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    @EventHandler
-    public void on(EntityDamageByEntityEvent event) {
-        if (!(event.getEntityType() == EntityType.PLAYER) | game.getGameState() != GameState.INGAME) return;
-        if (((event.getEntity() instanceof Player) && (event.getDamager() instanceof Player))) {
-            Player player = (Player) event.getEntity();
-            Player damager = (Player) event.getDamager();
-            game.getProfileService().getProfile(player).get().setLastDamager(damager);
-        }
-    }
 }
