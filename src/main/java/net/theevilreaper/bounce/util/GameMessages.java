@@ -29,7 +29,7 @@ public class GameMessages extends Messages {
         LEAVE_PART = withMini("<gray>left the game!");
         JOIN_PART = withMini("<gray>joined the game!");
 
-        int forceStartTime = GameConfig.FORCE_START_TIME;
+        int forceStartTime = GameConfig.FORCE_START_TIME - 1;
         ALREADY_FORCE_STARTED = withMiniPrefix("<red>The game has already been force started!");
         PHASE_NOT_RUNNING = withMiniPrefix("<red>The lobby countdown is not running!");
         PHASE_FORCE_STARTED = withMiniPrefix("<gray>The timer has been set to <color:#09ff00><seconds></color> seconds!",
@@ -54,13 +54,13 @@ public class GameMessages extends Messages {
 
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull Component getJoinMessage(@NotNull Player player) {
-        return withPrefix(withMini("<color:#249D9F>" + player.getUsername() + "</color>"))
+        return withPrefix(player.getDisplayName())
                 .append(Component.space()).append(JOIN_PART);
     }
 
     @Contract(value = "_ -> new", pure = true)
     public static @NotNull Component getLeaveMessage(@NotNull Player player) {
-        return withPrefix(withMini("<color:#249D9F>" + player.getUsername() + "</color>"))
+        return withPrefix(player.getDisplayName())
                 .append(Component.space()).append(LEAVE_PART);
     }
 
