@@ -16,7 +16,7 @@ public class ProfileService {
     }
 
     public @NotNull BounceProfile add(@NotNull Player player) {
-        this.profileMap.computeIfAbsent(player.getUuid(), uuid -> new BounceProfile(player));
+        return this.profileMap.computeIfAbsent(player.getUuid(), uuid -> new BounceProfile(player));
     }
 
     public BounceProfile remove(@NotNull Player player) {
@@ -25,6 +25,10 @@ public class ProfileService {
 
     public BounceProfile get(@NotNull Player player) {
         return this.profileMap.get(player.getUuid());
+    }
+
+    public BounceProfile get(@NotNull UUID uuid) {
+        return this.profileMap.get(uuid);
     }
 
     public void start(@NotNull GameMap gameMap) {
