@@ -16,6 +16,10 @@ public class GameMessages extends Messages {
     public static final Component PHASE_NOT_RUNNING;
     public static final Component PHASE_FORCE_STARTED;
 
+    public static final Component NO_PROFILE;
+    public static final Component INVALID_PLAYER_NAME;
+    public static final Component PLAYER_NOT_FOUND;
+
     public static final Component STATS_LINE;
 
     private static final Component LEAVE_PART;
@@ -29,6 +33,9 @@ public class GameMessages extends Messages {
         LEAVE_PART = withMini("<gray>left the game!");
         JOIN_PART = withMini("<gray>joined the game!");
 
+        NO_PROFILE = withPrefix(Component.text("You do not have a profile!", NamedTextColor.RED));
+        INVALID_PLAYER_NAME = withPrefix(Component.text("Invalid player name!", NamedTextColor.RED));
+        PLAYER_NOT_FOUND = withPrefix(Component.text("The provided player is not online!", NamedTextColor.RED));
         int forceStartTime = GameConfig.FORCE_START_TIME - 1;
         ALREADY_FORCE_STARTED = withMiniPrefix("<red>The game has already been force started!");
         PHASE_NOT_RUNNING = withMiniPrefix("<red>The lobby countdown is not running!");
