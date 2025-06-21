@@ -12,6 +12,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.theevilreaper.aves.map.MapProvider;
@@ -23,6 +24,7 @@ import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.event.GamePrepareEvent;
 import net.theevilreaper.bounce.event.ScoreDeathUpdateEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
+import net.theevilreaper.bounce.listener.PlayerChatListener;
 import net.theevilreaper.bounce.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.listener.PlayerJoinListener;
 import net.theevilreaper.bounce.listener.PlayerQuitListener;
@@ -121,6 +123,7 @@ public class Bounce implements ListenerHandling {
         ));
 
         node.addListener(GamePrepareEvent.class, new GamePrepareListener(this.playerUtil));
+        node.addListener(PlayerChatEvent.class, new PlayerChatListener());
     }
 
     private void registerGameListener(@NotNull EventNode<Event> node) {
