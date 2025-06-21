@@ -10,6 +10,13 @@ import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The {@link ItemUtil} is a small utility class which handles the creation and management of the used {@link ItemStack} in the game.
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public final class ItemUtil {
 
     private final ItemStack feather;
