@@ -35,7 +35,8 @@ public class PlayerJoinListener implements Consumer<PlayerSpawnEvent> {
         Phase phase = phaseSupplier.get();
 
         if (event.isFirstSpawn() && phase instanceof LobbyPhase lobbyPhase) {
-            Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getJoinMessage(player));
+            Component joinMessage = GameMessages.getJoinMessage(player);
+            Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(joinMessage);
             lobbyPhase.updatePlayerValues(player);
             lobbyPhase.checkStartCondition();
             this.spawnConsumer.accept(player);
