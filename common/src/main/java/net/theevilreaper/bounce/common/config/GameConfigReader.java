@@ -20,8 +20,6 @@ import java.util.Properties;
  *     <li>maxPlayers</li>
  *     <li>lobbyTime</li>
  *     <li>gameTime</li>
- *     <li>teamSize</li>
- *     <li>maxRounds</li>
  * </ul>
  * <p>
  * If a property can not be found in the file, the default value will be used.

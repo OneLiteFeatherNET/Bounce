@@ -1,6 +1,5 @@
 package net.theevilreaper.bounce.common.config;
 
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 public final class GameConfigBuilder implements GameConfig.Builder {
