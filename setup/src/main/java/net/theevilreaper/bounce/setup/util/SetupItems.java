@@ -22,6 +22,9 @@ public final class SetupItems {
 
     public static final int OVERVIEW_FLAG = 0x02;
     public static final Tag<Integer> ITEM_TAG = Tag.Integer("item_tag");
+    public static final ItemStack DECORATION = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE)
+            .customName(Component.empty())
+            .build();
 
     private final ItemStack overview;
     private final ItemStack save;
