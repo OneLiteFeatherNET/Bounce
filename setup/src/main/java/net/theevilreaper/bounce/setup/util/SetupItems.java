@@ -6,7 +6,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
-import net.theevilreaper.tamias.common.util.Tags;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -21,13 +20,8 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("java:S3252")
 public final class SetupItems {
 
-    public static int OVERVIEW_FLAG = 0x02;
-
-    public static final ItemStack DECORATION = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE)
-            .customName(Component.empty())
-            .build();
-    
-    public static Tag<Integer> ITEM_TAG = Tag.Integer("item_tag");
+    public static final int OVERVIEW_FLAG = 0x02;
+    public static final Tag<Integer> ITEM_TAG = Tag.Integer("item_tag");
 
     private final ItemStack overview;
     private final ItemStack save;
