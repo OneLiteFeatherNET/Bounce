@@ -53,3 +53,4 @@ dependencyResolutionManagement {
 }
 
 include("common")
+include("setup")
