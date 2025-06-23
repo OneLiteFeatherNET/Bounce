@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.setup.listener;
 
 import net.onelitefeather.guira.event.SetupFinishEvent;
-import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
