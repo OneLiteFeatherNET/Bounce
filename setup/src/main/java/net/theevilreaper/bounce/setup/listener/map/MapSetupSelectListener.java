@@ -38,7 +38,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
     public void accept(@NotNull MapSetupSelectEvent event) {
         Player player = event.getPlayer();
 
-        Optional<BounceData> setupData = this.setupDataService.get(player.getUuid()).get();
+        Optional<BounceData> setupData = this.setupDataService.get(player.getUuid());
 
         if (setupData.isPresent()) {
             // If this condition is reached the setup is fucked up
