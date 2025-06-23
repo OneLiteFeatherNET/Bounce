@@ -32,6 +32,14 @@ public final class BounceSetupMapProvider extends AbstractMapProvider {
         this.mapEntries.remove(lobbyEntry);
         this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
         this.registerInstance(this.activeInstance, lobbyEntry);
+
+        Optional<BaseMap> loadedMap = this.fileHandler.load(lobbyEntry.getMapFile(), BaseMap.class);
+
+        if (loadedMap.isEmpty()) {
+            throw new RuntimeException("Failed to load lobby map file: " + lobbyEntry.getMapFile());
+        }
+
+        this.activeMap = loadedMap.get();
     }
 
     @Override
