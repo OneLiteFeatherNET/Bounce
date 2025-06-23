@@ -8,6 +8,7 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
+import net.minestom.server.tag.Tag;
 import net.onelitefeather.guira.SetupDataService;
 import net.theevilreaper.aves.map.MapProvider;
 import net.theevilreaper.bounce.common.ListenerHandling;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 
 public final class BounceSetup implements ListenerHandling {
 
+    public static final Tag<Integer> SETUP_TAG = Tag.Transient("bounce.setup");
     private final MapProvider mapProvider;
     private final SetupDataService<BounceData> setupDataService;
     private final MapSetupInventory mapSetupInventory;

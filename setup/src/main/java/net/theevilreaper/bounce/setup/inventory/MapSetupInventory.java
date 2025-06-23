@@ -83,8 +83,7 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
     private void handleClick(@NotNull MapEntry currentMap, @NotNull Player player, int ignored, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
         if (clickType != ClickType.LEFT_CLICK && clickType != ClickType.RIGHT_CLICK) return;
-        boolean lobbyMode = clickType == ClickType.LEFT_CLICK;
-        EventDispatcher.callCancellable(new MapSetupSelectEvent(player, currentMap, lobbyMode), player::closeInventory);
+        EventDispatcher.callCancellable(new MapSetupSelectEvent(player, currentMap), player::closeInventory);
     }
 
     /**

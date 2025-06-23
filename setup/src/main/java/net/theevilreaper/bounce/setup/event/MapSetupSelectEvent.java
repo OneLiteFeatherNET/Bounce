@@ -17,7 +17,6 @@ public final class MapSetupSelectEvent implements PlayerEvent, CancellableEvent 
 
     private final Player player;
     private final MapEntry mapEntry;
-    private final boolean lobbyMode;
     private boolean cancelled;
 
     /**
@@ -25,12 +24,10 @@ public final class MapSetupSelectEvent implements PlayerEvent, CancellableEvent 
      *
      * @param player    the player who selected the map
      * @param mapEntry  the selected map
-     * @param lobbyMode if the setup is for the lobby or the game
      */
-    public MapSetupSelectEvent(@NotNull Player player, @NotNull MapEntry mapEntry, boolean lobbyMode) {
+    public MapSetupSelectEvent(@NotNull Player player, @NotNull MapEntry mapEntry) {
         this.player = player;
         this.mapEntry = mapEntry;
-        this.lobbyMode = lobbyMode;
     }
 
     /**
@@ -60,14 +57,6 @@ public final class MapSetupSelectEvent implements PlayerEvent, CancellableEvent 
      */
     public @NotNull MapEntry getMapEntry() {
         return mapEntry;
-    }
-
-    /**
-     * Returns if the setup is for the lobby or the game.
-     * @return true if the setup is for the lobby
-     */
-    public boolean isLobbyMode() {
-        return lobbyMode;
     }
 
     /**
