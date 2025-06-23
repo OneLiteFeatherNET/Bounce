@@ -19,9 +19,11 @@ import net.theevilreaper.aves.map.MapProvider;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.util.GsonUtil;
+import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.MapSetupInventory;
+import net.theevilreaper.bounce.setup.inventory.ground.GroundLayerInventory;
 import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
@@ -41,6 +43,7 @@ public final class BounceSetup implements ListenerHandling {
     private final MapProvider mapProvider;
     private final SetupDataService<BounceData> setupDataService;
     private final MapSetupInventory mapSetupInventory;
+    private final GroundLayerInventory groundLayerInventory;
     private final SetupItems setupItems;
     private final FileHandler fileHandler;
 
@@ -51,6 +54,7 @@ public final class BounceSetup implements ListenerHandling {
         this.mapSetupInventory = new MapSetupInventory(this.mapProvider::getEntries);
         this.setupItems = new SetupItems();
         this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
+        this.groundLayerInventory  = new GroundLayerInventory();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
     }
 
@@ -60,6 +64,9 @@ public final class BounceSetup implements ListenerHandling {
         registerListener(node);
 
         this.mapSetupInventory.register();
+        this.groundLayerInventory.register();
+
+        MinecraftServer.getCommandManager().register(new SetupCommand(this.setupDataService));
     }
 
     private void onShutdown() {
@@ -92,6 +99,7 @@ public final class BounceSetup implements ListenerHandling {
     }
 
     private void openMapSetupInventory(@NotNull Player player) {
-        player.openInventory(this.mapSetupInventory.getInventory());
+        player.openInventory(this.groundLayerInventory.getInventory());
+        //player.openInventory(this.mapSetupInventory.getInventory());
     }
 }
