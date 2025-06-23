@@ -34,9 +34,8 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
 
     private static final List<Component> LORE_COMPONENTS = List.of(
             Component.empty(),
-            MiniMessage.miniMessage().deserialize("<gray>Left-click: <white>Lobby setup"),
-            Component.empty(),
-            MiniMessage.miniMessage().deserialize("<gray>Right-click: <white>Game setup")
+            MiniMessage.miniMessage().deserialize("<yellow>Click to setup this <green>map</green>"),
+            Component.empty()
     );
 
     private static final int[] MAP_SLOTS = LayoutCalculator
