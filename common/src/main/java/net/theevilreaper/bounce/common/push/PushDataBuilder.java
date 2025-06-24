@@ -2,7 +2,9 @@ package net.theevilreaper.bounce.common.push;
 
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,14 @@ public final class PushDataBuilder implements PushData.Builder {
     public PushData.@NotNull Builder remove(@NotNull Block block) {
         this.blocks.remove(block);
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull @UnmodifiableView Map<Block, Double> getPushValues() {
+        return Collections.unmodifiableMap(this.blocks);
     }
 
     /**

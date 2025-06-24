@@ -3,6 +3,7 @@ package net.theevilreaper.bounce.common.push;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
 
@@ -73,6 +74,13 @@ public record PushData(@NotNull Map<Block, Double> push) {
          * @return the builder instance for method chaining
          */
         @NotNull Builder remove(@NotNull Block block);
+
+        /**
+         * Retrieves the accumulated push values.
+         *
+         * @return an unmodifiable view of the map containing block push values
+         */
+        @NotNull @UnmodifiableView Map<Block, Double> getPushValues();
 
         /**
          * Builds the {@link PushData} instance.
