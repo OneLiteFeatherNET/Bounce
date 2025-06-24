@@ -12,6 +12,8 @@ import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
+import net.theevilreaper.bounce.setup.inventory.ground.GroundLayerInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +31,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
     private InstanceContainer instance;
     private GameMapBuilder gameMapBuilder;
     private MapOverviewInventory overviewInventory;
+    private GroundViewInventory groundViewInventory;
+    private GroundLayerInventory groundLayerInventory;
 
     public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry, @NotNull FileHandler fileHandler) {
         super(owner, mapEntry);
@@ -81,8 +85,15 @@ public final class BounceData extends BaseSetupData<GameMap> {
             this.gameMapBuilder = new GameMapBuilder(gameMap);
         }, () -> this.gameMapBuilder = new GameMapBuilder());
 
-        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder);
+        this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder, () -> this.groundLayerInventory.ge);
+        this.groundViewInventory.register();
+
+        this.groundLayerInventory = new GroundLayerInventory(this.groundViewInventory::open);
+        this.groundLayerInventory.register();
+
+        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder, this.groundViewInventory::open);
         this.overviewInventory.register();
+
 
         this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
         AnvilLoader anvilLoader = new AnvilLoader(this.mapEntry.getDirectoryRoot());
@@ -94,4 +105,5 @@ public final class BounceData extends BaseSetupData<GameMap> {
     public @Nullable GameMapBuilder getMapBuilder() {
         return this.gameMapBuilder;
     }
+
 }
