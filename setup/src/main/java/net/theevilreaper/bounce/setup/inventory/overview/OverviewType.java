@@ -31,6 +31,7 @@ public enum OverviewType {
     private final TextColor color;
 
     private static final Map<OverviewType, ItemStack> itemCache = new EnumMap<>(OverviewType.class);
+    private static final OverviewType[] VALUES = values();
 
     /**
      * Constructs a new OverviewType with the specified name, material, and color.
@@ -81,5 +82,14 @@ public enum OverviewType {
         return itemCache.computeIfAbsent(this, type -> ItemStack.builder(type.getMaterial())
                 .customName(Component.text(type.getName(), type.getColor()))
                 .build());
+    }
+
+    /**
+     * Gets all available overview types.
+     *
+     * @return an array of all OverviewType values
+     */
+    public static @NotNull OverviewType[] getValues() {
+        return VALUES;
     }
 }
