@@ -16,10 +16,17 @@ public final class GameMapBuilder {
     private String name;
     private Pos spawn;
     private Pos gameSpawn;
+    private Block groundBlock;
 
     public GameMapBuilder() {
         this.pushDataBuilder = PushData.builder();
+        this.pushDataBuilder
+                .add(Block.RED_STAINED_GLASS, 0.5)
+                .add(Block.ORANGE_STAINED_GLASS, 0.5)
+                .add(Block.YELLOW_STAINED_GLASS, 0.5);
         this.authors = new ArrayList<>();
+        this.groundBlock = Block.GLASS;
+
     }
 
     public GameMapBuilder(@NotNull GameMap gameMap) {
@@ -32,15 +39,21 @@ public final class GameMapBuilder {
         this.spawn = gameMap.getSpawn();
         this.gameSpawn = gameMap.getGameSpawn();
         this.pushDataBuilder = PushData.builder();
+        this.groundBlock = Block.GLASS;
     }
 
     public @NotNull GameMapBuilder setName(String name) {
         this.name = name;
-        return  this;
+        return this;
     }
 
     public @NotNull GameMapBuilder addAuthors(String... authors) {
         this.authors.addAll(List.of(authors));
+        return this;
+    }
+
+    public @NotNull GameMapBuilder setGroundBlock(Block groundBlock) {
+        this.groundBlock = groundBlock;
         return this;
     }
 
@@ -98,6 +111,10 @@ public final class GameMapBuilder {
 
     public PushData.Builder getPushDataBuilder() {
         return pushDataBuilder;
+    }
+
+    public @NotNull Block getGroundBlock() {
+        return groundBlock;
     }
 
     public @NotNull Pos getSpawnOrDefault(@NotNull Pos defaultSpawn) {
