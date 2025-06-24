@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
 import static net.theevilreaper.bounce.setup.util.SetupItems.ITEM_TAG;
 import static net.theevilreaper.bounce.setup.util.SetupItems.OVERVIEW_FLAG;
 
@@ -44,7 +45,7 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
             return;
         }
 
-        //if (!player.hasTag(TamiasSetup.SETUP_TAG)) return;
+         if (!player.hasTag(SETUP_TAG)) return;
 
         Optional<BounceData> fetchedData = this.saveFunction.apply(player.getUuid());
         if (fetchedData.isEmpty()) return;
@@ -52,7 +53,7 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
        BounceData setupData = fetchedData.get();
 
         if (itemId == OVERVIEW_FLAG) {
-            //setupData.openInventory(player);
+            setupData.openInventory();
             return;
         }
         EventDispatcher.call(new SetupFinishEvent<>(setupData));
