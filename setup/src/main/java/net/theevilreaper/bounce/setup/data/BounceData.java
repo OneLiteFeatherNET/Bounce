@@ -51,7 +51,6 @@ public final class BounceData extends BaseSetupData<GameMap> {
         player.setInstance(this.instance, spawnPoint);
     }
 
-
     @Override
     public void save() {
         if (!Files.exists(mapEntry.getMapFile())) {

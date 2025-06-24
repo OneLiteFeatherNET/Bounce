@@ -11,6 +11,8 @@ import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
+import net.theevilreaper.aves.util.functional.PlayerConsumer;
+import net.theevilreaper.bounce.setup.inventory.slot.BackSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -57,7 +59,7 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
             Material.PACKED_ICE
     );
 
-    public GroundLayerInventory() {
+    public GroundLayerInventory(@NotNull PlayerConsumer backFunction) {
         super(Component.text("Select ground block"), InventoryType.CHEST_6_ROW);
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -76,6 +78,7 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
                     .build();
             layout.setItem(slots[i], stack, this::handleClick);
         }
+        layout.setItem(getType().getSize(), new BackSlot(), (player1, i, clickType, result) -> backFunction.accept(player1));
         this.setLayout(layout);
     }
 

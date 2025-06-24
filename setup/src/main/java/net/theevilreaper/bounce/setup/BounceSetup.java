@@ -43,7 +43,6 @@ public final class BounceSetup implements ListenerHandling {
     private final MapProvider mapProvider;
     private final SetupDataService<BounceData> setupDataService;
     private final MapSetupInventory mapSetupInventory;
-    private final GroundLayerInventory groundLayerInventory;
     private final SetupItems setupItems;
     private final FileHandler fileHandler;
 
@@ -54,7 +53,6 @@ public final class BounceSetup implements ListenerHandling {
         this.mapSetupInventory = new MapSetupInventory(this.mapProvider::getEntries);
         this.setupItems = new SetupItems();
         this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
-        this.groundLayerInventory  = new GroundLayerInventory();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
     }
 
@@ -99,7 +97,6 @@ public final class BounceSetup implements ListenerHandling {
     }
 
     private void openMapSetupInventory(@NotNull Player player) {
-        player.openInventory(this.groundLayerInventory.getInventory());
-        //player.openInventory(this.mapSetupInventory.getInventory());
+        player.openInventory(this.mapSetupInventory.getInventory());
     }
 }
