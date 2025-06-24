@@ -10,7 +10,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +61,13 @@ public final class SetupBuildersCommand extends Command {
         }
 
         BounceData setupData = fetchedData.get();
-        setupData.getMap().get().setBuilders(builders);
+
+        if (setupData.getMapBuilder() == null) {
+            sender.sendMessage("No map is currently selected. Please select a map first.");
+            return;
+        }
+
+        setupData.getMapBuilder().addAuthors(builders);
         Component buildersAsComponent = Component.join(JoinConfiguration.arrayLike(), transformBuilders(builders));
         sender.sendMessage(Component.text("The creators of the map are: ").append(buildersAsComponent));
     }

@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.setup.command.part;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -12,7 +11,6 @@ import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.util.Components;
-import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import org.jetbrains.annotations.NotNull;
@@ -50,15 +48,20 @@ public final class SetupPositionCommand extends Command {
             return;
         }
 
-        BounceData setupData = fetchedData.get();
         Player player = (Player) sender;
-        GameMap map = setupData.getMap().get();
+        BounceData setupData = fetchedData.get();
+
+        if (setupData.getMapBuilder() == null) {
+            sender.sendMessage("No map is currently selected. Please select a map first.");
+            return;
+        }
+
         switch (type) {
             case "spawn":
-                map.setSpawn(player.getPosition());
+                setupData.getMapBuilder().setSpawn(player.getPosition());
                 break;
             case "game":
-                map.setGameSpawn(player.getPosition());
+                setupData.getMapBuilder().setGameSpawn(player.getPosition());
                 break;
             default:
                 sender.sendMessage(Component.text("Invalid spawn type! Use 'spawn' or 'game'.", NamedTextColor.RED));

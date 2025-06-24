@@ -8,7 +8,6 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
@@ -53,8 +52,13 @@ public final class SetupNameCommand extends Command {
         }
 
         BounceData setupData = fetchedData.get();
-        setupData.getMap().get().setName(name);
 
+        if (setupData.getMapBuilder() == null) {
+            sender.sendMessage("No map is currently selected. Please select a map first.");
+            return;
+        }
+
+        setupData.getMapBuilder().setName(name);
         Component message = Messages.withPrefix(Component.text("The name of the map now is: ", NamedTextColor.GRAY))
                 .append(Component.text(name, NamedTextColor.AQUA));
         sender.sendMessage(message);

@@ -11,7 +11,10 @@ import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.map.GameMap;
+import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Files;
 import java.util.Optional;
@@ -21,33 +24,35 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     private static final Pos SPAWN_POINT = new Pos(0, 100, 0);
     private final FileHandler fileHandler;
+    private final Player player;
 
     private InstanceContainer instance;
-    private Player player;
-
+    private GameMapBuilder gameMapBuilder;
+    private MapOverviewInventory overviewInventory;
 
     public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry, @NotNull FileHandler fileHandler) {
         super(owner, mapEntry);
-        this.fileHandler = fileHandler;this.loadData();
-        Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(uuid);
+        this.fileHandler = fileHandler;
+        Player foundPlayer = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(owner);
 
-        if (player == null) {
-            throw new IllegalArgumentException("Player with UUID " + uuid + " is not online.");
+        if (foundPlayer == null) {
+            throw new IllegalArgumentException("Player with UUID " + owner + " is not online.");
         }
 
-        //this.viewInventory = new LobbyViewInventory(this.map);
+        this.player = foundPlayer;
+        this.loadData();
     }
 
     public void openInventory() {
-       // player.openInventory(this.viewInventory.getInventory());
+        this.overviewInventory.open();
     }
 
     public void triggerUpdate() {
-      //  this.viewInventory.invalidateDataLayout();
+        this.overviewInventory.invalidateDataLayout();
     }
 
     public void teleport(@NotNull Player player) {
-        Pos spawnPoint = map.getSpawnOrDefault(SPAWN_POINT);
+        Pos spawnPoint = this.gameMapBuilder.getSpawnOrDefault(SPAWN_POINT);
         player.setInstance(this.instance, spawnPoint);
     }
 
@@ -62,19 +67,31 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     @Override
     public void reset() {
-
+        if (this.overviewInventory != null) {
+            this.overviewInventory.unregister();
+        }
     }
 
     @Override
     public void loadData() {
-        if (this.mapEntry != null) return;
-        Optional<GameMap> mapData = fileHandler.load(mapEntry.getMapFile(), GameMap.class);
+        Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
         // Initialize with a new BaseMap if loading fails
-        this.map = mapData.orElseGet(GameMap::new);
+        mapData.ifPresentOrElse(gameMap -> {
+            this.map = gameMap;
+            this.gameMapBuilder = new GameMapBuilder(gameMap);
+        }, () -> this.gameMapBuilder = new GameMapBuilder());
+
+        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder);
+        this.overviewInventory.register();
 
         this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
         AnvilLoader anvilLoader = new AnvilLoader(this.mapEntry.getDirectoryRoot());
         this.instance.setChunkLoader(anvilLoader);
+
         MinecraftServer.getInstanceManager().registerInstance(this.instance);
+    }
+
+    public @Nullable GameMapBuilder getMapBuilder() {
+        return this.gameMapBuilder;
     }
 }
