@@ -13,14 +13,15 @@ import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
-import net.theevilreaper.bounce.setup.event.PlayerGroundPartSelectEvent;
+import net.theevilreaper.aves.util.functional.VoidConsumer;
+import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.slot.BackSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;
 
-import static net.theevilreaper.bounce.setup.event.PlayerGroundPartSelectEvent.*;
+import static net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 
 public class GroundLayerInventory extends GlobalInventoryBuilder {
@@ -62,7 +63,7 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
             Material.PACKED_ICE
     );
 
-    public GroundLayerInventory(@NotNull PlayerConsumer backFunction) {
+    public GroundLayerInventory(@NotNull VoidConsumer backFunction) {
         super(Component.text("Select ground block"), InventoryType.CHEST_6_ROW);
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -81,7 +82,7 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
                     .build();
             layout.setItem(slots[i], stack, this::handleClick);
         }
-        layout.setItem(getType().getSize(), new BackSlot(), (player1, i, clickType, result) -> backFunction.accept(player1));
+        layout.setItem(getType().getSize() - 1, new BackSlot(), (player1, i, clickType, result) -> backFunction.apply());
         this.setLayout(layout);
     }
 
@@ -96,6 +97,6 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
     private void handleClick(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
         ItemStack clickedItem = player.getInventory().getItemStack(slot);
-        EventDispatcher.call(new PlayerGroundPartSelectEvent(player, clickedItem.material(), GroundPart.BLOCK));
+        EventDispatcher.call(new PlayerBlockSelectEvent(player, clickedItem.material(), GroundPart.BLOCK));
     }
 }

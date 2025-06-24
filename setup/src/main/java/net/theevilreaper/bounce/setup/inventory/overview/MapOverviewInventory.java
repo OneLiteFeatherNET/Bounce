@@ -7,6 +7,8 @@ import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
+import net.theevilreaper.aves.util.functional.PlayerConsumer;
+import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.slot.GroundSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MultiStringSlot;
@@ -20,10 +22,12 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
     private static final int[] DATA_SLOT = LayoutCalculator.from(9, 11, 13, 15, 17);
 
     private final GameMapBuilder builder;
+    private final VoidConsumer viewSwitcher;
 
-    public MapOverviewInventory(@NotNull Player player, @NotNull GameMapBuilder builder) {
+    public MapOverviewInventory(@NotNull Player player, @NotNull GameMapBuilder builder, @NotNull VoidConsumer viewSwitcher) {
         super(Component.text("Data view"), InventoryType.CHEST_3_ROW, player);
         this.builder = builder;
+        this.viewSwitcher = viewSwitcher;
         InventoryLayout layout = InventoryLayout.fromType(getType());
 
         layout.setItems(LayoutCalculator.quad(0, getType().getSize() - 1), SetupItems.DECORATION);
@@ -47,7 +51,7 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
         return switch (type) {
             case SPAWN -> new PositionSlot(type, this.builder.getSpawn());
             case GAME_SPAWN -> new PositionSlot(type, this.builder.getGameSpawn());
-            case GROUND -> new GroundSlot(type);
+            case GROUND -> new GroundSlot(type, viewSwitcher);
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getAuthors());
         };
