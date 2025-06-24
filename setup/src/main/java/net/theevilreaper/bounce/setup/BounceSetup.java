@@ -19,11 +19,11 @@ import net.theevilreaper.aves.map.MapProvider;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.util.GsonUtil;
+import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.MapSetupInventory;
-import net.theevilreaper.bounce.setup.inventory.ground.GroundLayerInventory;
 import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
@@ -62,9 +62,10 @@ public final class BounceSetup implements ListenerHandling {
         registerListener(node);
 
         this.mapSetupInventory.register();
-        this.groundLayerInventory.register();
+        //this.groundLayerInventory.register();
 
         MinecraftServer.getCommandManager().register(new SetupCommand(this.setupDataService));
+        MinecraftServer.getCommandManager().register(new GameModeCommand());
     }
 
     private void onShutdown() {
