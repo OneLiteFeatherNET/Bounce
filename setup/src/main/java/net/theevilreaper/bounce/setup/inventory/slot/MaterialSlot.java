@@ -16,7 +16,6 @@ public class MaterialSlot extends Slot {
         this.stack = ItemStack.builder(material)
                 .lore(Component.empty(), SetupMessages.NO_SPACE_SEPARATOR.append(Component.space()).append(Component.text("Ground block", NamedTextColor.GRAY)))
                 .build();
-        //this.setClick(InventoryConstants.CANCEL_CLICK);
     }
 
     @Override

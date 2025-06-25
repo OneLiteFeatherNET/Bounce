@@ -12,7 +12,6 @@ import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
-import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.slot.BackSlot;

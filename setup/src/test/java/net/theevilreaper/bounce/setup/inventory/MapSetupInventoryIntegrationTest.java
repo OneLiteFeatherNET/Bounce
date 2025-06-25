@@ -55,7 +55,7 @@ class MapSetupInventoryIntegrationTest extends MapDataTestBase {
         Collector<OpenWindowPacket> windowPacketCollector = connection.trackIncoming(OpenWindowPacket.class);
         Collector<WindowItemsPacket> windowItemsPacketCollector = connection.trackIncoming(WindowItemsPacket.class);
 
-        mapSetupInventory.open(player);
+        player.openInventory(mapSetupInventory.getInventory());
 
         // We need to tick the server to send the packets
         env.tick();

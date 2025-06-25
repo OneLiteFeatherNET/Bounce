@@ -23,7 +23,7 @@ import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
-import net.theevilreaper.bounce.setup.inventory.MapSetupInventory;
+import net.theevilreaper.bounce.setup.inventory.InventoryService;
 import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
@@ -42,7 +42,7 @@ public final class BounceSetup implements ListenerHandling {
     public static final Tag<Integer> SETUP_TAG = Tag.Transient("bounce.setup");
     private final MapProvider mapProvider;
     private final SetupDataService<BounceData> setupDataService;
-    private final MapSetupInventory mapSetupInventory;
+    private final InventoryService inventoryService;
     private final SetupItems setupItems;
     private final FileHandler fileHandler;
 
@@ -50,7 +50,7 @@ public final class BounceSetup implements ListenerHandling {
         Path path = Path.of("");
         this.mapProvider = new BounceSetupMapProvider(path);
         this.setupDataService = SetupDataService.create();
-        this.mapSetupInventory = new MapSetupInventory(this.mapProvider::getEntries);
+        this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.setupItems = new SetupItems();
         this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
@@ -61,21 +61,18 @@ public final class BounceSetup implements ListenerHandling {
         registerCancelListener(node);
         registerListener(node);
 
-        this.mapSetupInventory.register();
-        //this.groundLayerInventory.register();
-
         MinecraftServer.getCommandManager().register(new SetupCommand(this.setupDataService));
         MinecraftServer.getCommandManager().register(new GameModeCommand());
     }
 
     private void onShutdown() {
-        this.mapSetupInventory.unregister();
+        this.inventoryService.cleanup();
     }
 
     private void registerListener(@NotNull EventNode<Event> node) {
         Supplier<Instance> instanceSupplier = this.mapProvider.getActiveInstance();
         node.addListener(AsyncPlayerConfigurationEvent.class, new PlayerConfigurationListener(instanceSupplier));
-        node.addListener(PlayerUseItemEvent.class, new PlayerItemListener(this::openMapSetupInventory, this.setupDataService::get));
+        node.addListener(PlayerUseItemEvent.class, new PlayerItemListener(this.inventoryService::openMapSetupInventory, this.setupDataService::get));
         node.addListener(PlayerSpawnEvent.class, new PlayerSpawnListener(
                 this.setupItems::setOverViewItem,
                 player -> this.mapProvider.teleportToSpawn(player, false))
@@ -95,9 +92,5 @@ public final class BounceSetup implements ListenerHandling {
 
         node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier, setupItems));
 
-    }
-
-    private void openMapSetupInventory(@NotNull Player player) {
-        player.openInventory(this.mapSetupInventory.getInventory());
     }
 }

@@ -98,13 +98,4 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
                 .customName(Component.text(path.getFileName().toString()))
                 .build();
     }
-
-    /**
-     * Opens the inventory for the specified player.
-     *
-     * @param player the player to open the inventory for
-     */
-    public void open(@NotNull Player player) {
-        player.openInventory(this.getInventory());
-    }
 }
