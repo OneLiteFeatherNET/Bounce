@@ -9,6 +9,13 @@ import net.theevilreaper.aves.inventory.util.InventoryConstants;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
+/**
+ * The {@link EmptyPushSlot} represents a {@link Slot} implementation that is used to indicate that a given push slot is not set up with any data.
+ *
+ * @author Joltra
+ * @version 1.0.0
+ * @since 0.1.0
+ */
 public final class EmptyPushSlot extends Slot {
 
     private static final ItemStack EMPTY_ITEM;
