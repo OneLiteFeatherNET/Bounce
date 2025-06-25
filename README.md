@@ -13,10 +13,12 @@ on the type of block the player is standing on, adding a strategic element to mo
 
 The current version of the game has a few limitations:
 
-- When players have the same score at the end of the game, the winner is determined by who reached that score earlier. This is tracked using a timestamp stored when a player’s score changes.
-- The playing area must be surrounded by lava blocks at the edges. If a player falls out of the arena, they are teleported back to the center. The lava block type is currently hardcoded in the game.
+- When players have the same score at the end of the game, the winner is determined by who reached that score earlier.
+  This is tracked using a timestamp stored when a player’s score changes.
+- The playing area must be surrounded by lava blocks at the edges. If a player falls out of the arena, they are
+  teleported back to the center. The lava block type is currently hardcoded in the game.
 
 > [!NOTE]
-> This repository is publicly visible **for transparency purposes only**.  
-> While this repository is primarily for transparency and internal use, we appreciate any feedback or issue reports regarding the code.
-> Please be aware that some features or resources may be restricted or unavailable outside the organization.
+> Some of the used dependencies are not available in a public repository like Maven Central or JitPack.
+> So it's not possible to build the project event when you create a fork of it.
+> We appreciate any feedback or issues reports regarding the code.
