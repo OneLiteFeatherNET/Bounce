@@ -56,7 +56,7 @@ public record PushData(@NotNull Map<Block, Double> push) {
      * @version 1.0.0
      * @since 0.1.0
      */
-    sealed interface Builder permits PushDataBuilder {
+    public sealed interface Builder permits PushDataBuilder {
         /**
          * Adds a push value for a specific block.
          *
