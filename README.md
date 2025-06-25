@@ -20,5 +20,5 @@ The current version of the game has a few limitations:
 
 > [!NOTE]
 > Some of the used dependencies are not available in a public repository like Maven Central or JitPack.
-> So it's not possible to build the project event when you create a fork of it.
+> So it's not possible to build the project even when you create a fork of it.
 > We appreciate any feedback or issues reports regarding the code.
