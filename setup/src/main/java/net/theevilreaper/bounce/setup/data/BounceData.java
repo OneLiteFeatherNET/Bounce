@@ -85,7 +85,9 @@ public final class BounceData extends BaseSetupData<GameMap> {
             this.gameMapBuilder = new GameMapBuilder(gameMap);
         }, () -> this.gameMapBuilder = new GameMapBuilder());
 
-        this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder, () -> this.groundLayerInventory.ge);
+        this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder, () -> {
+            return null;
+        });
         this.groundViewInventory.register();
 
         this.groundLayerInventory = new GroundLayerInventory(this.groundViewInventory::open);
