@@ -1,4 +1,4 @@
-package net.theevilreaper.bounce.common.ground;
+package net.theevilreaper.bounce.common.push;
 
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
