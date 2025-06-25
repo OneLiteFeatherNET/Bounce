@@ -33,7 +33,10 @@ public abstract class AbstractDataSlot extends Slot {
      * @return a new ItemStack.Builder with the same material and custom name
      */
     protected @NotNull ItemStack.Builder asBuilder(@NotNull ItemStack stack) {
-        return ItemStack.builder(stack.material())
-                .customName(stack.get(ItemComponent.CUSTOM_NAME));
+        ItemStack.Builder builder = ItemStack.builder(stack.material());
+        if (stack.has(ItemComponent.CUSTOM_NAME)) {
+            builder.customName(stack.get(ItemComponent.CUSTOM_NAME));
+        }
+        return builder;
     }
 }
