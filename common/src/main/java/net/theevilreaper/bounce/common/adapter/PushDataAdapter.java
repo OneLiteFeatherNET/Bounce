@@ -1,0 +1,53 @@
+package net.theevilreaper.bounce.common.adapter;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.instance.block.Block;
+import net.theevilreaper.bounce.common.push.PushData;
+import org.jetbrains.annotations.NotNull;
+
+import java.lang.reflect.Type;
+
+public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializer<PushData> {
+
+    @Override
+    public @NotNull PushData deserialize(
+            @NotNull JsonElement element,
+            @NotNull Type type,
+            @NotNull JsonDeserializationContext context
+    ) {
+        JsonArray jsonArray = element.getAsJsonArray();
+        PushData.Builder builder = PushData.builder();
+
+        for (JsonElement jsonElement : jsonArray.asList()) {
+            Key blockKey = context.deserialize(jsonElement.getAsJsonObject().get("block"), Key.class);
+            double value = jsonElement.getAsJsonObject().get("value").getAsDouble();
+            Block block = Block.fromKey(blockKey);
+
+            builder.add(block, value);
+        }
+
+        return builder.build();
+    }
+
+    @Override
+    public @NotNull JsonElement serialize(@NotNull PushData data, @NotNull Type type, @NotNull JsonSerializationContext context) {
+        JsonArray jsonArray = new JsonArray();
+
+        data.push().forEach((block, aDouble) -> {
+            JsonObject jsonObject = new JsonObject();
+            Key blockKey = block.key();
+            jsonObject.add("block", context.serialize(blockKey, Key.class));
+            jsonObject.addProperty("value", aDouble.doubleValue());
+            jsonArray.add(jsonObject);
+        });
+
+        return jsonArray;
+    }
+}
