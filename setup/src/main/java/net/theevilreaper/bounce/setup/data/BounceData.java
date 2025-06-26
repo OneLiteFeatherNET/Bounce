@@ -74,6 +74,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
         if (this.overviewInventory != null) {
             this.overviewInventory.unregister();
         }
+
+        MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
     }
 
     @Override
