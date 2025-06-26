@@ -2,8 +2,8 @@ package net.theevilreaper.bounce.setup.builder;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
-import net.theevilreaper.bounce.common.ground.PushData;
 import net.theevilreaper.bounce.common.map.GameMap;
+import net.theevilreaper.bounce.common.push.PushData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
