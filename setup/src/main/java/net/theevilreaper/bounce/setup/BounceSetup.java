@@ -7,6 +7,7 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.instance.Instance;
@@ -25,6 +26,7 @@ import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
 import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
+import net.theevilreaper.bounce.setup.listener.PlayerDisconnectListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
 import net.theevilreaper.bounce.setup.listener.entity.EntityAddToInstanceListener;
@@ -77,7 +79,7 @@ public final class BounceSetup implements ListenerHandling {
                 this.setupItems::setOverViewItem,
                 player -> this.mapProvider.teleportToSpawn(player, false))
         );
-
+        node.addListener(PlayerDisconnectEvent.class, new PlayerDisconnectListener(this.setupDataService::get));
         node.addListener(MapSetupSelectEvent.class, new MapSetupSelectListener(this.fileHandler, this.setupDataService));
 
         PlayerConsumer instanceSwitcher = player -> {
