@@ -10,6 +10,13 @@ public interface Area {
     void calculatePositions();
 
     /**
+     * Returns a boolean indicator if the are includes an amount of positions.
+     *
+     * @return true when yes otherwise false
+     */
+    boolean hasPositions();
+
+    /**
      * Returns the minimum point of the area.
      *
      * @return the point as {@link Vec}

@@ -51,6 +51,14 @@ public final class GroundArea implements Area {
      * {@inheritDoc}
      */
     @Override
+    public boolean hasPositions() {
+        return !this.positions.isEmpty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull PushData data() {
         return data;
     }
