@@ -10,31 +10,29 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
 import net.theevilreaper.bounce.common.map.GameMap;
+import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.ScoreDeathUpdateEvent;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
-public class PlayerJumpTask {
+@ApiStatus.NonExtendable
+public final class PlayerJumpTask {
 
-    private static final Map<Block, Function<GameMap, Double>> blockPushMap = Map.of(
-            Block.LIGHT_BLUE_STAINED_GLASS, GameMap::getDefaultPush,
-            Block.LAPIS_BLOCK, GameMap::getIronPush,
-            Block.GOLD_BLOCK, GameMap::getGoldPush,
-            Block.EMERALD_BLOCK, GameMap::getEmeraldPush
-    );
+    private static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
 
     private final Player player;
+    private final PushData pushData;
+
     private GameMap map;
     private Task task;
     private Block lastBlockBelow = Block.AIR; // Track previous block below player
     private long lastPushTime = 0;
-    private static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
 
-    public PlayerJumpTask(@NotNull Player player) {
+    public PlayerJumpTask(@NotNull Player player, @NotNull PushData pushData) {
         this.player = player;
+        this.pushData = pushData;
     }
 
     public void start(@NotNull GameMap bounceMap) {
@@ -67,7 +65,8 @@ public class PlayerJumpTask {
                 return;
             }
 
-            if (blockPushMap.containsKey(block) && !block.compare(lastBlockBelow)) {
+
+            if (pushData.push().containsKey(block) && !block.compare(lastBlockBelow)) {
                 foundJumpBlock = block;
             }
         }
@@ -79,8 +78,7 @@ public class PlayerJumpTask {
         if (player.getVelocity().y() < 0) {
             long now = System.currentTimeMillis();
             if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
-                Function<GameMap, Double> pushFunc = blockPushMap.get(foundJumpBlock);
-                double pushStrength = pushFunc.apply(map) * 10;
+                double pushStrength = pushData.getPush(foundJumpBlock) * 10;
                 Vec push = new Vec(0, pushStrength, 0); // Only push upwards
                 player.setVelocity(push);
                 lastPushTime = now;
