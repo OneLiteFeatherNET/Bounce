@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.jump.PlayerJumpTask;
 import net.theevilreaper.bounce.util.GameMessages;
@@ -26,8 +27,8 @@ public final class BounceProfile implements Comparable<BounceProfile> {
         this.points = 0;
     }
 
-    public void registerJumpRunnable() {
-        this.jumpRunnable = new PlayerJumpTask(player);
+    public void registerJumpRunnable(@NotNull PushData pushData) {
+        this.jumpRunnable = new PlayerJumpTask(player, pushData);
     }
 
     public void setLastDamager(Player paramPlayer) {

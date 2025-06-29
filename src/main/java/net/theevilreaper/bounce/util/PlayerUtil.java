@@ -16,6 +16,7 @@ import net.minestom.server.item.component.FireworkExplosion;
 import net.minestom.server.item.component.FireworkList;
 import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
+import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
 import org.jetbrains.annotations.NotNull;
@@ -25,18 +26,20 @@ import java.util.List;
 public final class PlayerUtil {
 
     private final ProfileService profileService;
+    private final PushData pushData;
 
     private Task task;
 
-    public PlayerUtil(@NotNull ProfileService profileService) {
+    public PlayerUtil(@NotNull ProfileService profileService, @NotNull PushData pushData) {
         this.profileService = profileService;
+        this.pushData = pushData;
     }
 
     public void preparePlayers() {
         for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             onlinePlayer.setLevel(0);
             BounceProfile profile = this.profileService.add(onlinePlayer);
-            profile.registerJumpRunnable();
+            profile.registerJumpRunnable(pushData);
         }
     }
 

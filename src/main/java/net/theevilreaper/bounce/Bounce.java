@@ -69,7 +69,7 @@ public class Bounce implements ListenerHandling {
         this.itemUtil = new ItemUtil();
         this.phaseSeries = new LinearPhaseSeries<>();
         this.profileService = new ProfileService();
-        this.playerUtil = new PlayerUtil(this.profileService);
+        this.playerUtil = new PlayerUtil(this.profileService, ((BounceMapProvider) this.mapProvider).getActiveMap().getPushData());
         this.scoreboard = new BounceScoreboard();
         this.registerPhases();
 
