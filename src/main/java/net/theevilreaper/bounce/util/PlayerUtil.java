@@ -1,36 +1,26 @@
 package net.theevilreaper.bounce.util;
 
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.color.Color;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.projectile.FireworkRocketMeta;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.FireworkExplosion;
 import net.minestom.server.item.component.FireworkList;
-import net.minestom.server.item.enchant.EntityEffect;
-import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
-import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Supplier;
 
 public final class PlayerUtil {
 
