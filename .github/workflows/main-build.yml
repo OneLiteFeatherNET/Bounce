@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - develop
+      - master
 
 jobs:
   build_and_test:
-    if: github.repository_owner == 'theEvilReaper'
+    if: github.repository_owner == 'OneLiteFeatherNET'
     name: Build and Test
     runs-on: ${{ matrix.os }}
     env:

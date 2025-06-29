@@ -2,7 +2,7 @@ name: Build PR
 on: [pull_request]
 jobs:
   build_pr:
-    if: github.repository_owner == 'theEvilReaper'
+    if: github.repository_owner == 'OneLiteFeatherNET'
     name: Build Pull Request Branch
     runs-on: ${{ matrix.os }}
     env:
