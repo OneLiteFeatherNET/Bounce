@@ -90,7 +90,7 @@ public final class GameMapBuilder {
      * @return a new GameMap instance
      */
     public @NotNull GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, 0, 0, 0, 0);
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build());
     }
 
     public String getName() {
