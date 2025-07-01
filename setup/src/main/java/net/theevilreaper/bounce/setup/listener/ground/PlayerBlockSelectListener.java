@@ -1,36 +1,47 @@
 package net.theevilreaper.bounce.setup.listener.ground;
 
-import net.minestom.server.entity.Player;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.Material;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class PlayerBlockSelectListener implements Consumer<PlayerBlockSelectEvent> {
 
-    private final Function<Player, Optional<BounceData>> bounceDataSupplier;
+    private final Function<UUID, Optional<BounceData>> bounceDataSupplier;
 
-    public PlayerBlockSelectListener(@NotNull Function<Player, Optional<BounceData>> bounceDataSupplier) {
+    public PlayerBlockSelectListener(@NotNull Function<UUID, Optional<BounceData>> bounceDataSupplier) {
         this.bounceDataSupplier = bounceDataSupplier;
     }
 
     @Override
     public void accept(@NotNull PlayerBlockSelectEvent event) {
-        Optional<BounceData> data = bounceDataSupplier.apply(event.getPlayer());
+        Optional<BounceData> data = bounceDataSupplier.apply(event.getPlayer().getUuid());
 
         if (data.isEmpty()) return;
 
         BounceData bounceData = data.get();
-        GameMapBuilder mapBuilder = bounceData.getMapBuilder();
-        Block block = event.getMaterial().block();
+        Material material = event.getMaterial();
+        System.out.println("Player " + event.getPlayer().getUsername() + " selected block: " + material.name());
+        Block block = material.block();
 
         switch (event.getPart()) {
-            case BLOCK -> mapBuilder.setGroundBlock(block);
+            case BLOCK -> this.handleGroundBlockChange(bounceData, block);
         }
+    }
+
+    private void handleGroundBlockChange(@NotNull BounceData bounceData, @NotNull Block block) {
+        GameMapBuilder mapBuilder = bounceData.getMapBuilder();
+        mapBuilder.setGroundBlock(block);
+        System.out.println("Ground block set to: " + block.name());
+        bounceData.triggerGroundViewUpdate();
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundView(true));
     }
 }
