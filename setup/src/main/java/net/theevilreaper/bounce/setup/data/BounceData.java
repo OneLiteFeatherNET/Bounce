@@ -13,7 +13,6 @@ import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
-import net.theevilreaper.bounce.setup.inventory.ground.GroundLayerInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +31,6 @@ public final class BounceData extends BaseSetupData<GameMap> {
     private GameMapBuilder gameMapBuilder;
     private MapOverviewInventory overviewInventory;
     private GroundViewInventory groundViewInventory;
-    private GroundLayerInventory groundLayerInventory;
 
     public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry, @NotNull FileHandler fileHandler) {
         super(owner, mapEntry);
@@ -53,6 +51,12 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     public void triggerUpdate() {
         this.overviewInventory.invalidateDataLayout();
+    }
+
+    public void triggerGroundViewUpdate() {
+        if (this.groundViewInventory != null) {
+            this.groundViewInventory.invalidateDataLayout();
+        }
     }
 
     public void teleport(@NotNull Player player) {
@@ -87,13 +91,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
             this.gameMapBuilder = new GameMapBuilder(gameMap);
         }, () -> this.gameMapBuilder = new GameMapBuilder());
 
-        this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder, () -> {
-            return null;
-        });
+        this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
         this.groundViewInventory.register();
-
-        this.groundLayerInventory = new GroundLayerInventory(this.groundViewInventory::open);
-        this.groundLayerInventory.register();
 
         this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder, this.groundViewInventory::open);
         this.overviewInventory.register();
@@ -110,4 +109,14 @@ public final class BounceData extends BaseSetupData<GameMap> {
         return this.gameMapBuilder;
     }
 
+    public void backToGroundView(boolean closeCurrentInventory) {
+        if (closeCurrentInventory) {
+            this.player.closeInventory(false);
+        }
+        this.groundViewInventory.open();
+    }
+
+    public GroundViewInventory getGroundViewInventory() {
+        return groundViewInventory;
+    }
 }
