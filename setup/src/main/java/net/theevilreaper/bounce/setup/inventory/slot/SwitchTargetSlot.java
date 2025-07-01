@@ -13,12 +13,12 @@ import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import org.jetbrains.annotations.NotNull;
 
-public final class BackSlot extends Slot {
+public final class SwitchTargetSlot extends Slot {
 
     private final ItemStack stack;
     private final SwitchTarget switchTarget;
 
-    public BackSlot(@NotNull SwitchTarget target) {
+    public SwitchTargetSlot(@NotNull SwitchTarget target) {
         this.stack = ItemStack.builder(Material.BARRIER)
                 .customName(Component.text("Back", NamedTextColor.RED))
                 .build();
