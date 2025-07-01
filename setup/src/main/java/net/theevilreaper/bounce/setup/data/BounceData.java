@@ -59,6 +59,12 @@ public final class BounceData extends BaseSetupData<GameMap> {
         }
     }
 
+    public void triggerPushViewUpdate() {
+        if (this.overviewInventory != null) {
+            this.groundViewInventory.invalidateDataLayout();
+        }
+    }
+
     public void teleport(@NotNull Player player) {
         Pos spawnPoint = this.gameMapBuilder.getSpawnOrDefault(SPAWN_POINT);
         player.setInstance(this.instance, spawnPoint);
@@ -79,7 +85,9 @@ public final class BounceData extends BaseSetupData<GameMap> {
             this.overviewInventory.unregister();
         }
 
-        MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
+            MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
+        });
     }
 
     @Override
