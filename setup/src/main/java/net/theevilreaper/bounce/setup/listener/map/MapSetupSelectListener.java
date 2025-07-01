@@ -8,7 +8,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.timer.Task;
 import net.onelitefeather.guira.SetupDataService;
 import net.theevilreaper.aves.file.FileHandler;
-import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;

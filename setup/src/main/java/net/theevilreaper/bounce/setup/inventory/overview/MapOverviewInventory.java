@@ -7,7 +7,6 @@ import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
-import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.slot.GroundSlot;
