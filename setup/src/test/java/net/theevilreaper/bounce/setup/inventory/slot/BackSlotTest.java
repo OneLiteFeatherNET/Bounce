@@ -5,6 +5,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +14,7 @@ class BackSlotTest {
 
     @Test
     void testBackSlot() {
-        BackSlot backSlot = new BackSlot();
+        BackSlot backSlot = new BackSlot(SetupInventorySwitchEvent.SwitchTarget.MAP_OVERVIEW);
         assertNotNull(backSlot);
         assertInstanceOf(BackSlot.class, backSlot);
 
