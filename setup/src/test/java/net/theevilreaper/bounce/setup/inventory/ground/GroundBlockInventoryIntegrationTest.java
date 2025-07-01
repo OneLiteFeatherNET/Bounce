@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
+import static net.theevilreaper.bounce.setup.SlotAssertions.assertItemStackInRow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -64,22 +65,5 @@ class GroundBlockInventoryIntegrationTest {
             assertEquals(expectedMaterial, itemStack.material(), "ItemStack in slot " + itemSlots[i] + " should match expected material");
         }
 
-    }
-
-    /**
-     * Asserts that the specified ItemStack is present in the given slots of the InventoryLayout.
-     *
-     * @param layout   The InventoryLayout to check.
-     * @param expected The expected ItemStack.
-     * @param slots    The slots to check for the expected ItemStack.
-     */
-    private void assertItemStackInRow(@NotNull InventoryLayout layout, @NotNull ItemStack expected, int... slots) {
-        for (int slotIndex : slots) {
-            ISlot slot = layout.getSlot(slotIndex);
-            assertNotNull(slot, "Slot " + slotIndex + " should not be null");
-            ItemStack itemStack = slot.getItem();
-            assertNotNull(itemStack, "ItemStack in slot " + slot + " should not be null");
-            assertEquals(expected, itemStack, "ItemStack in slot " + slot + " should match expected item");
-        }
     }
 }
