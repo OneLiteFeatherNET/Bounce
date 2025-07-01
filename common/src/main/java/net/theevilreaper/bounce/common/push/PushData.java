@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,7 +81,8 @@ public record PushData(@NotNull Map<Block, Double> push) {
          *
          * @return an unmodifiable view of the map containing block push values
          */
-        @NotNull @UnmodifiableView Map<Block, Double> getPushValues();
+        @NotNull @UnmodifiableView
+        List<PushEntry> getPushValues();
 
         /**
          * Builds the {@link PushData} instance.

@@ -4,20 +4,26 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class PushDataBuilder implements PushData.Builder {
 
-    private final Map<Block, Double> blocks;
+    private final List<PushEntry> blocks;
 
     public PushDataBuilder() {
-        this.blocks = new HashMap<>();
+        this.blocks = new ArrayList<>();
     }
 
     public PushDataBuilder(@NotNull PushData pushData) {
-        this.blocks = new HashMap<>(pushData.push());
+        this.blocks = new ArrayList<>();
+
+        pushData.push().forEach((block, aDouble) -> this.blocks.add(new PushEntry(block, aDouble.intValue())));
     }
 
     /**
@@ -25,7 +31,7 @@ public final class PushDataBuilder implements PushData.Builder {
      */
     @Override
     public PushData.@NotNull Builder add(@NotNull Block block, double value) {
-        this.blocks.put(block, value);
+        this.blocks.add(new PushEntry(block, ((int) value)));
         return this;
     }
 
@@ -42,8 +48,8 @@ public final class PushDataBuilder implements PushData.Builder {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull @UnmodifiableView Map<Block, Double> getPushValues() {
-        return Collections.unmodifiableMap(this.blocks);
+    public @NotNull @UnmodifiableView List<PushEntry> getPushValues() {
+        return Collections.unmodifiableList(this.blocks);
     }
 
     /**
@@ -51,6 +57,13 @@ public final class PushDataBuilder implements PushData.Builder {
      */
     @Override
     public @NotNull PushData build() {
-        return new PushData(this.blocks);
+        return new PushData(this.blocks.stream()
+                .collect(Collectors.toMap(
+                        PushEntry::getBlock,
+                        pushEntry -> ((double) pushEntry.getValue()),
+                        (v1, v2) -> v1,
+                        HashMap::new
+                ))
+        );// in case of duplicate keys, keep the first
     }
 }
