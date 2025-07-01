@@ -55,6 +55,8 @@ public class SetupInventorySwitchEvent implements PlayerEvent {
      */
     public enum SwitchTarget {
         GROUND_LAYER,
+        PUSH_LAYER,
+        LAYER_OVERVIEW,
         MAP_OVERVIEW,
     }
 }
