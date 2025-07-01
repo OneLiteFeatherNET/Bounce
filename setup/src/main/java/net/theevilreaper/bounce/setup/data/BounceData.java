@@ -124,7 +124,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
         this.groundViewInventory.open();
     }
 
-    public GroundViewInventory getGroundViewInventory() {
-        return groundViewInventory;
+    public void openGroundLayerView() {
+        this.groundViewInventory.open();
     }
 }
