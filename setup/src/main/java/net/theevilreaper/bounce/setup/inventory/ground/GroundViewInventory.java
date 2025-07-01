@@ -1,8 +1,8 @@
 package net.theevilreaper.bounce.setup.inventory.ground;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.ClickType;
@@ -10,8 +10,9 @@ import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
-import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
+import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import net.theevilreaper.bounce.setup.inventory.slot.EmptyPushSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MaterialSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
@@ -19,16 +20,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class GroundViewInventory extends PersonalInventoryBuilder {
 
-    private final Supplier<VoidConsumer> viewSwitcher;
-
-    public GroundViewInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder, @NotNull Supplier<VoidConsumer> viewSwitcher) {
+    public GroundViewInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder) {
         super(Component.text("Setup playing area"), InventoryType.CHEST_3_ROW, player);
         InventoryLayout layout = InventoryLayout.fromType(getType());
-        this.viewSwitcher = viewSwitcher;
 
         layout.setItems(LayoutCalculator.quad(0, getType().getSize() - 1), SetupItems.DECORATION);
 
@@ -57,9 +54,17 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         });
     }
 
+    /**
+     * Handles the button click for the ground layer inventory.
+     *
+     * @param player    the player who clicked the button
+     * @param slot      the slot that was clicked
+     * @param clickType the type of click that occurred
+     * @param result    the result of the click action, which can be modified to cancel the action
+     */
     private void handleGroundButton(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
         player.closeInventory();
-        MinecraftServer.getSchedulerManager().scheduleNextTick(viewSwitcher.get()::apply);
+        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.GROUND_LAYER));
     }
 }
