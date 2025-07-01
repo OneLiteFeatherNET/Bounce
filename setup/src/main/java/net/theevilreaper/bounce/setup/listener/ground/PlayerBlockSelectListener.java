@@ -32,9 +32,11 @@ public class PlayerBlockSelectListener implements Consumer<PlayerBlockSelectEven
         System.out.println("Player " + event.getPlayer().getUsername() + " selected block: " + material.name());
         Block block = material.block();
 
-        switch (event.getPart()) {
-            case BLOCK -> this.handleGroundBlockChange(bounceData, block);
+        if (event.getPart() == PlayerBlockSelectEvent.GroundPart.BLOCK) {
+            this.handleGroundBlockChange(bounceData, block);
+            return;
         }
+        this.handlePushBlockChange(bounceData, block);
     }
 
     private void handleGroundBlockChange(@NotNull BounceData bounceData, @NotNull Block block) {
@@ -42,6 +44,13 @@ public class PlayerBlockSelectListener implements Consumer<PlayerBlockSelectEven
         mapBuilder.setGroundBlock(block);
         System.out.println("Ground block set to: " + block.name());
         bounceData.triggerGroundViewUpdate();
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundView(true));
+    }
+
+    private void handlePushBlockChange(@NotNull BounceData bounceData, @NotNull Block block) {
+        GameMapBuilder mapBuilder = bounceData.getMapBuilder();
+        mapBuilder.getPushDataBuilder().add(block, 0);
+        bounceData.triggerPushViewUpdate();
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundView(true));
     }
 }

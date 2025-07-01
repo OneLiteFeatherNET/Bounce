@@ -32,10 +32,14 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
         if (!player.hasTag(BounceSetup.SETUP_TAG)) return;
 
         if (event.getTarget() == SetupInventorySwitchEvent.SwitchTarget.GROUND_LAYER) {
-            this.inventoryService.openGroundLayerInventory(player);
+            this.inventoryService.openGroundBlockInventory(player);
             return;
         }
 
+        if (event.getTarget() == SetupInventorySwitchEvent.SwitchTarget.PUSH_LAYER) {
+            this.inventoryService.openPushBlockInventory(player);
+            return;
+        }
 
         Optional<BounceData> optionalData = this.profileGetter.apply(player.getUuid());
 
@@ -45,7 +49,7 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
         }
 
         BounceData data = optionalData.get();
-        player.openInventory(data.getGroundViewInventory().getInventory());
+        data.openGroundLayerView();
 
     }
 }
