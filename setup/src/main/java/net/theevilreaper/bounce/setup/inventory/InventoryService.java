@@ -18,8 +18,7 @@ public final class InventoryService {
     public InventoryService(@NotNull Supplier<List<MapEntry>> entries) {
         this.mapSetupInventory = new MapSetupInventory(entries);
 
-        this.groundLayerInventory = new GroundLayerInventory(() -> {
-        });
+        this.groundLayerInventory = new GroundLayerInventory();
 
         this.mapSetupInventory.register();
         this.groundLayerInventory.register();
