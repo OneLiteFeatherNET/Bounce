@@ -2,7 +2,8 @@ package net.theevilreaper.bounce.setup.inventory;
 
 import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.map.MapEntry;
-import net.theevilreaper.bounce.setup.inventory.ground.GroundLayerInventory;
+import net.theevilreaper.bounce.setup.inventory.ground.GroundBlockInventory;
+import net.theevilreaper.bounce.setup.inventory.push.PushBlockInventory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,20 +14,24 @@ import java.util.function.Supplier;
 public final class InventoryService {
 
     private final MapSetupInventory mapSetupInventory;
-    private final GroundLayerInventory groundLayerInventory;
+    private final GroundBlockInventory groundBlockInventory;
+    private final PushBlockInventory pushBlockInventory;
 
     public InventoryService(@NotNull Supplier<List<MapEntry>> entries) {
         this.mapSetupInventory = new MapSetupInventory(entries);
 
-        this.groundLayerInventory = new GroundLayerInventory();
+        this.groundBlockInventory = new GroundBlockInventory();
+        this.pushBlockInventory = new PushBlockInventory();
 
         this.mapSetupInventory.register();
-        this.groundLayerInventory.register();
+        this.groundBlockInventory.register();
+        this.pushBlockInventory.register();
     }
 
     public void cleanup() {
         this.mapSetupInventory.unregister();
-        this.groundLayerInventory.unregister();
+        this.groundBlockInventory.unregister();
+        this.pushBlockInventory.unregister();
     }
 
     /**
@@ -43,7 +48,16 @@ public final class InventoryService {
      *
      * @param player the player to open the inventory for
      */
-    public void openGroundLayerInventory(@NotNull Player player) {
-        player.openInventory(this.groundLayerInventory.getInventory());
+    public void openGroundBlockInventory(@NotNull Player player) {
+        player.openInventory(this.groundBlockInventory.getInventory());
+    }
+
+    /**
+     * Opens the push layer inventory for the specified player.
+     *
+     * @param player the player to open the inventory for
+     */
+    public void openPushBlockInventory(@NotNull Player player) {
+        player.openInventory(this.pushBlockInventory.getInventory());
     }
 }
