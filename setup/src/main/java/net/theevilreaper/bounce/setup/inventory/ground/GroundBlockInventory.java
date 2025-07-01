@@ -13,56 +13,19 @@ import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
-import net.theevilreaper.bounce.setup.inventory.slot.BackSlot;
+import net.theevilreaper.bounce.setup.inventory.SetupBlocks;
+import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
-import java.util.List;
 
 import static net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent.*;
 import static net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 
-public class GroundLayerInventory extends GlobalInventoryBuilder {
+public class GroundBlockInventory extends GlobalInventoryBuilder {
 
-    private final List<Material> allowedGroundBlocks = List.of(
-            Material.GLASS,
-            Material.RED_STAINED_GLASS,
-            Material.ORANGE_STAINED_GLASS,
-            Material.YELLOW_STAINED_GLASS,
-            Material.LIME_STAINED_GLASS,
-            Material.GREEN_STAINED_GLASS,
-            Material.CYAN_STAINED_GLASS,
-            Material.LIGHT_BLUE_STAINED_GLASS,
-            Material.BLUE_STAINED_GLASS,
-            Material.PURPLE_STAINED_GLASS,
-            Material.MAGENTA_STAINED_GLASS,
-            Material.PINK_STAINED_GLASS,
-            Material.WHITE_STAINED_GLASS,
-            Material.BLACK_STAINED_GLASS,
-            Material.GRAY_STAINED_GLASS,
-            Material.BROWN_STAINED_GLASS,
-            Material.TERRACOTTA,
-            Material.WHITE_TERRACOTTA,
-            Material.ORANGE_TERRACOTTA,
-            Material.MAGENTA_TERRACOTTA,
-            Material.LIGHT_BLUE_TERRACOTTA,
-            Material.YELLOW_TERRACOTTA,
-            Material.LIME_TERRACOTTA,
-            Material.GREEN_TERRACOTTA,
-            Material.CYAN_TERRACOTTA,
-            Material.LIGHT_GRAY_TERRACOTTA,
-            Material.GRAY_TERRACOTTA,
-            Material.PINK_TERRACOTTA,
-            Material.PURPLE_TERRACOTTA,
-            Material.BLUE_TERRACOTTA,
-            Material.BROWN_TERRACOTTA,
-            Material.BLACK_TERRACOTTA,
-            Material.ICE,
-            Material.PACKED_ICE
-    );
-
-    public GroundLayerInventory() {
+    public GroundBlockInventory() {
         super(Component.text("Select ground block"), InventoryType.CHEST_6_ROW);
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -72,7 +35,7 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
 
         int[] slots = LayoutCalculator.quad(InventoryType.CHEST_1_ROW.getSize(), InventoryType.CHEST_5_ROW.getSize() - 1);
 
-        Iterator<Material> iterator = allowedGroundBlocks.iterator();
+        Iterator<Material> iterator = SetupBlocks.ALLOWED_GROUND_BLOCKS.iterator();
 
         for (int i = 0; i < slots.length && iterator.hasNext(); i++) {
             Material currentMaterial = iterator.next();
@@ -81,7 +44,7 @@ public class GroundLayerInventory extends GlobalInventoryBuilder {
                     .build();
             layout.setItem(slots[i], stack, this::handleClick);
         }
-        layout.setItem(getType().getSize() - 1, new BackSlot(SwitchTarget.MAP_OVERVIEW));
+        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.MAP_OVERVIEW));
         this.setLayout(layout);
     }
 
