@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.setup;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
@@ -24,12 +23,16 @@ import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
+import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
+import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
 import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerDisconnectListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
 import net.theevilreaper.bounce.setup.listener.entity.EntityAddToInstanceListener;
+import net.theevilreaper.bounce.setup.listener.ground.PlayerBlockSelectListener;
+import net.theevilreaper.bounce.setup.listener.inventory.SetupInventorySwitchListener;
 import net.theevilreaper.bounce.setup.listener.map.MapSetupSelectListener;
 import net.theevilreaper.bounce.setup.listener.map.SetupFinishListener;
 import net.theevilreaper.bounce.setup.map.BounceSetupMapProvider;
@@ -91,6 +94,8 @@ public final class BounceSetup implements ListenerHandling {
                 (Class<SetupFinishEvent<BounceData>>) (Class<?>) SetupFinishEvent.class,
                 new SetupFinishListener(instanceSwitcher)
         );
+        node.addListener(PlayerBlockSelectEvent.class, new PlayerBlockSelectListener(this.setupDataService::get));
+        node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
 
         node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier, setupItems));
 
