@@ -40,7 +40,7 @@ class GroundViewInventoryIntegrationTest {
 
         InventoryLayout layout = groundViewInventory.getLayout();
 
-        int[] slots = LayoutCalculator.from(12, 14, 16, 18);
+        int[] slots = LayoutCalculator.from(12, 14, 16);
 
         for (int slot : slots) {
             assertSlot(layout, slot, SetupItems.DECORATION.material());
