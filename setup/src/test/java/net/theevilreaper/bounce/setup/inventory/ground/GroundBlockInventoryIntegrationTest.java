@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MicrotusExtension.class)
 class GroundBlockInventoryIntegrationTest {
@@ -54,7 +53,7 @@ class GroundBlockInventoryIntegrationTest {
         int[] itemSlots = LayoutCalculator.quad(InventoryType.CHEST_1_ROW.getSize(), InventoryType.CHEST_5_ROW.getSize() - 1);
         List<Material> allowedGroundBlocks = SetupBlocks.ALLOWED_GROUND_BLOCKS;
         assertNotEquals(allowedGroundBlocks.size(), itemSlots.length, "There should be 36 item slots in the inventory");
-        assertTrue(itemSlots.length - allowedGroundBlocks.size() == 2, "The different between item slots and allowed ground blocks should be two");
+        assertEquals(2, itemSlots.length - allowedGroundBlocks.size(), "The different between item slots and allowed ground blocks should be two");
 
         for (int i = 0; i < itemSlots.length && i < allowedGroundBlocks.size(); i++) {
             ISlot slot = layout.getSlot(itemSlots[i]);
