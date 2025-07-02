@@ -46,9 +46,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
             Component.empty()
     );
 
-
     private final PushValueInventory[] pushValueInventories;
-
     private final GameMapBuilder gameMapBuilder;
 
     public GroundViewInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder) {
@@ -60,14 +58,19 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
 
         this.setLayout(layout);
 
-        int[] slots = LayoutCalculator.from(11, 13, 15, 17);
+        int[] slots = LayoutCalculator.from(12, 14, 16);
         this.pushValueInventories = new PushValueInventory[slots.length - 1];
+
+        int[] orangeSlots = LayoutCalculator.fillColumn(InventoryType.CHEST_3_ROW, 2);
+        ItemStack orangeStack = ItemStack.builder(Material.ORANGE_STAINED_GLASS_PANE).customName(Component.empty()).build();
+
+        layout.setItems(orangeSlots, orangeStack);
 
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
             dataLayout.blank(slots);
 
-            dataLayout.setItem(9, new MaterialSlot(gameMapBuilder.getGroundBlock().registry().material()), this::handleGroundButton);
+            dataLayout.setItem(10, new MaterialSlot(gameMapBuilder.getGroundBlock().registry().material()), this::handleGroundButton);
             List<PushEntry> pushEntries = gameMapBuilder.getPushDataBuilder().getPushValues();
             System.out.println("Push entries size: " + pushEntries.size());
             for (int index = 0; index < slots.length; index++) {
@@ -103,13 +106,13 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         System.out.println("Has push value inventory: " + (pushValueInventory != null));
         List<PushEntry> pushValues = gameMapBuilder.getPushDataBuilder().getPushValues();
         if (pushValueInventory == null) {
-            PushEntry pushEntry = null;
+            PushEntry pushEntry;
             if (!pushValues.isEmpty() && slotId < pushValues.size()) {
                 pushEntry = pushValues.get(slotId);
+            } else {
+                pushEntry = new PushEntry(Block.BARRIER, 0);
             }
-            Block block = pushEntry == null ? Block.BARRIER : pushEntry.getBlock();
-            int value = pushEntry == null ? 0 : pushEntry.getValue();
-            pushValueInventory = new PushValueInventory(player, this.gameMapBuilder, block, value);
+            pushValueInventory = new PushValueInventory(player, this.gameMapBuilder, () -> pushEntry);
             pushValueInventories[slotId] = pushValueInventory;
             pushValueInventory.register();
         }
