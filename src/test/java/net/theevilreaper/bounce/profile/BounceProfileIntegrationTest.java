@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.profile;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventFilter;
@@ -135,10 +134,10 @@ class BounceProfileIntegrationTest {
             assertNotNull(systemChatPacket.message());
             List<Component> components = flattenComponents(systemChatPacket.message());
 
-            assertEntry("Points", "20", components);
-            assertEntry("Kills", "4", components);
-            assertEntry("Deaths", "2", components);
-            assertEntry("Win", "✘", components);
+            assertStatsEntry("Points", "20", components);
+            assertStatsEntry("Kills", "4", components);
+            assertStatsEntry("Deaths", "2", components);
+            assertStatsEntry("Win", "✘", components);
         });
 
         Collector<SystemChatPacket> winMessagePacket = connection.trackIncoming(SystemChatPacket.class);
@@ -149,17 +148,48 @@ class BounceProfileIntegrationTest {
             assertNotNull(systemChatPacket.message());
             List<Component> components = flattenComponents(systemChatPacket.message());
 
-            assertEntry("Points", "20", components);
-            assertEntry("Kills", "4", components);
-            assertEntry("Deaths", "2", components);
-            assertEntry("Win", "✔", components);
+            assertStatsEntry("Points", "20", components);
+            assertStatsEntry("Kills", "4", components);
+            assertStatsEntry("Deaths", "2", components);
+            assertStatsEntry("Win", "✔", components);
         });
 
         env.destroyInstance(instance, true);
         assertTrue(instance.getPlayers().isEmpty(), "Instance should be empty after destruction");
     }
 
-    private void assertEntry(@NotNull String search, @NotNull String expected, @NotNull List<Component> message) {
+    @Test
+    void testProfileCompareTo(@NotNull Env env) {
+        Instance instance = env.createFlatInstance();
+        Player player1 = env.createPlayer(instance);
+        Player player2 = env.createPlayer(instance);
+
+        BounceProfile profile1 = new BounceProfile(player1);
+        BounceProfile profile2 = new BounceProfile(player2);
+
+        assertEquals(0, profile1.compareTo(profile2), "Profiles should be equal initially");
+
+        profile1.addPoints(10);
+        assertTrue(profile1.compareTo(profile2) > 0, "Profile 1 should be greater than Profile 2 after adding points");
+
+        profile2.addPoints(5);
+        assertTrue(profile1.compareTo(profile2) > 0, "Profile 1 should still be greater than Profile 2");
+
+        profile2.addPoints(5);
+        assertNotEquals(0, profile1.compareTo(profile2), "Profiles should not be equal after different timestamps");
+
+        env.destroyInstance(instance, true);
+        assertTrue(instance.getPlayers().isEmpty(), "Instance should be empty after destruction");
+    }
+
+    /**
+     * Asserts that the stats entry for the given search string matches the expected value in the provided message.
+     *
+     * @param search   the search string to find in the message
+     * @param expected the expected value for the additional string
+     * @param message  the list of components representing the message
+     */
+    private void assertStatsEntry(@NotNull String search, @NotNull String expected, @NotNull List<Component> message) {
         AbstractMap.SimpleEntry<Component, Component> components = findLabelAndValue(message, search);
         assertNotNull(components);
         assertComponent(search, components.getKey());
@@ -196,8 +226,9 @@ class BounceProfileIntegrationTest {
 
     /**
      * Finds a label and its corresponding value in the list of components.
+     *
      * @param components the list of components to search through
-     * @param label the label to find
+     * @param label      the label to find
      * @return an entry containing the label component and its value component, or null if not found
      */
     private @Nullable AbstractMap.SimpleEntry<Component, Component> findLabelAndValue(
