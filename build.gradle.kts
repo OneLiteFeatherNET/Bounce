@@ -13,7 +13,7 @@ dependencies {
     implementation(project(":common"))
     implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
-    implementation(enforcedPlatform("net.kyori:adventure-bom:4.20.0"))
+    implementation(enforcedPlatform("net.kyori:adventure-bom:4.23.0"))
     implementation(libs.adventure)
     implementation(libs.pvp)
     implementation(libs.minestom)
