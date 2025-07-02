@@ -13,6 +13,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+/**
+ * The {@link BounceProfile} class represents a player's profile during the game period.
+ * It stores the player's score, kills, deaths, and manages the player's jump task.
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 0.1.0
+ */
 public final class BounceProfile implements Comparable<BounceProfile> {
 
     private final Player player;
@@ -23,23 +31,45 @@ public final class BounceProfile implements Comparable<BounceProfile> {
     private PlayerJumpTask jumpRunnable;
     private long firstReachTimestamp;
 
+    /**
+     * Constructs a new BounceProfile for the specified player.
+     *
+     * @param player the player associated with this profile
+     */
     public BounceProfile(@NotNull Player player) {
         this.player = player;
         this.points = 0;
     }
 
+    /**
+     * Registers a jump runnable for the player's profile.
+     * This runnable will be executed when the player jumps.
+     *
+     * @param pushData the push data containing information about the jump
+     */
     public void registerJumpRunnable(@NotNull PushData pushData) {
         this.jumpRunnable = new PlayerJumpTask(player, pushData);
     }
 
-    public void setLastDamager(Player paramPlayer) {
+    /**
+     * Sets the last player who damaged this profile's player.
+     *
+     * @param paramPlayer the player who last damaged this profile's player
+     */
+    public void setLastDamager(@NotNull Player paramPlayer) {
         this.lastDamager = paramPlayer;
     }
 
+    /**
+     * Increments the kill count for this profile.
+     */
     public void addKill() {
         ++kills;
     }
 
+    /**
+     * Increments the death count for this profile.
+     */
     public void addDeath() {
         ++deaths;
     }
