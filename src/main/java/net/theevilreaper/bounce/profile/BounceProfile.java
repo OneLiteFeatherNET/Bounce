@@ -55,6 +55,11 @@ public final class BounceProfile implements Comparable<BounceProfile> {
         return Objects.hashCode(player);
     }
 
+    /**
+     * Adds points to the profile's score and updates the scoreboard.
+     *
+     * @param paramPoints the number of points to add
+     */
     public void addPoints(int paramPoints) {
         points += paramPoints;
         firstReachTimestamp = System.nanoTime();
@@ -63,6 +68,11 @@ public final class BounceProfile implements Comparable<BounceProfile> {
         player.sendActionBar(GameMessages.getCoinComponent(paramPoints, true));
     }
 
+    /**
+     * Removes points from the profile's score.
+     *
+     * @param paramPoints the number of points to remove
+     */
     public void removePoints(int paramPoints) {
         addDeath();
         if (points > 0) {
@@ -101,7 +111,8 @@ public final class BounceProfile implements Comparable<BounceProfile> {
 
     @Override
     public int compareTo(@NotNull BounceProfile other) {
-        int pointComparison = Integer.compare(other.points, this.points); // Descending by points
+        System.out.println("" + this.points + " vs " + other.points);
+        int pointComparison = Integer.compare(this.points, other.points); // Descending by points
         if (pointComparison != 0) return pointComparison;
 
         return Long.compare(this.firstReachTimestamp, other.firstReachTimestamp); // Ascending by timestamp
