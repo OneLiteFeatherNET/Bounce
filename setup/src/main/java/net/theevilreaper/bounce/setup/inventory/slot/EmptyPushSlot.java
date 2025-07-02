@@ -1,13 +1,9 @@
 package net.theevilreaper.bounce.setup.inventory.slot;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.slot.Slot;
 import net.theevilreaper.aves.inventory.util.InventoryConstants;
-
-import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link EmptyPushSlot} represents a {@link Slot} implementation that is used to indicate that a given push slot is not set up with any data.
@@ -18,25 +14,18 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
  */
 public final class EmptyPushSlot extends Slot {
 
-    private static final ItemStack EMPTY_ITEM;
-
-    static {
-        EMPTY_ITEM = ItemStack.builder(Material.BARRIER)
-                .customName(Component.text("No data", NamedTextColor.RED))
-                .lore(
-                        Component.empty(),
-                        miniMessage().deserialize("<gray>Please do a <green>left click <gray>to add data"),
-                        Component.empty()
-                )
-                .build();
-    }
-
-    public EmptyPushSlot() {
+    /**
+     * Creates a new {@link EmptyPushSlot} with the specified {@link ItemStack}.
+     *
+     * @param itemStack the {@link ItemStack} to be used for this slot, typically representing an empty or default state.
+     */
+    public EmptyPushSlot(@NotNull ItemStack itemStack) {
+        setItemStack(itemStack);
         setClick(InventoryConstants.CANCEL_CLICK);
     }
 
     @Override
     public ItemStack getItem() {
-        return EMPTY_ITEM;
+        return this.itemStack;
     }
 }
