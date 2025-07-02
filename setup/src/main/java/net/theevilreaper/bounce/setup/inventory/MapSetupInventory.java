@@ -13,7 +13,7 @@ import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.aves.map.MapEntry;
-import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
+import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

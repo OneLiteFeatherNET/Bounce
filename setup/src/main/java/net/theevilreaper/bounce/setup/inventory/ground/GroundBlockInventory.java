@@ -12,14 +12,13 @@ import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
-import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
+import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.SetupBlocks;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-import static net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent.*;
 import static net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 
@@ -58,6 +57,6 @@ public class GroundBlockInventory extends GlobalInventoryBuilder {
      */
     private void handleClick(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
-        EventDispatcher.call(new PlayerBlockSelectEvent(player, result.getClickedItem().material(), GroundPart.BLOCK));
+        EventDispatcher.call(new PlayerGroundBlockSelectEvent(player, result.getClickedItem().material()));
     }
 }
