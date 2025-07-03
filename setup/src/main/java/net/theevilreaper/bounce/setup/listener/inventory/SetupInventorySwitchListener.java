@@ -13,6 +13,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.*;
+
 public final class SetupInventorySwitchListener implements Consumer<SetupInventorySwitchEvent> {
 
     private final InventoryService inventoryService;
@@ -31,12 +33,12 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
         Player player = event.getPlayer();
         if (!player.hasTag(BounceSetup.SETUP_TAG)) return;
 
-        if (event.getTarget() == SetupInventorySwitchEvent.SwitchTarget.GROUND_LAYER) {
+        if (event.getTarget() == SwitchTarget.GROUND_LAYER) {
             this.inventoryService.openGroundBlockInventory(player);
             return;
         }
 
-        if (event.getTarget() == SetupInventorySwitchEvent.SwitchTarget.PUSH_LAYER) {
+        if (event.getTarget() == SwitchTarget.PUSH_LAYER) {
             this.inventoryService.openPushBlockInventory(player);
             return;
         }
@@ -49,6 +51,11 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
         }
 
         BounceData data = optionalData.get();
+
+        if (event.getTarget() == SwitchTarget.LAYER_OVERVIEW) {
+            data.openGroundLayerView();
+        }
+
         data.openGroundLayerView();
 
     }
