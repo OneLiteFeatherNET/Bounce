@@ -11,7 +11,7 @@ import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
-import net.theevilreaper.bounce.setup.event.MapSetupSelectEvent;
+import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;
