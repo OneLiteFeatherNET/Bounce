@@ -23,6 +23,7 @@ import net.theevilreaper.bounce.setup.inventory.slot.EmptyPushSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MaterialSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
+import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -76,7 +77,10 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
             for (int index = 0; index < slots.length; index++) {
                 if (index >= pushEntries.size()) {
                     EmptyPushSlot emptyPushSlot = new EmptyPushSlot(getNoDataItem(index));
-                    dataLayout.setItem(slots[index], emptyPushSlot, this::handlePushButton);
+                    int finalIndex = index;
+                    dataLayout.setItem(slots[index], emptyPushSlot, (player1, i, clickType, inventoryConditionResult) -> {
+                        this.handleInitialBlockSelect(player1, i, clickType, inventoryConditionResult, finalIndex);
+                    });
                     continue;
                 }
                 PushEntry entry = pushEntries.get(index);
@@ -143,6 +147,13 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         result.setCancel(true);
         player.closeInventory();
         EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.GROUND_LAYER));
+    }
+
+    private void handleInitialBlockSelect(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result, int id) {
+        result.setCancel(true);
+        player.closeInventory();
+        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.PUSH_LAYER));
+        player.setTag(SetupTags.PUSH_BLOCK_SELECT, id);
     }
 
     private @NotNull ItemStack getNoDataItem(int slotId) {
