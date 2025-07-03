@@ -45,26 +45,6 @@ public final class BounceData extends BaseSetupData<GameMap> {
         this.loadData();
     }
 
-    public void openInventory() {
-        this.overviewInventory.open();
-    }
-
-    public void triggerUpdate() {
-        this.overviewInventory.invalidateDataLayout();
-    }
-
-    public void triggerGroundViewUpdate() {
-        if (this.groundViewInventory != null) {
-            this.groundViewInventory.invalidateDataLayout();
-        }
-    }
-
-    public void triggerPushViewUpdate() {
-        if (this.overviewInventory != null) {
-            this.groundViewInventory.invalidateDataLayout();
-        }
-    }
-
     public void teleport(@NotNull Player player) {
         Pos spawnPoint = this.gameMapBuilder.getSpawnOrDefault(SPAWN_POINT);
         player.setInstance(this.instance, spawnPoint);
@@ -99,6 +79,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
             this.gameMapBuilder = new GameMapBuilder(gameMap);
         }, () -> this.gameMapBuilder = new GameMapBuilder());
 
+        //TODO: Reduce state complexity
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
         this.groundViewInventory.register();
 
@@ -122,6 +103,26 @@ public final class BounceData extends BaseSetupData<GameMap> {
             this.player.closeInventory(false);
         }
         this.groundViewInventory.open();
+    }
+
+    public void openInventory() {
+        this.overviewInventory.open();
+    }
+
+    public void triggerUpdate() {
+        this.overviewInventory.invalidateDataLayout();
+    }
+
+    public void triggerGroundViewUpdate() {
+        if (this.groundViewInventory != null) {
+            this.groundViewInventory.invalidateDataLayout();
+        }
+    }
+
+    public void triggerPushViewUpdate() {
+        if (this.groundViewInventory != null) {
+            this.groundViewInventory.invalidateDataLayout();
+        }
     }
 
     public void openGroundLayerView() {
