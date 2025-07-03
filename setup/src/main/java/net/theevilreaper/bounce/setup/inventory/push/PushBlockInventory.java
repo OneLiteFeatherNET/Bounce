@@ -12,8 +12,8 @@ import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.GlobalInventoryBuilder;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
-import net.theevilreaper.bounce.setup.event.PlayerBlockSelectEvent;
-import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
+import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
+import net.theevilreaper.bounce.setup.event.push.PlayerPushBlockSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.SetupBlocks;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
@@ -21,11 +21,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * The {@link  PushBlockInventory} class represents an inventory for selecting push blocks in the game.
+ * It extends the {@link GlobalInventoryBuilder} to create a custom inventory layout for push block selection
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 0.1.0
+ */
 public final class PushBlockInventory extends GlobalInventoryBuilder {
 
     public PushBlockInventory() {
         super(Component.text("Select push block"), InventoryType.CHEST_3_ROW);
-
         InventoryLayout layout = InventoryLayout.fromType(getType());
 
         int[] itemSlots = LayoutCalculator.fillRow(InventoryType.CHEST_2_ROW);
@@ -42,7 +49,7 @@ public final class PushBlockInventory extends GlobalInventoryBuilder {
             layout.setItem(itemSlots[i], stack, this::handleClick);
         }
 
-        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SetupInventorySwitchEvent.SwitchTarget.LAYER_OVERVIEW));
+        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.LAYER_OVERVIEW));
         this.setLayout(layout);
     }
 
@@ -56,6 +63,6 @@ public final class PushBlockInventory extends GlobalInventoryBuilder {
      */
     private void handleClick(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
-        EventDispatcher.call(new PlayerBlockSelectEvent(player, result.getClickedItem().material(), PlayerBlockSelectEvent.GroundPart.PUSH));
+        EventDispatcher.call(new PlayerPushBlockSelectEvent(player, result.getClickedItem().material()));
     }
 }

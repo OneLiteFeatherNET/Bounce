@@ -13,12 +13,15 @@ import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
+import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
+import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
@@ -37,10 +40,8 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
     private Material material;
     private int value = 0;
 
-    public PushValueInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder, @NotNull Block block, int value) {
+    public PushValueInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder, @NotNull Supplier<PushEntry> pushSupplier) {
         super(TITLE, InventoryType.CHEST_3_ROW, player);
-        this.material = block.registry().material();
-        this.value = value;
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
         layout.setItems(LayoutCalculator.quad(0, getType().getSize() - 1), DECORATION);
@@ -51,6 +52,9 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
 
             dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
+            PushEntry pushEntry = pushSupplier.get();
+            this.material = pushEntry.getBlock().registry().material();
+            this.value = pushSupplier.get().getValue();
 
             dataLayout.setItem(BLOCK_SLOT, ItemStack.builder(material).build(), this::handleBlockClick);
             dataLayout.setItem(VALUE_SLOT, getPushValue(), this::handlePushButtonClick);
@@ -59,21 +63,19 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         });
 
         this.setCloseFunction(closeFunction -> {
-            if (dataLayoutValid) return;
-            this.handleClose(gameMapBuilder);
+            if (this.material == Material.BARRIER) return;
+            PushEntry pushEntry = pushSupplier.get();
+            pushEntry.setValue(value);
+            gameMapBuilder.getPushDataBuilder().add(pushEntry.getBlock(), pushEntry.getValue());
+            this.invalidateDataLayout();
         });
         this.register();
-    }
-
-    private void handleClose(@NotNull GameMapBuilder gameMapBuilder) {
-        gameMapBuilder.getPushDataBuilder().add(this.material.block(), this.value);
-        this.invalidateDataLayout();
     }
 
     private void handleBlockClick(@NotNull Player player, int slot, @NotNull ClickType type, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
         player.closeInventory();
-        EventDispatcher.call(new SetupInventorySwitchEvent(player, SetupInventorySwitchEvent.SwitchTarget.PUSH_LAYER));
+        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.PUSH_LAYER));
     }
 
     private void handlePushButtonClick(@NotNull Player player, int slot, @NotNull ClickType type, @NotNull InventoryConditionResult result) {
