@@ -3,7 +3,6 @@ package net.theevilreaper.bounce.setup.listener.ground;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
@@ -30,7 +29,6 @@ public class PlayerBlockSelectListener implements Consumer<PlayerGroundBlockSele
 
         BounceData bounceData = data.get();
         Material material = event.getMaterial();
-        System.out.println("Player " + event.getPlayer().getUsername() + " selected block: " + material.name());
         Block block = material.block();
         this.handleGroundBlockChange(bounceData, block);
     }
@@ -40,22 +38,6 @@ public class PlayerBlockSelectListener implements Consumer<PlayerGroundBlockSele
         mapBuilder.setGroundBlock(block);
         System.out.println("Ground block set to: " + block.name());
         bounceData.triggerGroundViewUpdate();
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundView(true));
-    }
-
-    private void handlePushBlockChange(@NotNull BounceData bounceData, @NotNull Block block) {
-        GameMapBuilder mapBuilder = bounceData.getMapBuilder();
-        if (hasBlock(mapBuilder.getPushDataBuilder(), block)) {
-            System.out.println("Block " + block.name() + " already exists in push data.");
-            return;
-        }
-        mapBuilder.getPushDataBuilder().add(block, 0);
-        bounceData.triggerPushViewUpdate();
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundView(true));
-    }
-
-    private boolean hasBlock(@NotNull PushData.Builder pushDataBuilder, @NotNull Block block) {
-        return pushDataBuilder.getPushValues().stream()
-                .anyMatch(pushBlock -> pushBlock.getBlock().equals(block));
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundBlock(true));
     }
 }
