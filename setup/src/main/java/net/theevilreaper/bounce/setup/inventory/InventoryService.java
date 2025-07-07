@@ -2,7 +2,7 @@ package net.theevilreaper.bounce.setup.inventory;
 
 import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.map.MapEntry;
-import net.theevilreaper.bounce.setup.inventory.ground.GroundBlockInventory;
+import net.theevilreaper.bounce.setup.inventory.ground.GroundBlockOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushBlockInventory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,23 +14,23 @@ import java.util.function.Supplier;
 public final class InventoryService {
 
     private final MapSetupInventory mapSetupInventory;
-    private final GroundBlockInventory groundBlockInventory;
+    private final GroundBlockOverviewInventory groundBlockOverviewInventory;
     private final PushBlockInventory pushBlockInventory;
 
     public InventoryService(@NotNull Supplier<List<MapEntry>> entries) {
         this.mapSetupInventory = new MapSetupInventory(entries);
 
-        this.groundBlockInventory = new GroundBlockInventory();
+        this.groundBlockOverviewInventory = new GroundBlockOverviewInventory();
         this.pushBlockInventory = new PushBlockInventory();
 
         this.mapSetupInventory.register();
-        this.groundBlockInventory.register();
+        this.groundBlockOverviewInventory.register();
         this.pushBlockInventory.register();
     }
 
     public void cleanup() {
         this.mapSetupInventory.unregister();
-        this.groundBlockInventory.unregister();
+        this.groundBlockOverviewInventory.unregister();
         this.pushBlockInventory.unregister();
     }
 
@@ -49,7 +49,7 @@ public final class InventoryService {
      * @param player the player to open the inventory for
      */
     public void openGroundBlockInventory(@NotNull Player player) {
-        player.openInventory(this.groundBlockInventory.getInventory());
+        player.openInventory(this.groundBlockOverviewInventory.getInventory());
     }
 
     /**
