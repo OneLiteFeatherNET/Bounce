@@ -22,9 +22,9 @@ import java.util.Iterator;
 import static net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 
-public class GroundBlockInventory extends GlobalInventoryBuilder {
+public class GroundBlockOverviewInventory extends GlobalInventoryBuilder {
 
-    public GroundBlockInventory() {
+    public GroundBlockOverviewInventory() {
         super(Component.text("Select ground block"), InventoryType.CHEST_6_ROW);
 
         InventoryLayout layout = InventoryLayout.fromType(getType());

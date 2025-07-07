@@ -24,16 +24,16 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MicrotusExtension.class)
-class GroundBlockInventoryIntegrationTest {
+class GroundBlockOverviewInventoryIntegrationTest {
 
     @Test
     void testGroundBlockInventoryLayout(@NotNull Env env) {
-        GroundBlockInventory groundBlockInventory = new GroundBlockInventory();
-        groundBlockInventory.register();
+        GroundBlockOverviewInventory groundBlockOverviewInventory = new GroundBlockOverviewInventory();
+        groundBlockOverviewInventory.register();
 
-        assertNotNull(groundBlockInventory, "GroundBlockInventory should not be null");
+        assertNotNull(groundBlockOverviewInventory, "GroundBlockInventory should not be null");
 
-        InventoryLayout layout = groundBlockInventory.getLayout();
+        InventoryLayout layout = groundBlockOverviewInventory.getLayout();
 
         assertNotNull(layout, "InventoryLayout should not be null");
         assertEquals(InventoryType.CHEST_6_ROW.getSize(), layout.getSize(), "Inventory type should be CHEST_6_ROW");
