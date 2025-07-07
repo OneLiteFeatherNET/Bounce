@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.0.0
  * @since 0.1.0
  */
+@SuppressWarnings("java:S6206")
 public final class PlayerPushBlockSelectEvent implements PlayerEvent {
 
     private final Player player;
