@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.timer.Task;
 import net.onelitefeather.guira.SetupDataService;
 import net.theevilreaper.aves.file.FileHandler;
@@ -18,7 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
+import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class MapSetupSelectListener implements Consumer<MapSetupSelectEvent> {
 
@@ -42,6 +43,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
         if (setupData.isPresent()) {
             // If this condition is reached the setup is fucked up
             player.sendMessage("You already have a map selected");
+            return;
         }
 
         MapEntry mapEntry = event.getMapEntry();
@@ -51,6 +53,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
                 .append(Component.text(mapEntry.getDirectoryRoot().getFileName().toString(), NamedTextColor.AQUA));
         player.sendMessage(message);
         player.closeInventory(false);
+        player.getInventory().setItemStack(0, ItemStack.AIR);
         player.setGameMode(GameMode.CREATIVE);
         player.setAllowFlying(true);
         player.setFlying(true);
@@ -58,7 +61,9 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
         this.setupDataService.add(player.getUuid(), data);
 
         player.setTag(SETUP_TAG, 1);
-        getTeleportTask(() -> data.teleport(player)).schedule();
+        getTeleportTask(() -> {
+            data.teleport(player);
+        }).schedule();
     }
 
     private @NotNull Task.Builder getTeleportTask(@NotNull Runnable runnable) {

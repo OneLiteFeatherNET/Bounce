@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.setup.listener.inventory;
 
 import net.minestom.server.entity.Player;
-import net.theevilreaper.bounce.setup.BounceSetup;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
@@ -14,6 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.*;
+import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class SetupInventorySwitchListener implements Consumer<SetupInventorySwitchEvent> {
 
@@ -31,9 +31,9 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
     @Override
     public void accept(@NotNull SetupInventorySwitchEvent event) {
         Player player = event.getPlayer();
-        if (!player.hasTag(BounceSetup.SETUP_TAG)) return;
+        if (!player.hasTag(SETUP_TAG)) return;
 
-        if (event.getTarget() == SwitchTarget.GROUND_LAYER) {
+        if (event.getTarget() == SwitchTarget.GROUND_BLOCK_LAYER) {
             this.inventoryService.openGroundBlockInventory(player);
             return;
         }
@@ -56,7 +56,6 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
             data.openGroundLayerView();
         }
 
-        data.openGroundLayerView();
-
+        data.openInventory();
     }
 }

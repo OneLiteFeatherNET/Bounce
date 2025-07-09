@@ -29,13 +29,12 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
     public void accept(@NotNull PlayerPushBlockSelectEvent event) {
         Player player = event.getPlayer();
 
-        if (!player.hasTag(SetupTags.PUSH_BLOCK_SELECT)) return;
-
+        if (!player.hasTag(SetupTags.PUSH_SLOT_INDEX)) return;
 
         Optional<BounceData> data = bounceDataSupplier.apply(event.getPlayer().getUuid());
 
         if (data.isEmpty()) return;
-        int blockSelectIndex = player.getTag(SetupTags.PUSH_BLOCK_SELECT);
+        int blockSelectIndex = player.getTag(SetupTags.PUSH_SLOT_INDEX);
 
         BounceData bounceData = data.get();
         Material material = event.getMaterial();
@@ -49,8 +48,10 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
         PushEntry entry = mapBuilder.getPushDataBuilder().getPushValues().get(blockSelectIndex);
 
         entry.setBlock(block);
-        bounceData.triggerPushViewUpdate();
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToPushEntry(true));
+        bounceData.triggerPushViewUpdate(blockSelectIndex);
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
+            bounceData.backToPushEntry(true);
+        });
     }
 
     private boolean hasBlock(@NotNull PushData.Builder pushDataBuilder, @NotNull Block block) {
