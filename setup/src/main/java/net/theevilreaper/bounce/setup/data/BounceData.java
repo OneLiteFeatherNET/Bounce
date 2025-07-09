@@ -14,7 +14,7 @@ import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
-import net.theevilreaper.bounce.setup.util.SetupTags;
+import net.theevilreaper.bounce.setup.inventory.push.PushValueInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +32,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
     private GameMapBuilder gameMapBuilder;
     private MapOverviewInventory overviewInventory;
     private GroundViewInventory groundViewInventory;
+    private PushValueInventory pushValueInventory;
 
     public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry, @NotNull FileHandler fileHandler) {
         super(owner, mapEntry);
@@ -56,7 +57,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
         if (!Files.exists(mapEntry.getMapFile())) {
             this.mapEntry.createFile();
         }
-        this.fileHandler.save(mapEntry.getDirectoryRoot(), map);
+        this.map = this.gameMapBuilder.build();
+        this.fileHandler.save(mapEntry.getMapFile(), map);
         EventDispatcher.call(new SetupFinishEvent<>(this));
     }
 
@@ -87,6 +89,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
         this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder, this.groundViewInventory::open);
         this.overviewInventory.register();
 
+        this.pushValueInventory = new PushValueInventory(this.player, this.gameMapBuilder);
+        this.pushValueInventory.register();
 
         this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
         AnvilLoader anvilLoader = new AnvilLoader(this.mapEntry.getDirectoryRoot());
@@ -103,8 +107,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
         if (closeCurrentInventory) {
             this.player.closeInventory(false);
         }
-        if (!player.hasTag(SetupTags.PUSH_BLOCK_SELECT)) return;
-        this.groundViewInventory.openPushValueInventory(player.getTag(SetupTags.PUSH_BLOCK_SELECT));
+        pushValueInventory.invalidateDataLayout();
+        pushValueInventory.open();
     }
 
     public void backToGroundBlock(boolean closeCurrentInventory) {
@@ -129,10 +133,21 @@ public final class BounceData extends BaseSetupData<GameMap> {
         }
     }
 
-    public void triggerPushViewUpdate() {
+    public void triggerPushViewUpdate(int index) {
         if (this.groundViewInventory != null) {
             this.groundViewInventory.invalidateDataLayout();
+          //  this.groundViewInventory.openPushValueInventory(index);
         }
+    }
+
+    public void triggerPushValueUpdate(int index) {
+        if (this.pushValueInventory != null) {
+            this.pushValueInventory.updateLayout(index);
+        }
+    }
+
+    public void openPushValueInventory() {
+        this.pushValueInventory.open();
     }
 
     public void openGroundLayerView() {
