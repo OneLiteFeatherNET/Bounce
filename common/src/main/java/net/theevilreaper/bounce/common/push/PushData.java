@@ -68,6 +68,8 @@ public record PushData(@NotNull Map<Block, Double> push) {
          */
         @NotNull Builder add(@NotNull Block block, double value);
 
+        @NotNull Builder add(int slot, @NotNull Block block, double value);
+
         /**
          * Removes a block from the push data.
          *

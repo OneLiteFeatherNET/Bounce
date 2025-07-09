@@ -33,6 +33,12 @@ public final class PushDataBuilder implements PushData.Builder {
         return this;
     }
 
+    @Override
+    public PushData.@NotNull Builder add(int slot, @NotNull Block block, double value) {
+        this.blocks.add(slot, new PushEntry(block, ((int) value)));
+        return this;
+    }
+
     /**
      * {@inheritDoc}
      */
