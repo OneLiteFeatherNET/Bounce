@@ -17,17 +17,15 @@ public final class GameMapBuilder {
     private String name;
     private Pos spawn;
     private Pos gameSpawn;
-    private PushEntry groundBlockEntry;
 
     public GameMapBuilder() {
         this.pushDataBuilder = PushData.builder();
         this.pushDataBuilder
-                .add(Block.RED_STAINED_GLASS, 0.5)
-                .add(Block.ORANGE_STAINED_GLASS, 0.5)
-                .add(Block.YELLOW_STAINED_GLASS, 0.5);
+                .add(PushEntry.groundEntry(Block.GLASS, 1))
+                .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1))
+                .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1))
+                .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1));
         this.authors = new ArrayList<>();
-        this.groundBlockEntry = new PushEntry(Block.GLASS, 0);
-
     }
 
     public GameMapBuilder(@NotNull GameMap gameMap) {
@@ -40,21 +38,44 @@ public final class GameMapBuilder {
         this.spawn = gameMap.getSpawn();
         this.gameSpawn = gameMap.getGameSpawn();
         this.pushDataBuilder = PushData.builder();
-        this.groundBlockEntry = new PushEntry(Block.GLASS, 0);
+        this.pushDataBuilder
+                .add(PushEntry.groundEntry(Block.GLASS, 1))
+                .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1))
+                .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1))
+                .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1));
     }
 
+    /**
+     * Sets the name of the map.
+     *
+     * @param name the name of the map
+     * @return this builder instance for chaining
+     */
     public @NotNull GameMapBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Adds authors to the map.
+     *
+     * @param authors the authors to add
+     * @return this builder instance for chaining
+     */
     public @NotNull GameMapBuilder addAuthors(String... authors) {
         this.authors.addAll(List.of(authors));
         return this;
     }
 
+    /**
+     * Sets the ground block for the map.
+     *
+     * @param groundBlock the block to set as the ground block
+     * @return this builder instance for chaining
+     */
     public @NotNull GameMapBuilder setGroundBlock(Block groundBlock) {
-        this.groundBlockEntry.setBlock(groundBlock);
+        PushEntry pushEntry = this.pushDataBuilder.getPushValues().getFirst();
+        pushEntry.setBlock(groundBlock);
         return this;
     }
 
@@ -84,28 +105,58 @@ public final class GameMapBuilder {
         return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build());
     }
 
+    /**
+     * Returns the name of the map.
+     *
+     * @return the name of the map
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the spawn position used during the game.
+     *
+     * @return the game spawn position
+     */
     public Pos getGameSpawn() {
         return gameSpawn;
     }
 
+    /**
+     * Returns the spawn position of the map.
+     *
+     * @return the spawn position
+     */
     public Pos getSpawn() {
         return spawn;
     }
 
-    public List<String> getAuthors() {
+    /**
+     * Returns the list of authors for the map.
+     *
+     * @return the list of authors
+     */
+    public @NotNull List<String> getAuthors() {
         return authors;
     }
 
+    /**
+     * Returns the {@link PushData.Builder} instance used to build push data.
+     *
+     * @return the push data builder
+     */
     public PushData.Builder getPushDataBuilder() {
         return pushDataBuilder;
     }
 
+    /**
+     * Returns the first push entry which is used as the ground block entry.
+     *
+     * @return the ground block entry
+     */
     public @NotNull PushEntry getGroundBlockEntry() {
-        return groundBlockEntry;
+        return this.pushDataBuilder.getPushValues().getFirst();
     }
 
     public @NotNull Pos getSpawnOrDefault(@NotNull Pos defaultSpawn) {
