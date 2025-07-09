@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
+import net.theevilreaper.bounce.common.push.PushEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public final class GameMapBuilder {
     private String name;
     private Pos spawn;
     private Pos gameSpawn;
-    private Block groundBlock;
+    private PushEntry groundBlockEntry;
 
     public GameMapBuilder() {
         this.pushDataBuilder = PushData.builder();
@@ -25,7 +26,7 @@ public final class GameMapBuilder {
                 .add(Block.ORANGE_STAINED_GLASS, 0.5)
                 .add(Block.YELLOW_STAINED_GLASS, 0.5);
         this.authors = new ArrayList<>();
-        this.groundBlock = Block.GLASS;
+        this.groundBlockEntry = new PushEntry(Block.GLASS, 0);
 
     }
 
@@ -39,7 +40,7 @@ public final class GameMapBuilder {
         this.spawn = gameMap.getSpawn();
         this.gameSpawn = gameMap.getGameSpawn();
         this.pushDataBuilder = PushData.builder();
-        this.groundBlock = Block.GLASS;
+        this.groundBlockEntry = new PushEntry(Block.GLASS, 0);
     }
 
     public @NotNull GameMapBuilder setName(String name) {
@@ -53,7 +54,7 @@ public final class GameMapBuilder {
     }
 
     public @NotNull GameMapBuilder setGroundBlock(Block groundBlock) {
-        this.groundBlock = groundBlock;
+        this.groundBlockEntry.setBlock(groundBlock);
         return this;
     }
 
@@ -71,16 +72,6 @@ public final class GameMapBuilder {
 
     public @NotNull GameMapBuilder setGameSpawn(Pos gameSpawn) {
         this.gameSpawn = gameSpawn;
-        return this;
-    }
-
-    public @NotNull GameMapBuilder addPush(@NotNull Block block, double push) {
-        this.pushDataBuilder.add(block, push);
-        return this;
-    }
-
-    public @NotNull GameMapBuilder removePush(@NotNull Block block) {
-        this.pushDataBuilder.remove(block);
         return this;
     }
 
@@ -113,8 +104,8 @@ public final class GameMapBuilder {
         return pushDataBuilder;
     }
 
-    public @NotNull Block getGroundBlock() {
-        return groundBlock;
+    public @NotNull PushEntry getGroundBlockEntry() {
+        return groundBlockEntry;
     }
 
     public @NotNull Pos getSpawnOrDefault(@NotNull Pos defaultSpawn) {
