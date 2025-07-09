@@ -10,7 +10,6 @@ import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.tag.Tag;
 import net.onelitefeather.guira.SetupDataService;
 import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.file.FileHandler;
@@ -51,7 +50,6 @@ import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 
 public final class BounceSetup implements ListenerHandling {
 
-    public static final Tag<Integer> SETUP_TAG = Tag.Transient("bounce.setup");
     private final MapProvider mapProvider;
     private final SetupDataService<BounceData> setupDataService;
     private final InventoryService inventoryService;
