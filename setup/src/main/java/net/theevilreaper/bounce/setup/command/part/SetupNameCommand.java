@@ -8,8 +8,10 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.event.EventDispatcher;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
+import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.GameMapBuilderStateNotifyEvent;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +20,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
+import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
 
 public final class SetupNameCommand extends Command {
@@ -58,10 +61,12 @@ public final class SetupNameCommand extends Command {
             return;
         }
 
+
         setupData.getMapBuilder().setName(name);
         Component message = Messages.withPrefix(Component.text("The name of the map now is: ", NamedTextColor.GRAY))
                 .append(Component.text(name, NamedTextColor.AQUA));
         sender.sendMessage(message);
-        setupData.triggerUpdate();
+        GameMapBuilderState state = new GameMapBuilderState(setupData, GameMapBuilderState.StateChange.NAME);
+        EventDispatcher.call(new GameMapBuilderStateNotifyEvent(state));
     }
 }

@@ -10,9 +10,11 @@ import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.theevilreaper.aves.util.Components;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
+import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -20,6 +22,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
+import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
 
 public final class SetupPositionCommand extends Command {
@@ -55,13 +58,15 @@ public final class SetupPositionCommand extends Command {
             sender.sendMessage("No map is currently selected. Please select a map first.");
             return;
         }
-
+        GameMapBuilderState.StateChange stateChange;
         switch (type) {
             case "spawn":
                 setupData.getMapBuilder().setSpawn(player.getPosition());
+                stateChange = GameMapBuilderState.StateChange.SPAWN;
                 break;
             case "game":
                 setupData.getMapBuilder().setGameSpawn(player.getPosition());
+                stateChange = GameMapBuilderState.StateChange.GAME_SPAWN;
                 break;
             default:
                 sender.sendMessage(Component.text("Invalid spawn type! Use 'spawn' or 'game'.", NamedTextColor.RED));
@@ -76,6 +81,7 @@ public final class SetupPositionCommand extends Command {
                 .append(posAsComponent)
         );
         sender.sendMessage(message);
-        setupData.triggerUpdate();
+        GameMapBuilderState state = new GameMapBuilderState(setupData, stateChange);
+        EventDispatcher.call(new GameMapBuilderStateNotifyEvent(state));
     }
 }

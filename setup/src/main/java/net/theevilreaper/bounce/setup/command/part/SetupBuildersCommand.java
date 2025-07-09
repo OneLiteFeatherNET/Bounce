@@ -10,7 +10,9 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentStringArray;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.event.EventDispatcher;
 import net.theevilreaper.bounce.setup.data.BounceData;
+import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -20,6 +22,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
+import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
 
 /**
@@ -70,6 +73,8 @@ public final class SetupBuildersCommand extends Command {
         setupData.getMapBuilder().addAuthors(builders);
         Component buildersAsComponent = Component.join(JoinConfiguration.arrayLike(), transformBuilders(builders));
         sender.sendMessage(Component.text("The creators of the map are: ").append(buildersAsComponent));
+        GameMapBuilderState state = new GameMapBuilderState(setupData, GameMapBuilderState.StateChange.BUILDERS);
+        EventDispatcher.call(new GameMapBuilderStateNotifyEvent(state));
     }
 
     private @NotNull List<TextComponent> transformBuilders(@NotNull String... builders) {
