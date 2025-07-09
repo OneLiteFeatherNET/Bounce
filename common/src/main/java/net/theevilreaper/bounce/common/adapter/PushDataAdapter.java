@@ -10,6 +10,7 @@ import com.google.gson.JsonSerializer;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.push.PushData;
+import net.theevilreaper.bounce.common.push.PushEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
@@ -27,10 +28,15 @@ public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializ
 
         for (JsonElement jsonElement : jsonArray.asList()) {
             Key blockKey = context.deserialize(jsonElement.getAsJsonObject().get("block"), Key.class);
-            double value = jsonElement.getAsJsonObject().get("value").getAsDouble();
+            int value = jsonElement.getAsJsonObject().get("value").getAsInt();
+            boolean ground = jsonElement.getAsJsonObject().get("ground").getAsBoolean();
             Block block = Block.fromKey(blockKey);
 
-            builder.add(block, value);
+            if (ground) {
+                builder.add(0, PushEntry.groundEntry(block, value));
+            } else {
+                builder.add(PushEntry.pushEntry(block, value));
+            }
         }
 
         return builder.build();
@@ -40,11 +46,12 @@ public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializ
     public @NotNull JsonElement serialize(@NotNull PushData data, @NotNull Type type, @NotNull JsonSerializationContext context) {
         JsonArray jsonArray = new JsonArray();
 
-        data.push().forEach((block, aDouble) -> {
+        data.push().forEach(pushEntry -> {
             JsonObject jsonObject = new JsonObject();
-            Key blockKey = block.key();
+            Key blockKey = pushEntry.getBlock().key();
             jsonObject.add("block", context.serialize(blockKey, Key.class));
-            jsonObject.addProperty("value", aDouble.doubleValue());
+            jsonObject.addProperty("value", pushEntry.getValue());
+            jsonObject.addProperty("ground", pushEntry.isGround());
             jsonArray.add(jsonObject);
         });
 

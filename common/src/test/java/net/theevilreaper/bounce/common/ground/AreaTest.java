@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.push.PushData;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +14,7 @@ class AreaTest {
 
     @Test
     void testArea() {
-        Area area = new GroundArea(Vec.ZERO, Vec.ONE, Block.AMETHYST_BLOCK, new PushData(Map.of()));
+        Area area = new GroundArea(Vec.ZERO, Vec.ONE, Block.AMETHYST_BLOCK, new PushData(List.of()));
 
         assertNotNull(area);
         assertEquals(Vec.ZERO, area.min());
