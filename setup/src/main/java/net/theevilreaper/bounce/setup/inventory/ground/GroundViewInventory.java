@@ -4,43 +4,31 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.tag.Tag;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
-import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
-import net.theevilreaper.bounce.setup.inventory.push.PushValueInventory;
-import net.theevilreaper.bounce.setup.inventory.slot.EmptyPushSlot;
+import net.theevilreaper.bounce.setup.event.push.PlayerPushIndexChangeEvent;
 import net.theevilreaper.bounce.setup.inventory.slot.MaterialSlot;
+import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
-import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
+import static net.theevilreaper.bounce.setup.util.SetupTags.PUSH_SLOT_INDEX;
 
 public class GroundViewInventory extends PersonalInventoryBuilder {
 
-    public static final Tag<Integer> PUSH_SLOT_INDEX = Tag.Integer("push_slot_index");
-
-    private static final Component NO_DATA_ITEM = Component.text("No data", NamedTextColor.RED);
-    private static final List<Component> NO_DATA_LORE = List.of(
-            Component.empty(),
-            miniMessage().deserialize("<gray>Please do a <green>left click <gray>to add data"),
-            Component.empty()
-    );
-
+    private static final int[] PUSH_SLOTS = LayoutCalculator.from(12, 14, 16);
     private static final List<Component> PUSH_LORE = List.of(
             Component.empty(),
             SetupMessages.NO_SPACE_SEPARATOR.append(Component.space()).append(Component.text("Push block", NamedTextColor.GREEN)),
@@ -48,7 +36,6 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
     );
 
     private GroundValueInventory groundValueInventory;
-    private final PushValueInventory[] pushValueInventories;
     private final GameMapBuilder gameMapBuilder;
 
     public GroundViewInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder) {
@@ -57,11 +44,8 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         InventoryLayout layout = InventoryLayout.fromType(getType());
 
         layout.setItems(LayoutCalculator.quad(0, getType().getSize() - 1), SetupItems.DECORATION);
-
+        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SetupInventorySwitchEvent.SwitchTarget.MAP_OVERVIEW));
         this.setLayout(layout);
-
-        int[] slots = LayoutCalculator.from(12, 14, 16);
-        this.pushValueInventories = new PushValueInventory[slots.length];
 
         int[] orangeSlots = LayoutCalculator.fillColumn(InventoryType.CHEST_3_ROW, 2);
         ItemStack orangeStack = ItemStack.builder(Material.ORANGE_STAINED_GLASS_PANE).customName(Component.empty()).build();
@@ -70,32 +54,19 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
 
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
-            dataLayout.blank(slots);
+            dataLayout.blank(PUSH_SLOTS);
 
             dataLayout.setItem(10, new MaterialSlot(gameMapBuilder.getGroundBlockEntry().getBlock().registry().material()), this::handleGroundButton);
             List<PushEntry> pushEntries = gameMapBuilder.getPushDataBuilder().getPushValues();
-            System.out.println("Push entries size: " + pushEntries.size());
-            for (int index = 0; index < slots.length; index++) {
-                if (index >= pushEntries.size()) {
-                    EmptyPushSlot emptyPushSlot = new EmptyPushSlot(getNoDataItem(index));
-                    int finalIndex = index;
-                    dataLayout.setItem(slots[index], emptyPushSlot, (player1, i, clickType, inventoryConditionResult) -> {
-                        this.handleInitialBlockSelect(player1, i, clickType, inventoryConditionResult, finalIndex);
-                    });
-                    PushValueInventory pushValueInventory = new PushValueInventory(player, () -> new PushEntry(Block.BARRIER, 0));
-                    pushValueInventory.register();
-                    this.pushValueInventories[index] = pushValueInventory;
-                    this.gameMapBuilder.getPushDataBuilder().add(index, Block.BARRIER, 0);
-                    continue;
-                }
-                PushEntry entry = pushEntries.get(index);
-                System.out.println("Adding push entry: " + entry.getBlock().name() + " with value: " + entry.getValue());
-                Block block = entry.getBlock();
-                PushValueInventory pushValueInventory = new PushValueInventory(player, () -> entry);
-                pushValueInventory.register();
-                this.pushValueInventories[index] = pushValueInventory;
-                dataLayout.setItem(slots[index], new MaterialSlot(getSlotItem(block.registry().material(), index)), this::handlePushButton);
+
+            for (int i = 1; i < pushEntries.size(); i++) {
+                int inventorySlot = PUSH_SLOTS[i - 1];
+                PushEntry pushEntry = pushEntries.get(i);
+                Material material = pushEntry.getBlock().registry().material();
+                ItemStack itemStack = getSlotItem(material, i);
+                dataLayout.setItem(inventorySlot, new MaterialSlot(itemStack), this::handlePushButton);
             }
+
             return dataLayout;
         });
     }
@@ -106,26 +77,9 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
 
         if (!result.getClickedItem().hasTag(PUSH_SLOT_INDEX)) return;
 
-        int slotId = result.getClickedItem().getTag(PUSH_SLOT_INDEX);
+        int pushIndex = result.getClickedItem().getTag(PUSH_SLOT_INDEX);
 
-        if (slotId < 0 || slotId > pushValueInventories.length) {
-            player.sendMessage(Component.text("Invalid push slot index!", NamedTextColor.RED));
-            return;
-        }
-
-        PushValueInventory pushValueInventory = pushValueInventories[slotId];
-        pushValueInventory.open();
-    }
-
-    @Override
-    public void unregister() {
-        super.unregister();
-
-        for (PushValueInventory inventory : pushValueInventories) {
-            if (inventory != null) {
-                inventory.unregister();
-            }
-        }
+        EventDispatcher.call(new PlayerPushIndexChangeEvent(player, pushIndex));
     }
 
     /**
@@ -147,21 +101,6 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         groundValueInventory.open();
     }
 
-    private void handleInitialBlockSelect(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result, int id) {
-        result.setCancel(true);
-        player.closeInventory();
-        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.PUSH_LAYER));
-        player.setTag(SetupTags.PUSH_BLOCK_SELECT, id);
-    }
-
-    private @NotNull ItemStack getNoDataItem(int slotId) {
-        return ItemStack.builder(Material.BARRIER)
-                .customName(NO_DATA_ITEM)
-                .lore(NO_DATA_LORE)
-                .set(PUSH_SLOT_INDEX, slotId)
-                .build();
-    }
-
     private @NotNull ItemStack getSlotItem(@NotNull Material material, int slotId) {
         return ItemStack.builder(material)
                 .customName(Component.translatable(material.registry().translationKey(), NamedTextColor.AQUA))
@@ -173,19 +112,6 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
     public void invalidateGroundValueInventory() {
         if (groundValueInventory != null) {
             groundValueInventory.invalidateDataLayout();
-        }
-    }
-
-    public void openPushValueInventory(int id) {
-        if (id < 0 || id >= pushValueInventories.length) {
-            throw new IllegalArgumentException("Invalid push slot index: " + id);
-        }
-        PushValueInventory pushValueInventory = pushValueInventories[id];
-        if (pushValueInventory != null) {
-            pushValueInventory.invalidateDataLayout();
-            pushValueInventory.open();
-        } else {
-            throw new IllegalStateException("Push value inventory for slot " + id + " is not initialized.");
         }
     }
 
