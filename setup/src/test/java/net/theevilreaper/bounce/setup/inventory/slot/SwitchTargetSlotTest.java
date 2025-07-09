@@ -10,15 +10,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BackSlotTest {
+class SwitchTargetSlotTest {
 
     @Test
     void testBackSlot() {
-        BackSlot backSlot = new BackSlot(SetupInventorySwitchEvent.SwitchTarget.MAP_OVERVIEW);
-        assertNotNull(backSlot);
-        assertInstanceOf(BackSlot.class, backSlot);
+        SwitchTargetSlot switchTargetSlot = new SwitchTargetSlot(SetupInventorySwitchEvent.SwitchTarget.MAP_OVERVIEW);
+        assertNotNull(switchTargetSlot);
+        assertInstanceOf(SwitchTargetSlot.class, switchTargetSlot);
 
-        ItemStack item = backSlot.getItem();
+        ItemStack item = switchTargetSlot.getItem();
         assertNotNull(item);
         assertEquals(Material.BARRIER, item.material());
         assertTrue(item.has(ItemComponent.CUSTOM_NAME));
