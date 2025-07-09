@@ -14,6 +14,7 @@ import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
+import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -98,11 +99,19 @@ public final class BounceData extends BaseSetupData<GameMap> {
         return this.gameMapBuilder;
     }
 
-    public void backToGroundView(boolean closeCurrentInventory) {
+    public void backToPushEntry(boolean closeCurrentInventory) {
         if (closeCurrentInventory) {
             this.player.closeInventory(false);
         }
-        this.groundViewInventory.open();
+        if (!player.hasTag(SetupTags.PUSH_BLOCK_SELECT)) return;
+        this.groundViewInventory.openPushValueInventory(player.getTag(SetupTags.PUSH_BLOCK_SELECT));
+    }
+
+    public void backToGroundBlock(boolean closeCurrentInventory) {
+        if (closeCurrentInventory) {
+            this.player.closeInventory(false);
+        }
+        this.groundViewInventory.openGroundBlockValueInventory();
     }
 
     public void openInventory() {
@@ -116,6 +125,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
     public void triggerGroundViewUpdate() {
         if (this.groundViewInventory != null) {
             this.groundViewInventory.invalidateDataLayout();
+            this.groundViewInventory.invalidateGroundValueInventory();
         }
     }
 
