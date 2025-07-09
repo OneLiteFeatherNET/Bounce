@@ -50,11 +50,7 @@ class PushDataAdapterTest {
         assertNotNull(pushData);
         assertEquals(2, pushData.push().size());
 
-       /* assertTrue(pushData.push().containsKey(Block.AMETHYST_BLOCK));
-        assertTrue(pushData.push().containsKey(Block.SLIME_BLOCK));
-
-        assertEquals(0.5, pushData.push().get(Block.AMETHYST_BLOCK));
-        assertEquals(1.0, pushData.push().get(Block.SLIME_BLOCK));*/
+        assertEquals(1, pushData.getPush(Block.SLIME_BLOCK));
+        assertEquals(2, pushData.getPush(Block.AMETHYST_BLOCK));
     }
-
 }
