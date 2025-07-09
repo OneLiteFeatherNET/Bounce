@@ -56,6 +56,8 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
             setupData.openInventory();
             return;
         }
-        EventDispatcher.call(new SetupFinishEvent<>(setupData));
+
+        setupData.save();
+        player.getInventory().setItemStack(0x0, ItemStack.AIR);
     }
 }
