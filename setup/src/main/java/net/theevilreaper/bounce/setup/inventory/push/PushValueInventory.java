@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
@@ -37,10 +36,9 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
     private static final int BLOCK_SLOT = 11;
     private static final int VALUE_SLOT = 15;
 
-    private Material material;
-    private int value = 0;
+    private PushEntry pushEntry;
 
-    public PushValueInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder, @NotNull Supplier<PushEntry> pushSupplier) {
+    public PushValueInventory(@NotNull Player player, @NotNull Supplier<PushEntry> pushSupplier) {
         super(TITLE, InventoryType.CHEST_3_ROW, player);
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -52,23 +50,14 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
 
             dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
-            PushEntry pushEntry = pushSupplier.get();
-            this.material = pushEntry.getBlock().registry().material();
-            this.value = pushSupplier.get().getValue();
+            this.pushEntry = pushSupplier.get();
 
-            dataLayout.setItem(BLOCK_SLOT, ItemStack.builder(material).build(), this::handleBlockClick);
+            dataLayout.setItem(BLOCK_SLOT, ItemStack.builder(this.pushEntry.getBlock().registry().material()).build(), this::handleBlockClick);
             dataLayout.setItem(VALUE_SLOT, getPushValue(), this::handlePushButtonClick);
 
             return dataLayout;
         });
 
-        this.setCloseFunction(closeFunction -> {
-            if (this.material == Material.BARRIER) return;
-            PushEntry pushEntry = pushSupplier.get();
-            pushEntry.setValue(value);
-            gameMapBuilder.getPushDataBuilder().add(pushEntry.getBlock(), pushEntry.getValue());
-            this.invalidateDataLayout();
-        });
         this.register();
     }
 
@@ -85,14 +74,14 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
             return;
         }
 
-        int oldValue = value;
+        int oldValue = this.pushEntry.getValue();
         if (type == ClickType.LEFT_CLICK) {
-            value++;
-        } else if (value > 0) {
-            value--;
+            this.pushEntry.incrementValue();
+        } else {
+            this.pushEntry.decrementValue();
         }
 
-        if (value != oldValue) {
+        if (this.pushEntry.getValue() != oldValue) {
             this.invalidateDataLayout();
         }
     }
@@ -100,7 +89,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
     private @NotNull ItemStack getPushValue() {
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
-        lore.add(CURRENT_VALUE.append(Component.text(value, NamedTextColor.YELLOW)));
+        lore.add(CURRENT_VALUE.append(Component.text(this.pushEntry.getValue(), NamedTextColor.YELLOW)));
         lore.add(Component.empty());
         lore.add(LEFT_CLICK);
         lore.add(RIGHT_CLICK);

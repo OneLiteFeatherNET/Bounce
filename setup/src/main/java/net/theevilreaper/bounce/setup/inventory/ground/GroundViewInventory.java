@@ -47,6 +47,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
             Component.empty()
     );
 
+    private GroundValueInventory groundValueInventory;
     private final PushValueInventory[] pushValueInventories;
     private final GameMapBuilder gameMapBuilder;
 
@@ -60,7 +61,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         this.setLayout(layout);
 
         int[] slots = LayoutCalculator.from(12, 14, 16);
-        this.pushValueInventories = new PushValueInventory[slots.length - 1];
+        this.pushValueInventories = new PushValueInventory[slots.length];
 
         int[] orangeSlots = LayoutCalculator.fillColumn(InventoryType.CHEST_3_ROW, 2);
         ItemStack orangeStack = ItemStack.builder(Material.ORANGE_STAINED_GLASS_PANE).customName(Component.empty()).build();
@@ -71,7 +72,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
             dataLayout.blank(slots);
 
-            dataLayout.setItem(10, new MaterialSlot(gameMapBuilder.getGroundBlock().registry().material()), this::handleGroundButton);
+            dataLayout.setItem(10, new MaterialSlot(gameMapBuilder.getGroundBlockEntry().getBlock().registry().material()), this::handleGroundButton);
             List<PushEntry> pushEntries = gameMapBuilder.getPushDataBuilder().getPushValues();
             System.out.println("Push entries size: " + pushEntries.size());
             for (int index = 0; index < slots.length; index++) {
@@ -81,11 +82,18 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
                     dataLayout.setItem(slots[index], emptyPushSlot, (player1, i, clickType, inventoryConditionResult) -> {
                         this.handleInitialBlockSelect(player1, i, clickType, inventoryConditionResult, finalIndex);
                     });
+                    PushValueInventory pushValueInventory = new PushValueInventory(player, () -> new PushEntry(Block.BARRIER, 0));
+                    pushValueInventory.register();
+                    this.pushValueInventories[index] = pushValueInventory;
+                    this.gameMapBuilder.getPushDataBuilder().add(index, Block.BARRIER, 0);
                     continue;
                 }
                 PushEntry entry = pushEntries.get(index);
                 System.out.println("Adding push entry: " + entry.getBlock().name() + " with value: " + entry.getValue());
                 Block block = entry.getBlock();
+                PushValueInventory pushValueInventory = new PushValueInventory(player, () -> entry);
+                pushValueInventory.register();
+                this.pushValueInventories[index] = pushValueInventory;
                 dataLayout.setItem(slots[index], new MaterialSlot(getSlotItem(block.registry().material(), index)), this::handlePushButton);
             }
             return dataLayout;
@@ -106,21 +114,6 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         }
 
         PushValueInventory pushValueInventory = pushValueInventories[slotId];
-        System.out.println("Opening push value inventory for slot: " + slotId);
-        System.out.println("Has push value inventory: " + (pushValueInventory != null));
-        List<PushEntry> pushValues = gameMapBuilder.getPushDataBuilder().getPushValues();
-        if (pushValueInventory == null) {
-            PushEntry pushEntry;
-            if (!pushValues.isEmpty() && slotId < pushValues.size()) {
-                pushEntry = pushValues.get(slotId);
-            } else {
-                pushEntry = new PushEntry(Block.BARRIER, 0);
-            }
-            pushValueInventory = new PushValueInventory(player, this.gameMapBuilder, () -> pushEntry);
-            pushValueInventories[slotId] = pushValueInventory;
-            pushValueInventory.register();
-        }
-
         pushValueInventory.open();
     }
 
@@ -146,7 +139,12 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
     private void handleGroundButton(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
         result.setCancel(true);
         player.closeInventory();
-        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.GROUND_LAYER));
+
+        if (groundValueInventory == null) {
+            groundValueInventory = new GroundValueInventory(player, gameMapBuilder);
+            groundValueInventory.register();
+        }
+        groundValueInventory.open();
     }
 
     private void handleInitialBlockSelect(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result, int id) {
@@ -170,5 +168,33 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
                 .lore(PUSH_LORE)
                 .set(PUSH_SLOT_INDEX, slotId)
                 .build();
+    }
+
+    public void invalidateGroundValueInventory() {
+        if (groundValueInventory != null) {
+            groundValueInventory.invalidateDataLayout();
+        }
+    }
+
+    public void openPushValueInventory(int id) {
+        if (id < 0 || id >= pushValueInventories.length) {
+            throw new IllegalArgumentException("Invalid push slot index: " + id);
+        }
+        PushValueInventory pushValueInventory = pushValueInventories[id];
+        if (pushValueInventory != null) {
+            pushValueInventory.invalidateDataLayout();
+            pushValueInventory.open();
+        } else {
+            throw new IllegalStateException("Push value inventory for slot " + id + " is not initialized.");
+        }
+    }
+
+    /**
+     * Opens the ground value inventory for the player.
+     * This method checks if the ground value inventory is initialized before attempting to open it.
+     */
+    public void openGroundBlockValueInventory() {
+        if (groundValueInventory == null) return;
+        this.groundValueInventory.open();
     }
 }
