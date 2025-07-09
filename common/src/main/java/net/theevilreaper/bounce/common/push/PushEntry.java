@@ -1,6 +1,7 @@
 package net.theevilreaper.bounce.common.push;
 
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -15,18 +16,43 @@ import java.util.Objects;
  */
 public final class PushEntry {
 
+    private final boolean ground;
     private Block block;
     private int value;
 
     /**
      * Constructs a new PushEntry with the specified block and value.
      *
+     * @param block  the block associated with this PushEntry
+     * @param value  the initial value for this PushEntry
+     * @return a new PushEntry instance representing a ground block entry
+     */
+    public static @NotNull PushEntry groundEntry(@NotNull Block block, int value) {
+       return new PushEntry(block, value, true);
+    }
+
+    /**
+     * Constructs a new PushEntry with the specified block and value.
+     *
      * @param block the block associated with this PushEntry
      * @param value the initial value for this PushEntry
+     * @return a new PushEntry instance
      */
-    public PushEntry(Block block, int value) {
+    public static @NotNull PushEntry pushEntry(@NotNull Block block, int value) {
+        return new PushEntry(block, value, false);
+    }
+
+    /**
+     * Constructs a new PushEntry with the specified block and value.
+     *
+     * @param block the block associated with this PushEntry
+     * @param value the initial value for this PushEntry
+     * @param ground indicates whether this entry is a ground block entry
+     */
+    public PushEntry(Block block, int value, boolean ground) {
         this.block = block;
         this.value = value;
+        this.ground = ground;
     }
 
     /**
@@ -39,10 +65,14 @@ public final class PushEntry {
         this.block = block;
     }
 
+    /**
+     * Sets the value for this PushEntry.
+     * This method should be used to update the value associated with this entry.
+     *
+     * @param value the new value to set
+     */
     public void setValue(int value) {
-        System.out.println("PushEntry value set to: " + value);
         this.value = value;
-        System.out.println("PushEntry value is now: " + this.value);
     }
 
     /**
@@ -79,8 +109,18 @@ public final class PushEntry {
      *
      * @return the block associated with this PushEntry
      */
-    public Block getBlock() {
+    public @NotNull Block getBlock() {
         return block;
+    }
+
+    /**
+     * Checks if this PushEntry is a ground block entry.
+     * This method can be used to differentiate between ground and non-ground entries.
+     *
+     * @return true if this entry is a ground block entry, false otherwise
+     */
+    public boolean isGround() {
+        return ground;
     }
 
     @Override
