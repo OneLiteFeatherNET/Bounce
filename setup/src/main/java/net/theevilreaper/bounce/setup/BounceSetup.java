@@ -26,6 +26,7 @@ import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.event.push.PlayerPushBlockSelectEvent;
+import net.theevilreaper.bounce.setup.event.push.PlayerPushIndexChangeEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
 import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerDisconnectListener;
@@ -37,6 +38,7 @@ import net.theevilreaper.bounce.setup.listener.inventory.SetupInventorySwitchLis
 import net.theevilreaper.bounce.setup.listener.map.MapSetupSelectListener;
 import net.theevilreaper.bounce.setup.listener.map.SetupFinishListener;
 import net.theevilreaper.bounce.setup.listener.push.PlayerPushBlockSelectListener;
+import net.theevilreaper.bounce.setup.listener.push.PlayerPushIndexChangeListener;
 import net.theevilreaper.bounce.setup.listener.state.GameMapBuilderStateNotifyListener;
 import net.theevilreaper.bounce.setup.listener.state.PushValueStateNotifierListener;
 import net.theevilreaper.bounce.setup.map.BounceSetupMapProvider;
@@ -99,11 +101,15 @@ public final class BounceSetup implements ListenerHandling {
                 (Class<SetupFinishEvent<BounceData>>) (Class<?>) SetupFinishEvent.class,
                 new SetupFinishListener(instanceSwitcher)
         );
+
         node.addListener(PlayerGroundBlockSelectEvent.class, new PlayerBlockSelectListener(this.setupDataService::get));
         node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
         node.addListener(GameMapBuilderStateNotifyEvent.class, new GameMapBuilderStateNotifyListener());
         node.addListener(AbstractStateNotifyEvent.PushDataStateNotifyEvent.class, new PushValueStateNotifierListener());
+
         node.addListener(PlayerPushBlockSelectEvent.class, new PlayerPushBlockSelectListener(this.setupDataService::get));
+        node.addListener(PlayerPushIndexChangeEvent.class, new PlayerPushIndexChangeListener(this.setupDataService::get));
+
         node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier, setupItems));
 
     }
