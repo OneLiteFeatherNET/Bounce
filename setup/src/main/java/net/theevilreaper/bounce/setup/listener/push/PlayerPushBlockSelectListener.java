@@ -1,12 +1,15 @@
 package net.theevilreaper.bounce.setup.listener.push;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.theevilreaper.bounce.common.push.PushData;
+import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.push.PlayerPushBlockSelectEvent;
+import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -24,9 +27,15 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
 
     @Override
     public void accept(@NotNull PlayerPushBlockSelectEvent event) {
+        Player player = event.getPlayer();
+
+        if (!player.hasTag(SetupTags.PUSH_BLOCK_SELECT)) return;
+
+
         Optional<BounceData> data = bounceDataSupplier.apply(event.getPlayer().getUuid());
 
         if (data.isEmpty()) return;
+        int blockSelectIndex = player.getTag(SetupTags.PUSH_BLOCK_SELECT);
 
         BounceData bounceData = data.get();
         Material material = event.getMaterial();
@@ -34,12 +43,14 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
         Block block = material.block();
         GameMapBuilder mapBuilder = bounceData.getMapBuilder();
         if (hasBlock(mapBuilder.getPushDataBuilder(), block)) {
-            System.out.println("Block " + block.name() + " already exists in push data.");
+            MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToPushEntry(true));
             return;
         }
-        mapBuilder.getPushDataBuilder().add(block, 0);
+        PushEntry entry = mapBuilder.getPushDataBuilder().getPushValues().get(blockSelectIndex);
+
+        entry.setBlock(block);
         bounceData.triggerPushViewUpdate();
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundView(true));
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToPushEntry(true));
     }
 
     private boolean hasBlock(@NotNull PushData.Builder pushDataBuilder, @NotNull Block block) {
