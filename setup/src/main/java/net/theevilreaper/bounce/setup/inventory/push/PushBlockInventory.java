@@ -49,7 +49,7 @@ public final class PushBlockInventory extends GlobalInventoryBuilder {
             layout.setItem(itemSlots[i], stack, this::handleClick);
         }
 
-        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.LAYER_OVERVIEW));
+        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.PUSH_LAYER_VIEW));
         this.setLayout(layout);
     }
 

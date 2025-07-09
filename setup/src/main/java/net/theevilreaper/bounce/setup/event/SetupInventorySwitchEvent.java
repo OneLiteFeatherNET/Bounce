@@ -54,9 +54,10 @@ public class SetupInventorySwitchEvent implements PlayerEvent {
      * @author Joltra
      */
     public enum SwitchTarget {
-        GROUND_LAYER,
-        PUSH_LAYER,
-        LAYER_OVERVIEW,
+        GROUND_BLOCKS_OVERVIEW,
+        GROUND_LAYER_VIEW,
+        PUSH_LAYER_VIEW,
+        PUSH_BLOCKS_OVERVIEW,
         MAP_OVERVIEW,
     }
 }

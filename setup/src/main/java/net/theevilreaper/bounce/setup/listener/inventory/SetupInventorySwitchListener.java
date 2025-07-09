@@ -33,12 +33,13 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
         Player player = event.getPlayer();
         if (!player.hasTag(SETUP_TAG)) return;
 
-        if (event.getTarget() == SwitchTarget.GROUND_BLOCK_LAYER) {
+
+        if (event.getTarget() == SwitchTarget.GROUND_BLOCKS_OVERVIEW) {
             this.inventoryService.openGroundBlockInventory(player);
             return;
         }
 
-        if (event.getTarget() == SwitchTarget.PUSH_LAYER) {
+        if (event.getTarget() == SwitchTarget.PUSH_BLOCKS_OVERVIEW) {
             this.inventoryService.openPushBlockInventory(player);
             return;
         }
@@ -52,10 +53,16 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
 
         BounceData data = optionalData.get();
 
-        if (event.getTarget() == SwitchTarget.LAYER_OVERVIEW) {
+        if (event.getTarget() == SwitchTarget.MAP_OVERVIEW) {
+            data.openInventory();
+        }
+
+        if (event.getTarget() == SwitchTarget.GROUND_LAYER_VIEW) {
             data.openGroundLayerView();
         }
 
-        data.openInventory();
+        if (event.getTarget() == SwitchTarget.PUSH_LAYER_VIEW) {
+            data.openPushValueInventory();
+        }
     }
 }

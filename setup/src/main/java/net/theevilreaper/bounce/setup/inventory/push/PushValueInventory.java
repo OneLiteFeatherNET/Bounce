@@ -36,7 +36,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
         layout.setItems(LayoutCalculator.quad(0, getType().getSize() - 1), DECORATION);
-        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.LAYER_OVERVIEW));
+        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.GROUND_LAYER_VIEW));
 
         this.setLayout(layout);
         this.register();
@@ -67,7 +67,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         result.setCancel(true);
         player.closeInventory();
 
-        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.PUSH_LAYER));
+        EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.PUSH_BLOCKS_OVERVIEW));
     }
 
     private void handlePushButtonClick(@NotNull Player player, int slot, @NotNull ClickType type, @NotNull InventoryConditionResult result) {
