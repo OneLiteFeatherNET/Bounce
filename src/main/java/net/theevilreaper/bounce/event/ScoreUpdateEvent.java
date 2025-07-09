@@ -4,8 +4,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
 public class ScoreUpdateEvent implements PlayerEvent {
 
     private final Player player;
