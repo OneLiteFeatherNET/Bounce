@@ -1,6 +1,5 @@
 package net.theevilreaper.bounce.common.push;
 
-import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -40,23 +39,6 @@ public final class PushDataBuilder implements PushData.Builder {
     @Override
     public PushData.@NotNull Builder add(int index, @NotNull PushEntry entry) {
         this.blocks.add(index, entry);
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PushData.@NotNull Builder updateBlock(int slot, @NotNull Block entry) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PushData.@NotNull Builder remove(@NotNull Block block) {
-        this.blocks.remove(block);
         return this;
     }
 

@@ -76,24 +76,15 @@ public record PushData(@NotNull List<PushEntry> push) {
          */
         @NotNull Builder add(@NotNull PushEntry entry);
 
+        /**
+         * Adds a block with its associated push value at a specific index in the push data.
+         *
+         * @param index the index at which to add the entry
+         * @param entry the {@link PushEntry} containing the block and its push value
+         * @return the builder instance for method chaining
+         */
         @NotNull Builder add(int index, @NotNull PushEntry entry);
 
-        /**
-         * Updates a block at a specific slot with a new push value.
-         *
-         * @param slot  the index in the push data where the block should be updated
-         * @param entry the {@link Block} to update with its new push value
-         * @return the builder instance for method chaining
-         */
-        @NotNull Builder updateBlock(int slot, @NotNull Block entry);
-
-        /**
-         * Removes a block from the push data.
-         *
-         * @param block the block to remove
-         * @return the builder instance for method chaining
-         */
-        @NotNull Builder remove(@NotNull Block block);
 
         /**
          * Retrieves the accumulated push values.
