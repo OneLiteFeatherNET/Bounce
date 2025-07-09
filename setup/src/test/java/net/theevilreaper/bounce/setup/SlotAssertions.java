@@ -1,6 +1,7 @@
 package net.theevilreaper.bounce.setup;
 
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.slot.ISlot;
 import org.jetbrains.annotations.ApiStatus;
@@ -27,6 +28,21 @@ public final class SlotAssertions {
             assertNotNull(itemStack, "ItemStack in slot " + slot + " should not be null");
             assertEquals(expected, itemStack, "ItemStack in slot " + slot + " should match expected item");
         }
+    }
+
+    /**
+     * Asserts that the slot at the given index in the layout contains an ItemStack with the expected material.
+     *
+     * @param layout           the InventoryLayout to check
+     * @param slotIndex        the index of the slot to check
+     * @param expectedMaterial the expected Material of the ItemStack in the slot
+     */
+    public static void assertSlot(@NotNull InventoryLayout layout, int slotIndex, @NotNull Material expectedMaterial) {
+        ISlot slot = layout.getSlot(slotIndex);
+        assertNotNull(slot, "Slot " + slotIndex + " should not be null");
+        ItemStack itemStack = slot.getItem();
+        assertNotNull(itemStack, "ItemStack in slot " + slotIndex + " should not be null");
+        assertEquals(expectedMaterial, itemStack.material(), "Item in slot " + slotIndex + " should match expected material");
     }
 
     private SlotAssertions() {
