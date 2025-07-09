@@ -37,12 +37,7 @@ public final class GameMapBuilder {
         }
         this.spawn = gameMap.getSpawn();
         this.gameSpawn = gameMap.getGameSpawn();
-        this.pushDataBuilder = PushData.builder();
-        this.pushDataBuilder
-                .add(PushEntry.groundEntry(Block.GLASS, 1))
-                .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1))
-                .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1))
-                .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1));
+        this.pushDataBuilder = PushData.builder(gameMap.getPushData());
     }
 
     /**

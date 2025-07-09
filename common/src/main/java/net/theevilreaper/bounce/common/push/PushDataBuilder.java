@@ -20,8 +20,14 @@ public final class PushDataBuilder implements PushData.Builder {
 
     public PushDataBuilder(@NotNull PushData pushData) {
         this.blocks = new ArrayList<>();
-
-       // pushData.push().forEach((block, aDouble) -> this.blocks.add(new PushEntry(block, aDouble.intValue())));
+        for (int i = 0; i < pushData.push().size(); i++) {
+            PushEntry entry = pushData.push().get(i);
+            if (entry.isGround()) {
+                this.blocks.add(PushEntry.groundEntry(entry.getBlock(), entry.getValue()));
+            } else {
+                this.blocks.add(PushEntry.pushEntry(entry.getBlock(), entry.getValue()));
+            }
+        }
     }
 
     /**
