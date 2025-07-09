@@ -8,8 +8,8 @@ import org.jetbrains.annotations.ApiStatus;
 public final class SetupTags {
 
     public static final Tag<Integer> SETUP_TAG = Tag.Transient("bounce.setup");
-    public static final Tag<Void> LOADING_TAG = Tag.Transient("bounce.setup.loading");
     public static final Tag<Integer> PUSH_BLOCK_SELECT = Tag.Integer("bounce.push_block_select");
+    public static final Tag<Integer> PUSH_SLOT_INDEX = Tag.Integer("push_slot_index");
 
     private SetupTags() {
         // Prevent instantiation
