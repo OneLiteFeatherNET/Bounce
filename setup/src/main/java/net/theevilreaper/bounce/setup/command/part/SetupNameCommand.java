@@ -19,9 +19,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
 import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
+import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class SetupNameCommand extends Command {
 

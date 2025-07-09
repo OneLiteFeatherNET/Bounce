@@ -12,7 +12,6 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.event.EventDispatcher;
 import net.theevilreaper.bounce.setup.data.BounceData;
-import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -21,9 +20,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
 import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
+import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 /**
  * The command allows the set the creators of a map to a {@link net.theevilreaper.bounce.common.map.GameMap} reference.

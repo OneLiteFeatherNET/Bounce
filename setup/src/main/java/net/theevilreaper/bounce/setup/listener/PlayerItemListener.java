@@ -14,9 +14,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static net.theevilreaper.bounce.setup.BounceSetup.SETUP_TAG;
 import static net.theevilreaper.bounce.setup.util.SetupItems.ITEM_TAG;
 import static net.theevilreaper.bounce.setup.util.SetupItems.OVERVIEW_FLAG;
+import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
 
@@ -33,19 +33,19 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
 
     @Override
     public void accept(@NotNull PlayerUseItemEvent event) {
-        ItemStack stack = event.getItemStack();
+        Player player = event.getPlayer();
 
+        ItemStack stack = event.getItemStack();
         if (!stack.hasTag(ITEM_TAG)) return;
 
         int itemId = stack.getTag(ITEM_TAG);
 
-        Player player = event.getPlayer();
         if (itemId == 0x00) {
             this.invOpener.accept(player);
             return;
         }
 
-         if (!player.hasTag(SETUP_TAG)) return;
+        if (!player.hasTag(SETUP_TAG)) return;
 
         Optional<BounceData> fetchedData = this.saveFunction.apply(player.getUuid());
         if (fetchedData.isEmpty()) return;
