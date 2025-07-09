@@ -7,6 +7,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The {@link PushData} class represents a collection of different push values which are associated with specific blocks.
@@ -16,7 +17,14 @@ import java.util.Map;
  * @version 1.0.0
  * @since 0.1.0
  */
-public record PushData(@NotNull Map<Block, Double> push) {
+public record PushData(@NotNull List<PushEntry> push) {
+
+    private static Map<Block, Integer> pushMap;
+
+    public PushData {
+        pushMap = push.stream()
+                .collect(Collectors.toMap(PushEntry::getBlock, PushEntry::getValue, (v1, v2) -> v2));
+    }
 
     /**
      * Creates a new {@link PushData} instance with the provided push values.
@@ -45,8 +53,8 @@ public record PushData(@NotNull Map<Block, Double> push) {
      * @param block the block for which the push value is requested
      * @return the push value associated with the block, or 0.0 if the block is not present in the map
      */
-    public double getPush(@NotNull Block block) {
-        return push.getOrDefault(block, 0.0);
+    public int getPush(@NotNull Block block) {
+        return pushMap.getOrDefault(block, 0);
     }
 
     /**
@@ -59,16 +67,25 @@ public record PushData(@NotNull Map<Block, Double> push) {
      * @since 0.1.0
      */
     public sealed interface Builder permits PushDataBuilder {
+
         /**
-         * Adds a push value for a specific block.
+         * Adds a block with its associated push value to the push data.
          *
-         * @param block the block to add the push value for
-         * @param value the push value to associate with the block
+         * @param entry the {@link PushEntry} containing the block and its push value
          * @return the builder instance for method chaining
          */
-        @NotNull Builder add(@NotNull Block block, double value);
+        @NotNull Builder add(@NotNull PushEntry entry);
 
-        @NotNull Builder add(int slot, @NotNull Block block, double value);
+        @NotNull Builder add(int index, @NotNull PushEntry entry);
+
+        /**
+         * Updates a block at a specific slot with a new push value.
+         *
+         * @param slot  the index in the push data where the block should be updated
+         * @param entry the {@link Block} to update with its new push value
+         * @return the builder instance for method chaining
+         */
+        @NotNull Builder updateBlock(int slot, @NotNull Block entry);
 
         /**
          * Removes a block from the push data.
@@ -83,7 +100,8 @@ public record PushData(@NotNull Map<Block, Double> push) {
          *
          * @return an unmodifiable view of the map containing block push values
          */
-        @NotNull @UnmodifiableView
+        @NotNull
+        @UnmodifiableView
         List<PushEntry> getPushValues();
 
         /**

@@ -21,22 +21,30 @@ public final class PushDataBuilder implements PushData.Builder {
     public PushDataBuilder(@NotNull PushData pushData) {
         this.blocks = new ArrayList<>();
 
-        pushData.push().forEach((block, aDouble) -> this.blocks.add(new PushEntry(block, aDouble.intValue())));
+       // pushData.push().forEach((block, aDouble) -> this.blocks.add(new PushEntry(block, aDouble.intValue())));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public PushData.@NotNull Builder add(@NotNull Block block, double value) {
-        this.blocks.add(new PushEntry(block, ((int) value)));
+    public PushData.@NotNull Builder add(@NotNull PushEntry entry) {
+        this.blocks.add(entry);
         return this;
     }
 
     @Override
-    public PushData.@NotNull Builder add(int slot, @NotNull Block block, double value) {
-        this.blocks.add(slot, new PushEntry(block, ((int) value)));
+    public PushData.@NotNull Builder add(int index, @NotNull PushEntry entry) {
+        this.blocks.add(index, entry);
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PushData.@NotNull Builder updateBlock(int slot, @NotNull Block entry) {
+        return null;
     }
 
     /**
@@ -61,13 +69,6 @@ public final class PushDataBuilder implements PushData.Builder {
      */
     @Override
     public @NotNull PushData build() {
-        return new PushData(this.blocks.stream()
-                .collect(Collectors.toMap(
-                        PushEntry::getBlock,
-                        pushEntry -> ((double) pushEntry.getValue()),
-                        (v1, v2) -> v1,
-                        HashMap::new
-                ))
-        );// in case of duplicate keys, keep the first
+        return new PushData(this.blocks);
     }
 }
