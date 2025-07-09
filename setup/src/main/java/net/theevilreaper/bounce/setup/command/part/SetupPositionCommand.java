@@ -14,7 +14,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.theevilreaper.aves.util.Components;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
-import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

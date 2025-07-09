@@ -1,15 +1,12 @@
 package net.theevilreaper.bounce.setup.inventory.slot;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
-import net.theevilreaper.aves.inventory.slot.Slot;
 import net.theevilreaper.aves.util.Components;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
