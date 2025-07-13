@@ -23,8 +23,9 @@ public enum OverviewType {
     NAME("Map Name", Material.OAK_SIGN, NamedTextColor.YELLOW),
     BUILDER("Builder", Material.OAK_HANGING_SIGN, NamedTextColor.AQUA),
     SPAWN("Spawn Point", Material.COMPASS, NamedTextColor.RED),
-    GAME_SPAWN("Game Spawn Point", Material.RECOVERY_COMPASS, NamedTextColor.RED),
-    GROUND("Ground Layer", Material.CARTOGRAPHY_TABLE, NamedTextColor.GREEN);
+    GAME_SPAWN("Game Spawn Point", Material.RECOVERY_COMPASS, NamedTextColor.RED)
+
+    ;
 
     private final String name;
     private final Material material;
