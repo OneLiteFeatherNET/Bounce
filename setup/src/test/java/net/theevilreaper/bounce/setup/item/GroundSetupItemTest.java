@@ -19,7 +19,7 @@ import java.util.Optional;
 import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GroundItemTest extends ItemLogicTestBase {
+public class GroundSetupItemTest extends SetupItemTestBase {
 
     @Test
     void testGroundItemLogic(@NotNull Env env) {

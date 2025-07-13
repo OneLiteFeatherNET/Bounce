@@ -12,9 +12,16 @@ import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-
+/**
+ * The {@link SetupItemTestBase} is an abstract base class to write test for the existing items in the setup.
+ * It provides some data that is required for the tests.
+ *
+ * @version 1.0.0
+ * @since 0.1.0
+ * @author theEvilReaper
+ */
 @ExtendWith(MicrotusExtension.class)
-public abstract class ItemLogicTestBase extends MapDataTestBase {
+public abstract class SetupItemTestBase extends MapDataTestBase {
 
     protected static FileHandler fileHandler;
     protected static SetupItems setupItems;
