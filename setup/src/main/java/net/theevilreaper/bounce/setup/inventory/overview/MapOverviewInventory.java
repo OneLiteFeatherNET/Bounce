@@ -9,7 +9,6 @@ import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
-import net.theevilreaper.bounce.setup.inventory.slot.GroundSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MultiStringSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.PositionSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.StringSlot;
@@ -71,7 +70,6 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
         return switch (type) {
             case SPAWN -> new PositionSlot(type, this.builder.getSpawn());
             case GAME_SPAWN -> new PositionSlot(type, this.builder.getGameSpawn());
-            case GROUND -> new GroundSlot(type, viewSwitcher);
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getAuthors());
         };
