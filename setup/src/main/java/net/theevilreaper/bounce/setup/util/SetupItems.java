@@ -29,6 +29,7 @@ public final class SetupItems {
     private final ItemStack overview;
     private final ItemStack save;
     private final ItemStack viewItem;
+    private final ItemStack groundItem;
 
     public SetupItems() {
         this.overview = ItemStack.builder(Material.CHEST)
@@ -42,6 +43,9 @@ public final class SetupItems {
         this.viewItem = ItemStack.builder(Material.COMPASS)
                 .customName(Component.text("View data", NamedTextColor.AQUA))
                 .set(ITEM_TAG, OVERVIEW_FLAG)
+                .build();
+        this.groundItem = ItemStack.builder(Material.CARTOGRAPHY_TABLE)
+                .customName(Component.text("Ground Layer", NamedTextColor.GREEN))
                 .build();
     }
 
@@ -64,6 +68,7 @@ public final class SetupItems {
     public void setSaveItem(@NotNull Player player) {
         player.getInventory().clear();
         player.getInventory().setItemStack(0x06, this.save);
+        player.getInventory().setItemStack(0x04, this.groundItem);
         player.getInventory().setItemStack(0x02, this.viewItem);
         player.setHeldItemSlot((byte) 0);
     }
