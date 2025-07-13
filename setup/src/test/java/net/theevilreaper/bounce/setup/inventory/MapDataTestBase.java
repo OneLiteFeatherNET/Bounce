@@ -20,12 +20,12 @@ public abstract class MapDataTestBase {
 
     static {
         ClassLoader classLoader = MapDataTestBase.class.getClassLoader();
-        URI folderUrl;
+        URI folderUri;
         try {
-            folderUrl = classLoader.getResource("testMap").toURI();
+            folderUri = classLoader.getResource("testMap").toURI();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-        testMapEntry = MapEntry.of(Paths.get(folderUrl.getPath()));
+        testMapEntry = MapEntry.of(Paths.get(folderUri));
     }
 }
