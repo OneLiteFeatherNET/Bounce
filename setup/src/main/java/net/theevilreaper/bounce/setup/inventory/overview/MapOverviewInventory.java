@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MapOverviewInventory extends PersonalInventoryBuilder {
 
-    private static final int[] DATA_SLOT = LayoutCalculator.from(9, 11, 13, 15, 17);
+    private static final int[] DATA_SLOT = LayoutCalculator.from(10, 12, 14, 16);
 
     private final GameMapBuilder builder;
     private final VoidConsumer viewSwitcher;

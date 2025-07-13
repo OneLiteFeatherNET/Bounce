@@ -73,7 +73,7 @@ class MapOverviewInventoryIntegrationTest {
 
         assertNotNull(dataLayout, "Data layout should not be null");
 
-        int[] dataSlots = LayoutCalculator.from(9, 11, 13, 15, 17);
+        int[] dataSlots = LayoutCalculator.from(10, 12, 14, 16);
         OverviewType[] overviewTypes = OverviewType.getValues();
 
         for (int i = 0; i < overviewTypes.length && i < dataSlots.length; i++) {
