@@ -2,7 +2,8 @@ package net.theevilreaper.bounce.setup.inventory;
 
 import net.theevilreaper.aves.map.MapEntry;
 
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 
 /**
@@ -19,7 +20,12 @@ public abstract class MapDataTestBase {
 
     static {
         ClassLoader classLoader = MapDataTestBase.class.getClassLoader();
-        URL folderUrl = classLoader.getResource("testMap");
+        URI folderUrl;
+        try {
+            folderUrl = classLoader.getResource("testMap").toURI();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
         testMapEntry = MapEntry.of(Paths.get(folderUrl.getPath()));
     }
 }
