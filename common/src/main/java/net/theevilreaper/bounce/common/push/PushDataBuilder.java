@@ -1,29 +1,44 @@
 package net.theevilreaper.bounce.common.push;
 
-import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public final class PushDataBuilder implements PushData.Builder {
 
-    private final Map<Block, Double> blocks;
+    private final List<PushEntry> blocks;
 
     public PushDataBuilder() {
-        this.blocks = new HashMap<>();
+        this.blocks = new ArrayList<>();
     }
 
     public PushDataBuilder(@NotNull PushData pushData) {
-        this.blocks = new HashMap<>(pushData.push());
+        this.blocks = new ArrayList<>();
+        for (int i = 0; i < pushData.push().size(); i++) {
+            PushEntry entry = pushData.push().get(i);
+            if (entry.isGround()) {
+                this.blocks.add(PushEntry.groundEntry(entry.getBlock(), entry.getValue()));
+            } else {
+                this.blocks.add(PushEntry.pushEntry(entry.getBlock(), entry.getValue()));
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public PushData.@NotNull Builder add(@NotNull Block block, double value) {
-        this.blocks.put(block, value);
+    public PushData.@NotNull Builder add(@NotNull PushEntry entry) {
+        this.blocks.add(entry);
+        return this;
+    }
+
+    @Override
+    public PushData.@NotNull Builder add(int index, @NotNull PushEntry entry) {
+        this.blocks.add(index, entry);
         return this;
     }
 
@@ -31,9 +46,8 @@ public final class PushDataBuilder implements PushData.Builder {
      * {@inheritDoc}
      */
     @Override
-    public PushData.@NotNull Builder remove(@NotNull Block block) {
-        this.blocks.remove(block);
-        return this;
+    public @NotNull @UnmodifiableView List<PushEntry> getPushValues() {
+        return Collections.unmodifiableList(this.blocks);
     }
 
     /**

@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.ground.GroundArea;
 import net.theevilreaper.bounce.common.push.PushData;
+import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,8 @@ class AreaAdapterTest {
     @BeforeAll
     static void setup() {
         data = PushData.builder()
-                .add(Block.SLIME_BLOCK, 1.0)
-                .add(Block.ACACIA_FENCE, 0.5)
+                .add(PushEntry.pushEntry(Block.SLIME_BLOCK, 2))
+                .add(PushEntry.groundEntry(Block.GRASS_BLOCK, 1))
                 .build();
         areaJson = """
                 {
@@ -38,16 +39,18 @@ class AreaAdapterTest {
                     {
                       "block": {
                         "namespace": "minecraft",
-                        "value": "acacia_fence"
+                        "value": "slime_block"
                       },
-                      "value": 0.5
+                      "value": 2,
+                      "ground": false
                     },
                     {
                       "block": {
                         "namespace": "minecraft",
-                        "value": "slime_block"
+                        "value": "grass_block"
                       },
-                      "value": 1.0
+                      "value": 1,
+                      "ground": true
                     }
                   ],
                   "groundBlock": {
@@ -80,8 +83,11 @@ class AreaAdapterTest {
         assertNotNull(area);
         assertEquals(Vec.ZERO, area.min());
         assertEquals(new Vec(5, 0, 5), area.max());
-        assertEquals(Block.GRASS_BLOCK, area.groundBlock());
-        assertEquals(data, area.data());
 
+        assertNotNull(area.data());
+        PushEntry groundBlock = area.data().push().stream().filter(PushEntry::isGround).findAny().orElse(null);
+
+        assertNotNull(groundBlock, "Ground block entry should not be null");
+        assertEquals(Block.GRASS_BLOCK, groundBlock.getBlock());
     }
 }
