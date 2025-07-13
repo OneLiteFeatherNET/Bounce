@@ -90,7 +90,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
         this.groundViewInventory.register();
 
-        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder, this.groundViewInventory::open);
+        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder);
         this.overviewInventory.register();
 
         this.pushValueInventory = new PushValueInventory(this.player, this.gameMapBuilder);
@@ -140,7 +140,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
     public void triggerPushViewUpdate(int index) {
         if (this.groundViewInventory != null) {
             this.groundViewInventory.invalidateDataLayout();
-          //  this.groundViewInventory.openPushValueInventory(index);
+            //  this.groundViewInventory.openPushValueInventory(index);
         }
     }
 
@@ -154,6 +154,9 @@ public final class BounceData extends BaseSetupData<GameMap> {
         this.pushValueInventory.open();
     }
 
+    /**
+     * Opens the {@link GroundViewInventory} for the player which owns the data.
+     */
     public void openGroundLayerView() {
         this.groundViewInventory.open();
     }
