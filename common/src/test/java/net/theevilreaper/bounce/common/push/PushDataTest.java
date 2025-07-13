@@ -27,7 +27,7 @@ class PushDataTest {
     void testPushData() {
         assertNotNull(pushData);
         assertEquals(1.0, pushData.getPush(Block.STONE));
-        assertEquals(0.5, pushData.getPush(Block.DIRT));
+        assertEquals(2.5, pushData.getPush(Block.DIRT));
         assertEquals(0.75, pushData.getPush(Block.GRASS_BLOCK));
         // Test for a block not in the map and expect 0.0
         assertEquals(0.0, pushData.getPush(Block.SAND));
