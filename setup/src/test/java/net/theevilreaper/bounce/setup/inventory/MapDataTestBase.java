@@ -2,6 +2,7 @@ package net.theevilreaper.bounce.setup.inventory;
 
 import net.theevilreaper.aves.map.MapEntry;
 
+import java.net.URL;
 import java.nio.file.Paths;
 
 /**
@@ -17,6 +18,8 @@ public abstract class MapDataTestBase {
     protected static final MapEntry testMapEntry;
 
     static {
-        testMapEntry = MapEntry.of(Paths.get(""));
+        ClassLoader classLoader = MapDataTestBase.class.getClassLoader();
+        URL folderUrl = classLoader.getResource("testMap");
+        testMapEntry = MapEntry.of(Paths.get(folderUrl.getPath()));
     }
 }
