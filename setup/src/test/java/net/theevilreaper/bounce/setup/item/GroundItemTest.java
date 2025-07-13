@@ -59,4 +59,3 @@ public class GroundItemTest extends ItemLogicTestBase {
         assertTrue(instance.getPlayers().isEmpty(), "Instance should be empty after destruction");
     }
 }
-
