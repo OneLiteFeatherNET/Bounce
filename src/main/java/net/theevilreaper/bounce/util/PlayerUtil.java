@@ -84,7 +84,7 @@ public final class PlayerUtil {
         for (BounceProfile profile : profileService.getProfileMap().values()) {
             boolean isWinner = profile.equals(winnerProfile);
             profile.sendStats(isWinner);
-            var title = Title.title(player.getCustomName(), Component.text("wons the game", NamedTextColor.GRAY), Title.DEFAULT_TIMES);
+            var title = Title.title(player.getDisplayName(), Component.text("wons the game", NamedTextColor.GRAY), Title.DEFAULT_TIMES);
             player.sendTitlePart(TitlePart.TITLE, title.title());
             player.sendTitlePart(TitlePart.SUBTITLE, title.subtitle());
             player.sendTitlePart(TitlePart.TIMES, title.times());
