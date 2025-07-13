@@ -27,6 +27,15 @@ public record PushData(@NotNull List<PushEntry> push) {
     }
 
     /**
+     * Checks if the push data contains a specific block.
+     * @param block the block to check for presence in the push data
+     * @return true when the provided block is in the data otherwise false
+     */
+    public boolean hasBlock(@NotNull Block block) {
+        return pushMap.containsKey(block);
+    }
+
+    /**
      * Creates a new {@link PushData} instance with the provided push values.
      *
      * @return a new {@link PushData.Builder} instance to build a {@link PushData} object
