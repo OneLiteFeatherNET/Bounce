@@ -75,12 +75,16 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     @Override
     public void loadData() {
-        Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
-        // Initialize with a new BaseMap if loading fails
-        mapData.ifPresentOrElse(gameMap -> {
-            this.map = gameMap;
-            this.gameMapBuilder = new GameMapBuilder(gameMap);
-        }, () -> this.gameMapBuilder = new GameMapBuilder());
+        if (this.mapEntry.getMapFile() == null) {
+            this.gameMapBuilder = new GameMapBuilder();
+        } else {
+            Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
+            // Initialize with a new BaseMap if loading fails
+            mapData.ifPresentOrElse(gameMap -> {
+                this.map = gameMap;
+                this.gameMapBuilder = new GameMapBuilder(gameMap);
+            }, () -> this.gameMapBuilder = new GameMapBuilder());
+        }
 
         //TODO: Reduce state complexity
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
