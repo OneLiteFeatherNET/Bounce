@@ -43,15 +43,16 @@ public class GroundItemTest extends ItemLogicTestBase {
         ClientUseItemPacket packet = new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f);
         UseItemListener.useItemListener(packet, player);
 
-        for (int i = 0; i < 20; i++) {
-            env.tick();
-        }
+        env.tick();
 
         Optional<BounceData> dataOptional = setupDataService.get(player.getUuid());
         assertTrue(dataOptional.isPresent(), "BounceData should be present for the player");
 
         assertNotNull(player.getOpenInventory());
 
+        player.closeInventory();
+
+        assertNull(player.getOpenInventory(), "The player should not have an open inventory after closing it");
 
         setupDataService.get(player.getUuid()).ifPresent(BounceData::reset);
         env.destroyInstance(instance, true);
