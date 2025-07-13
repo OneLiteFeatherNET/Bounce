@@ -46,6 +46,7 @@ public final class SetupItems {
                 .build();
         this.groundItem = ItemStack.builder(Material.CARTOGRAPHY_TABLE)
                 .customName(Component.text("Ground Layer", NamedTextColor.GREEN))
+                .set(ITEM_TAG, 0x04)
                 .build();
     }
 
