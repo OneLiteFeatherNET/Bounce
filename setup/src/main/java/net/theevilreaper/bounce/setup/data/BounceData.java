@@ -75,18 +75,21 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     @Override
     public void loadData() {
-        Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
-        // Initialize with a new BaseMap if loading fails
-        mapData.ifPresentOrElse(gameMap -> {
-            this.map = gameMap;
-            this.gameMapBuilder = new GameMapBuilder(gameMap);
-        }, () -> this.gameMapBuilder = new GameMapBuilder());
+        if (this.mapEntry.getMapFile() == null) {
+            this.gameMapBuilder = new GameMapBuilder();
+        } else {
+            Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
+            // Initialize with a new BaseMap if loading fails
+            mapData.ifPresentOrElse(gameMap -> {
+                this.map = gameMap;
+                this.gameMapBuilder = new GameMapBuilder(gameMap);
+            }, () -> this.gameMapBuilder = new GameMapBuilder());
+        }
 
-        //TODO: Reduce state complexity
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
         this.groundViewInventory.register();
 
-        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder, this.groundViewInventory::open);
+        this.overviewInventory = new MapOverviewInventory(this.player, this.gameMapBuilder);
         this.overviewInventory.register();
 
         this.pushValueInventory = new PushValueInventory(this.player, this.gameMapBuilder);
@@ -136,7 +139,7 @@ public final class BounceData extends BaseSetupData<GameMap> {
     public void triggerPushViewUpdate(int index) {
         if (this.groundViewInventory != null) {
             this.groundViewInventory.invalidateDataLayout();
-          //  this.groundViewInventory.openPushValueInventory(index);
+            //  this.groundViewInventory.openPushValueInventory(index);
         }
     }
 
@@ -150,6 +153,9 @@ public final class BounceData extends BaseSetupData<GameMap> {
         this.pushValueInventory.open();
     }
 
+    /**
+     * Opens the {@link GroundViewInventory} for the player which owns the data.
+     */
     public void openGroundLayerView() {
         this.groundViewInventory.open();
     }

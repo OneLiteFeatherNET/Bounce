@@ -49,12 +49,12 @@ class SetupItemsIntegrationTest {
     }
 
     @Test
-    void testSaveMapItem(@NotNull Env env) {
+    void testSetupItems(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         Player player = env.createPlayer(instance);
         assertNotNull(player);
 
-        setupItems.setSaveItem(player);
+        setupItems.setSetupItems(player);
         ItemStack saveItem = player.getInventory().getItemStack(0x06);
         assertNotNull(saveItem);
         assertNotEquals(Material.AIR, saveItem.material());
@@ -62,6 +62,10 @@ class SetupItemsIntegrationTest {
 
         assertEquals(0x01, saveItem.getTag(ITEM_TAG).byteValue());
         assertEquals(0x00, player.getHeldSlot());
+
+        ItemStack groundItem = player.getInventory().getItemStack(0x04);
+        assertNotNull(groundItem);
+        assertEquals(Material.CARTOGRAPHY_TABLE, groundItem.material());
 
         env.destroyInstance(instance, true);
     }

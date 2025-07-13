@@ -55,6 +55,11 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
             return;
         }
 
+        if (itemId == 0x04) {
+            setupData.openGroundLayerView();
+            return;
+        }
+
         setupData.save();
         player.getInventory().setItemStack(0x0, ItemStack.AIR);
     }
