@@ -86,7 +86,6 @@ public final class BounceData extends BaseSetupData<GameMap> {
             }, () -> this.gameMapBuilder = new GameMapBuilder());
         }
 
-        //TODO: Reduce state complexity
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
         this.groundViewInventory.register();
 
