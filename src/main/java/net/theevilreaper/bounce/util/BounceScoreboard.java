@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import net.theevilreaper.aves.util.Strings;
@@ -70,7 +69,7 @@ public class BounceScoreboard {
     }
 
     public void createPlayerLine(@NotNull Player player) {
-        this.sideBar.createLine(new Sidebar.ScoreboardLine(player.getUuid().toString(), player.getDisplayName(), 100));
+        this.sideBar.createLine(new Sidebar.ScoreboardLine(player.getUuid().toString(), player.getDisplayName(), 0));
     }
 
     public void updatePlayerLine(@NotNull UUID uuid, int points) {
