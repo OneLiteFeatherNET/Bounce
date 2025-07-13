@@ -65,8 +65,7 @@ public final class PlayerJumpTask {
                 return;
             }
 
-
-            if (pushData.push().containsKey(block) && !block.compare(lastBlockBelow)) {
+            if (pushData.hasBlock(block) && !block.compare(lastBlockBelow)) {
                 foundJumpBlock = block;
             }
         }
