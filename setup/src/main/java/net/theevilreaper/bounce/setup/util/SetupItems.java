@@ -66,7 +66,7 @@ public final class SetupItems {
      *
      * @param player the player to set the item
      */
-    public void setSaveItem(@NotNull Player player) {
+    public void setSetupItems(@NotNull Player player) {
         player.getInventory().clear();
         player.getInventory().setItemStack(0x06, this.save);
         player.getInventory().setItemStack(0x04, this.groundItem);

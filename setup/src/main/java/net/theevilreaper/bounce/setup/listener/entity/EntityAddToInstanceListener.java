@@ -27,6 +27,6 @@ public class EntityAddToInstanceListener implements Consumer<AddEntityToInstance
             items.setOverViewItem(player);
             return;
         }
-        items.setSaveItem(player);
+        items.setSetupItems(player);
     }
 }

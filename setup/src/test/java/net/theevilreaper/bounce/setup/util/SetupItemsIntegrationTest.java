@@ -54,7 +54,7 @@ class SetupItemsIntegrationTest {
         Player player = env.createPlayer(instance);
         assertNotNull(player);
 
-        setupItems.setSaveItem(player);
+        setupItems.setSetupItems(player);
         ItemStack saveItem = player.getInventory().getItemStack(0x06);
         assertNotNull(saveItem);
         assertNotEquals(Material.AIR, saveItem.material());

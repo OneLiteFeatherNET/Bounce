@@ -31,7 +31,7 @@ public class GroundSetupItemTest extends SetupItemTestBase {
 
         env.process().eventHandler().addListener(PlayerUseItemEvent.class, playerItemListener);
 
-        setupItems.setSaveItem(player);
+        setupItems.setSetupItems(player);
         player.setTag(SETUP_TAG, 1);
         ItemStack stack = player.getInventory().getItemStack(0x04);
         assertNotEquals(ItemStack.AIR, stack);
