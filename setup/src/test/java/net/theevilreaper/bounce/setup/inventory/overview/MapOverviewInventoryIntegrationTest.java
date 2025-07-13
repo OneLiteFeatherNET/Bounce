@@ -8,7 +8,6 @@ import net.minestom.testing.extension.MicrotusExtension;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
-import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.jetbrains.annotations.NotNull;
@@ -23,15 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class MapOverviewInventoryIntegrationTest {
 
     private static GameMapBuilder gameMapBuilder;
-    private static VoidConsumer inventorySwitcher;
 
     @BeforeAll
     static void setup() {
         gameMapBuilder = new GameMapBuilder();
-        inventorySwitcher = () -> {
-            throw new RuntimeException("Works");
-        };
-
         assertNotNull(gameMapBuilder);
     }
 
@@ -39,7 +33,7 @@ class MapOverviewInventoryIntegrationTest {
     void testMapOverviewLayout(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         Player player = env.createPlayer(instance);
-        MapOverviewInventory inventory = new MapOverviewInventory(player, gameMapBuilder, inventorySwitcher);
+        MapOverviewInventory inventory = new MapOverviewInventory(player, gameMapBuilder);
 
         assertNotNull(inventory);
 
@@ -60,7 +54,7 @@ class MapOverviewInventoryIntegrationTest {
     void testMapOverviewDataLayout(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         Player player = env.createPlayer(instance);
-        MapOverviewInventory inventory = new MapOverviewInventory(player, gameMapBuilder, inventorySwitcher);
+        MapOverviewInventory inventory = new MapOverviewInventory(player, gameMapBuilder);
         assertNotNull(inventory);
 
         // We need to open the inventory to initialize the data layout
