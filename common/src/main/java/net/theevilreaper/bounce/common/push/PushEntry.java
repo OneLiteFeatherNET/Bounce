@@ -89,7 +89,7 @@ public final class PushEntry {
      * If the value is already 0 or negative, it does nothing.
      */
     public void decrementValue() {
-        if (this.value < 0) return;
+        if (this.value <= 0) return;
         this.value--;
     }
 
