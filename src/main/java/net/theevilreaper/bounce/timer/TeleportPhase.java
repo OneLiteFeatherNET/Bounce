@@ -33,7 +33,6 @@ public class TeleportPhase extends TimedPhase {
 
     @Override
     public void onUpdate() {
-        System.out.println(getCurrentTicks());
     }
 
     @Override
