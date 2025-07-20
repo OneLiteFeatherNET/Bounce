@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class ProfileService {
 
@@ -50,6 +51,13 @@ public class ProfileService {
     public void clear() {
         if (this.profileMap.isEmpty()) return;
         this.profileMap.clear();
+    }
+
+    public void clear(@NotNull Consumer<BounceProfile> callback) {
+        if (this.profileMap.isEmpty()) return;
+        for (BounceProfile value : this.profileMap.values()) {
+            callback.accept(value);
+        }
     }
 
     public Map<UUID, BounceProfile> getProfileMap() {
