@@ -24,7 +24,7 @@ public final class ItemUtil {
     public ItemUtil() {
         this.feather = ItemStack.builder(Material.FEATHER)
                 .customName(Component.text("Recoil-pushing recoil pusher", NamedTextColor.LIGHT_PURPLE))
-                .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Enchantment.KNOCKBACK, 1))
+                .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Enchantment.KNOCKBACK, 3))
                 .build();
     }
 
