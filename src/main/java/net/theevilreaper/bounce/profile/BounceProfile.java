@@ -141,7 +141,6 @@ public final class BounceProfile implements Comparable<BounceProfile> {
 
     @Override
     public int compareTo(@NotNull BounceProfile other) {
-        System.out.println("" + this.points + " vs " + other.points);
         int pointComparison = Integer.compare(this.points, other.points); // Descending by points
         if (pointComparison != 0) return pointComparison;
 
