@@ -128,7 +128,7 @@ public class Bounce implements ListenerHandling {
     }
 
     private void registerGameListener(@NotNull EventNode<Event> node) {
-        node.addListener(BounceGameFinishEvent.class, new GameFinishListener(playerUtil));
+        node.addListener(BounceGameFinishEvent.class, new GameFinishListener(profileService));
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener(this.profileService::get, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
