@@ -89,6 +89,7 @@ public class Bounce implements ListenerHandling {
                 .version(CombatVersion.MODERN)
                 .add(CombatFeatures.VANILLA_ATTACK)
                 .add(CombatFeatures.VANILLA_ATTACK_COOLDOWN)
+                .add(CombatFeatures.VANILLA_KNOCKBACK)
                 .build();
         globalEventHandler.addChild(featureSet.createNode());
     }
