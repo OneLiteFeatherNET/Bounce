@@ -62,6 +62,7 @@ public final class PlayerJumpTask {
             if (block == Block.LAVA) {
                 player.teleport(map.getGameSpawn());
                 lastBlockBelow = block;
+                EventDispatcher.call(new ScoreDeathUpdateEvent(player));
                 return;
             }
 

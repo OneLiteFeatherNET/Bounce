@@ -26,6 +26,10 @@ public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializ
         JsonArray jsonArray = element.getAsJsonArray();
         PushData.Builder builder = PushData.builder();
 
+        if (jsonArray.isEmpty()) {
+            return builder.build(); // Return empty PushData if no entries are present
+        }
+
         for (JsonElement jsonElement : jsonArray.asList()) {
             Key blockKey = context.deserialize(jsonElement.getAsJsonObject().get("block"), Key.class);
             int value = jsonElement.getAsJsonObject().get("value").getAsInt();
