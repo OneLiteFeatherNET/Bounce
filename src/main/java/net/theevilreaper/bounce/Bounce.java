@@ -86,10 +86,10 @@ public class Bounce implements ListenerHandling {
         this.scoreboard.initLobbyLayout(((BounceMapProvider) this.mapProvider).getMapName());
 
         CombatFeatureSet featureSet = CombatFeatures.empty()
-                .version(CombatVersion.MODERN)
                 .add(CombatFeatures.VANILLA_ATTACK)
                 .add(CombatFeatures.VANILLA_ATTACK_COOLDOWN)
                 .add(CombatFeatures.VANILLA_KNOCKBACK)
+                .add(CombatFeatures.VANILLA_ENCHANTMENT)
                 .build();
         globalEventHandler.addChild(featureSet.createNode());
     }
@@ -132,7 +132,7 @@ public class Bounce implements ListenerHandling {
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener(this.profileService::get, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
-        node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
+       // node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
         node.addListener(ScoreDeathUpdateEvent.class, new ScoreUpdateDeathListener(this.phaseSeries::getCurrentPhase, this.profileService::get));
     }
 
