@@ -14,7 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 /**
- * The command allows to force start the game.
+ * The {@link StartCommand} can be used during the {@link LobbyPhase} to force start the game.
+ * In each other phase, it will not have any effect.
+ * It checks if the game is paused if the timer is long enough, and if the game has already been force started.
  *
  * @author theEvilReaper
  * @version 1.0.0
