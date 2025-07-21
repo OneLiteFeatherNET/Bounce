@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.listener.damage;
 
 import io.github.togar2.pvp.events.FinalDamageEvent;
 import io.github.togar2.pvp.player.CombatPlayer;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
@@ -32,12 +31,14 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
         Player originPlayer = (Player) event.getEntity();
         CombatPlayer player = (CombatPlayer) event.getEntity();
 
-        /*if (type == DamageType.LAVA) {
+        // TODO: Check in a future state why MinestomPVP doesn't handle LAVA damage correctly
+       /* if (type == DamageType.LAVA) {
             System.out.printf("Player %s was damaged by lava%n", originPlayer.getUsername());
             player.setVelocityNoUpdate(vec -> Vec.ZERO);
             BounceProfile profile = profileFunction.apply(originPlayer);
             if (profile == null) return;
             profile.removePoints(5);
+            EventDispatcher.call(new ScoreDeathUpdateEvent(profile.getPlayer()));
             if (profile.getLastDamager() != null) {
                 BounceProfile damagerProfile = profileFunction.apply(profile.getLastDamager());
                 damagerProfile.addPoints(10);

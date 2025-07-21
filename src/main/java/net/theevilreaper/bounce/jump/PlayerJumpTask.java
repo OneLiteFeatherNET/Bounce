@@ -11,7 +11,7 @@ import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
-import net.theevilreaper.bounce.event.ScoreDeathUpdateEvent;
+import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,16 +53,16 @@ public final class PlayerJumpTask {
             Block block = instance.getBlock(pos[0], pos[1], pos[2]);
 
             if (block == Block.REDSTONE_BLOCK) {
-                player.teleport(map.getGameSpawn());
-                EventDispatcher.call(new ScoreDeathUpdateEvent(player));
                 lastBlockBelow = block;
+                player.teleport(map.getGameSpawn());
+               // EventDispatcher.call(new ScoreDeathUpdateEvent(player));
                 return;
             }
 
             if (block == Block.LAVA) {
-                player.teleport(map.getGameSpawn());
+                System.out.println("Player " + player.getUsername() + " hit lava, teleporting to spawn.");
                 lastBlockBelow = block;
-                EventDispatcher.call(new ScoreDeathUpdateEvent(player));
+                EventDispatcher.call(new PlayerLavaEvent(player));
                 return;
             }
 
@@ -75,6 +75,7 @@ public final class PlayerJumpTask {
             lastBlockBelow = Block.AIR;
             return;
         }
+
         if (player.getVelocity().y() < 0) {
             long now = System.currentTimeMillis();
             if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
