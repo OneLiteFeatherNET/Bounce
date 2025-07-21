@@ -1,11 +1,9 @@
 package net.theevilreaper.bounce;
 
-import io.github.togar2.pvp.events.EntityKnockbackEvent;
 import io.github.togar2.pvp.events.FinalAttackEvent;
 import io.github.togar2.pvp.events.FinalDamageEvent;
 import io.github.togar2.pvp.feature.CombatFeatureSet;
 import io.github.togar2.pvp.feature.CombatFeatures;
-import io.github.togar2.pvp.utils.CombatVersion;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
@@ -30,7 +28,6 @@ import net.theevilreaper.bounce.listener.PlayerJoinListener;
 import net.theevilreaper.bounce.listener.PlayerQuitListener;
 import net.theevilreaper.bounce.listener.damage.AttackListener;
 import net.theevilreaper.bounce.listener.damage.DamageListener;
-import net.theevilreaper.bounce.listener.damage.KnockbackListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
 import net.theevilreaper.bounce.listener.game.GamePrepareListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateDeathListener;
