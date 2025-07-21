@@ -40,7 +40,7 @@ public class BounceMapProvider extends AbstractMapProvider {
 
     @Override
     public void saveMap(@NotNull Path path, @NotNull BaseMap baseMap) {
-        throw new  UnsupportedOperationException("Not supported yet.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void teleportToGameSpawn(@NotNull Player player) {
