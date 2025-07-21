@@ -1,5 +1,6 @@
 package net.theevilreaper.bounce;
 
+import io.github.togar2.pvp.events.EntityKnockbackEvent;
 import io.github.togar2.pvp.events.FinalAttackEvent;
 import io.github.togar2.pvp.events.FinalDamageEvent;
 import io.github.togar2.pvp.feature.CombatFeatureSet;
@@ -20,7 +21,7 @@ import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.config.GameConfigReader;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.event.GamePrepareEvent;
-import net.theevilreaper.bounce.event.ScoreDeathUpdateEvent;
+import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.listener.PlayerChatListener;
 import net.theevilreaper.bounce.listener.PlayerConfigurationListener;
@@ -28,9 +29,10 @@ import net.theevilreaper.bounce.listener.PlayerJoinListener;
 import net.theevilreaper.bounce.listener.PlayerQuitListener;
 import net.theevilreaper.bounce.listener.damage.AttackListener;
 import net.theevilreaper.bounce.listener.damage.DamageListener;
+import net.theevilreaper.bounce.listener.damage.KnockbackListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
 import net.theevilreaper.bounce.listener.game.GamePrepareListener;
-import net.theevilreaper.bounce.listener.game.ScoreUpdateDeathListener;
+import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
 import net.theevilreaper.bounce.profile.BounceProfile;
@@ -85,6 +87,7 @@ public class Bounce implements ListenerHandling {
         CombatFeatureSet featureSet = CombatFeatures.empty()
                 .add(CombatFeatures.VANILLA_ATTACK)
                 .add(CombatFeatures.VANILLA_ATTACK_COOLDOWN)
+                .add(CombatFeatures.VANILLA_DAMAGE)
                 .add(CombatFeatures.VANILLA_KNOCKBACK)
                 .add(CombatFeatures.VANILLA_ENCHANTMENT)
                 .build();
@@ -129,8 +132,8 @@ public class Bounce implements ListenerHandling {
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener(this.profileService::get, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn));
-       // node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
-        node.addListener(ScoreDeathUpdateEvent.class, new ScoreUpdateDeathListener(this.phaseSeries::getCurrentPhase, this.profileService::get));
+        node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
+        node.addListener(PlayerLavaEvent.class, new PlayerLavaListener(this.profileService::get, ((BounceMapProvider) this.mapProvider).getActiveMap()::getGameSpawn));
     }
 
     private void registerCommands() {
