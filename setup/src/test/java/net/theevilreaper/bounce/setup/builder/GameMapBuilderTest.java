@@ -35,7 +35,7 @@ class GameMapBuilderTest {
                     () -> assertNull(gameMapBuilder.getSpawn())
          );
 
-         assertTrue(gameMapBuilder.getAuthors().isEmpty());
+         assertTrue(gameMapBuilder.getBuilders().isEmpty());
     }
 
     @Test
@@ -43,8 +43,8 @@ class GameMapBuilderTest {
         GameMapBuilder gameMapBuilder = new GameMapBuilder();
         gameMapBuilder.setGameSpawn(new Pos(1, 2, 3));
         gameMapBuilder.setName("Test Map");
-        gameMapBuilder.setSpawn(new Pos(4, 5, 6));
-        gameMapBuilder.addAuthor("Test");
+        gameMapBuilder.spawn(new Pos(4, 5, 6));
+        gameMapBuilder.builder("Test");
 
         gameMapBuilder.getPushDataBuilder().getPushValues().get(2).setBlock(Block.STONE);
 
