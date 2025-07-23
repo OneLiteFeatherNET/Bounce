@@ -3,31 +3,31 @@ package net.theevilreaper.bounce.setup.listener.ground;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class PlayerBlockSelectListener implements Consumer<PlayerGroundBlockSelectEvent> {
 
-    private final Function<UUID, Optional<BounceData>> bounceDataSupplier;
+    private final OptionalSetupDataGetter bounceDataSupplier;
 
-    public PlayerBlockSelectListener(@NotNull Function<UUID, Optional<BounceData>> bounceDataSupplier) {
+    public PlayerBlockSelectListener(@NotNull OptionalSetupDataGetter bounceDataSupplier) {
         this.bounceDataSupplier = bounceDataSupplier;
     }
 
     @Override
     public void accept(@NotNull PlayerGroundBlockSelectEvent event) {
-        Optional<BounceData> data = bounceDataSupplier.apply(event.getPlayer().getUuid());
+        Optional<SetupData> data = bounceDataSupplier.get(event.getPlayer().getUuid());
 
         if (data.isEmpty()) return;
 
-        BounceData bounceData = data.get();
+        BounceData bounceData = ((BounceData) data.get());
         Material material = event.getMaterial();
         Block block = material.block();
         this.handleGroundBlockChange(bounceData, block);

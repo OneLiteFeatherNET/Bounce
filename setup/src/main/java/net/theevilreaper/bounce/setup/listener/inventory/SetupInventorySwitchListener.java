@@ -1,6 +1,8 @@
 package net.theevilreaper.bounce.setup.listener.inventory;
 
 import net.minestom.server.entity.Player;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
@@ -8,9 +10,7 @@ import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
@@ -18,11 +18,11 @@ import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 public final class SetupInventorySwitchListener implements Consumer<SetupInventorySwitchEvent> {
 
     private final InventoryService inventoryService;
-    private final Function<UUID, Optional<BounceData>> profileGetter;
+    private final OptionalSetupDataGetter profileGetter;
 
     public SetupInventorySwitchListener(
             @NotNull InventoryService inventoryService,
-            @NotNull Function<UUID, Optional<BounceData>> profileGetter
+            @NotNull OptionalSetupDataGetter profileGetter
     ) {
         this.inventoryService = inventoryService;
         this.profileGetter = profileGetter;
@@ -44,14 +44,14 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
             return;
         }
 
-        Optional<BounceData> optionalData = this.profileGetter.apply(player.getUuid());
+        Optional<SetupData> optionalData = this.profileGetter.get(player.getUuid());
 
         if (optionalData.isEmpty()) {
             player.sendMessage(SetupMessages.SELECT_MAP_FIRST);
             return;
         }
 
-        BounceData data = optionalData.get();
+        BounceData data = ((BounceData) optionalData.get());
 
         if (event.getTarget() == SwitchTarget.MAP_OVERVIEW) {
             data.openInventory();
