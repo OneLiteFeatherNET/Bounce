@@ -62,7 +62,7 @@ public final class SetupPositionCommand extends Command {
         GameMapBuilderState.StateChange stateChange;
         switch (type) {
             case "spawn":
-                setupData.getMapBuilder().setSpawn(player.getPosition());
+                setupData.getMapBuilder().spawn(player.getPosition());
                 stateChange = GameMapBuilderState.StateChange.SPAWN;
                 break;
             case "game":

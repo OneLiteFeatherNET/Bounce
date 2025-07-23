@@ -70,7 +70,7 @@ public final class SetupBuildersCommand extends Command {
             return;
         }
 
-        setupData.getMapBuilder().addAuthors(builders);
+        setupData.getMapBuilder().builders(builders);
         Component buildersAsComponent = Component.join(JoinConfiguration.arrayLike(), transformBuilders(builders));
         sender.sendMessage(Component.text("The creators of the map are: ").append(buildersAsComponent));
         GameMapBuilderState state = new GameMapBuilderState(setupData, GameMapBuilderState.StateChange.BUILDERS);
