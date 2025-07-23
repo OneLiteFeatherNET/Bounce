@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.listener.game;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import net.theevilreaper.bounce.profile.BounceProfile;
