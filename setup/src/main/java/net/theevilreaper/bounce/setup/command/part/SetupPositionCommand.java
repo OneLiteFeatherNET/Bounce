@@ -11,6 +11,8 @@ import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.aves.util.Components;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
@@ -26,9 +28,9 @@ import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class SetupPositionCommand extends Command {
 
-    private final Function<UUID, Optional<BounceData>> setupDataFunction;
+    private final OptionalSetupDataGetter setupDataFunction;
 
-    public SetupPositionCommand(@NotNull Function<UUID, Optional<BounceData>> setupDataFunction) {
+    public SetupPositionCommand(@NotNull OptionalSetupDataGetter setupDataFunction) {
         super("position");
         this.setCondition(Conditions::playerOnly);
         this.setupDataFunction = setupDataFunction;
@@ -44,14 +46,14 @@ public final class SetupPositionCommand extends Command {
 
         String type = context.get("spawnType");
 
-        Optional<BounceData> fetchedData = setupDataFunction.apply(sender.identity().uuid());
+        Optional<SetupData> fetchedData = setupDataFunction.get(sender.identity().uuid());
         if (fetchedData.isEmpty()) {
             sender.sendMessage(SELECT_MAP_FIRST);
             return;
         }
 
         Player player = (Player) sender;
-        BounceData setupData = fetchedData.get();
+        BounceData setupData = ((BounceData) fetchedData.get());
 
         if (setupData.getMapBuilder() == null) {
             sender.sendMessage("No map is currently selected. Please select a map first.");

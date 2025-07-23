@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SetupCommand extends Command {
 
-    public SetupCommand(@NotNull SetupDataService<BounceData> dataService) {
+    public SetupCommand(@NotNull SetupDataService dataService) {
         super("setup");
         this.setCondition(Conditions::playerOnly);
         this.addSubcommand(new SetupNameCommand(dataService::get));
