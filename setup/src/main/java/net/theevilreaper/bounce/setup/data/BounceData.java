@@ -136,10 +136,9 @@ public final class BounceData extends BaseSetupData<GameMap> {
         }
     }
 
-    public void triggerPushViewUpdate(int index) {
+    public void triggerPushViewUpdate() {
         if (this.groundViewInventory != null) {
             this.groundViewInventory.invalidateDataLayout();
-            //  this.groundViewInventory.openPushValueInventory(index);
         }
     }
 
