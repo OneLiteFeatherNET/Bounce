@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The {@code SetupInventorySwitchEvent} is triggered when a player switches to a specific inventory.
  *
+ * @author Joltra
  * @version 1.0.0
  * @since 0.1.0
- * @author Joltra
  */
 public class SetupInventorySwitchEvent implements PlayerEvent {
 
@@ -49,15 +49,34 @@ public class SetupInventorySwitchEvent implements PlayerEvent {
     /**
      * Enum representing the possible target inventories for the setup.
      *
-     * @version 1.0.0
-     * @since 0.1.0
      * @author Joltra
+     * @version 1.1.0
+     * @since 0.1.0
      */
     public enum SwitchTarget {
+        /**
+         * Switch to the overview of ground blocks.
+         */
         GROUND_BLOCKS_OVERVIEW,
+        /**
+         * Switch to the ground block view of the map.
+         */
+        GROUND_BLOCK_VIEW,
+        /**
+         * Switch to the ground layer view of the map.
+         */
         GROUND_LAYER_VIEW,
+        /**
+         * Switch to the overview of push blocks.
+         */
         PUSH_LAYER_VIEW,
+        /**
+         * Switch to the overview of push blocks.
+         */
         PUSH_BLOCKS_OVERVIEW,
+        /**
+         * Switch to the overview of maps.
+         */
         MAP_OVERVIEW,
     }
 }
