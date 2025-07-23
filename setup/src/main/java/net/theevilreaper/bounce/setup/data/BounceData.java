@@ -15,6 +15,7 @@ import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushValueInventory;
+import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,6 +65,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     @Override
     public void reset() {
+        player.removeTag(SetupTags.SETUP_TAG);
+        player.removeTag(SetupTags.PUSH_SLOT_INDEX);
         if (this.overviewInventory != null) {
             this.overviewInventory.unregister();
         }
