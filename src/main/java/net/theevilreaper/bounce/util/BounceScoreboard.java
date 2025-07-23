@@ -11,7 +11,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class BounceScoreboard {
+/**
+ * The {@link BounceScoreboard} class is responsible for managing different layouts of the scoreboard during the game.
+ * It provides methods to initialize the lobby layout, game scoreboard, and manage player lines.
+ *
+ * @version 1.0.0
+ * @author theEvilReaper
+ * @since 0.1.0
+ */
+public final class BounceScoreboard {
 
     private static final Component GAME_TITLE = Component.text("Knockouts", NamedTextColor.AQUA)
             .append(Component.space())
@@ -23,6 +31,12 @@ public class BounceScoreboard {
         sideBar = new Sidebar(Component.empty());
     }
 
+    /**
+     * Initializes the lobby layout of the scoreboard.
+     * This method sets up the initial state of the scoreboard for the lobby.
+     *
+     * @param mapName the name of the map to display in the scoreboard
+     */
     public void initLobbyLayout(@NotNull String mapName) {
         sideBar.setTitle(Component.text("Bounce", NamedTextColor.DARK_AQUA));
 
@@ -35,6 +49,10 @@ public class BounceScoreboard {
         sideBar.createLine(new Sidebar.ScoreboardLine("map_name", mapComponent, 1));
     }
 
+    /**
+     * Initializes the game scoreboard layout.
+     * This method sets up the initial state of the scoreboard for the game.
+     */
     public void initGameScoreboard() {
         sideBar.removeLine("header");
         sideBar.removeLine("map_header");
@@ -68,16 +86,24 @@ public class BounceScoreboard {
         this.sideBar.removeViewer(player);
     }
 
+    /**
+     * Creates a new line for the player in the scoreboard.
+     * The player's UUID is used as the line identifier, and their display name is used as the line text.
+     *
+     * @param player the player for whom to create a line
+     */
     public void createPlayerLine(@NotNull Player player) {
         this.sideBar.createLine(new Sidebar.ScoreboardLine(player.getUuid().toString(), player.getDisplayName(), 0));
     }
 
+    /**
+     * Updates the player's line score in the scoreboard.
+     *
+     * @param uuid   the UUID of the player whose score is to be updated
+     * @param points the points to set for the player
+     */
     public void updatePlayerLine(@NotNull UUID uuid, int points) {
-        System.out.printf("Updating player line for UUID: %s with points: %d%n", uuid, points);
         this.sideBar.updateLineScore(uuid.toString(), points);
-
-        Sidebar.ScoreboardLine line = this.sideBar.getLine(uuid.toString());
-        System.out.printf("Current line: %s%n", line);
     }
 
     /**
