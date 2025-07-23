@@ -38,7 +38,6 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
 
         BounceData bounceData = data.get();
         Material material = event.getMaterial();
-        System.out.println("Player " + event.getPlayer().getUsername() + " selected block: " + material.name());
         Block block = material.block();
         GameMapBuilder mapBuilder = bounceData.getMapBuilder();
         if (hasBlock(mapBuilder.getPushDataBuilder(), block)) {
@@ -49,11 +48,16 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
 
         entry.setBlock(block);
         bounceData.triggerPushViewUpdate(blockSelectIndex);
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-            bounceData.backToPushEntry(true);
-        });
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToPushEntry(true));
     }
 
+    /**
+     * Checks if the given block is already present in the push data builder.
+     *
+     * @param pushDataBuilder the push data builder to check against
+     * @param block           the block to check for
+     * @return true if the block is already present, false otherwise
+     */
     private boolean hasBlock(@NotNull PushData.Builder pushDataBuilder, @NotNull Block block) {
         return pushDataBuilder.getPushValues().stream()
                 .anyMatch(pushBlock -> pushBlock.getBlock().equals(block));
