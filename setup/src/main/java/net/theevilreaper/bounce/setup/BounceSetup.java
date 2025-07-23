@@ -14,13 +14,12 @@ import net.onelitefeather.guira.SetupDataService;
 import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.file.GsonFileHandler;
-import net.theevilreaper.aves.map.MapProvider;
+import net.theevilreaper.aves.map.provider.MapProvider;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
-import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
@@ -53,7 +52,7 @@ import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 public final class BounceSetup implements ListenerHandling {
 
     private final MapProvider mapProvider;
-    private final SetupDataService<BounceData> setupDataService;
+    private final SetupDataService setupDataService;
     private final InventoryService inventoryService;
     private final SetupItems setupItems;
     private final FileHandler fileHandler;
@@ -97,11 +96,7 @@ public final class BounceSetup implements ListenerHandling {
             setupItems.setOverViewItem(player);
         };
 
-        node.addListener(
-                (Class<SetupFinishEvent<BounceData>>) (Class<?>) SetupFinishEvent.class,
-                new SetupFinishListener(instanceSwitcher)
-        );
-
+        node.addListener(SetupFinishEvent.class, new SetupFinishListener(instanceSwitcher));
         node.addListener(PlayerGroundBlockSelectEvent.class, new PlayerBlockSelectListener(this.setupDataService::get));
         node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
         node.addListener(GameMapBuilderStateNotifyEvent.class, new GameMapBuilderStateNotifyListener());
