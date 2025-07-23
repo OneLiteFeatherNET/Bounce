@@ -55,12 +55,10 @@ public final class PlayerJumpTask {
             if (block == Block.REDSTONE_BLOCK) {
                 lastBlockBelow = block;
                 player.teleport(map.getGameSpawn());
-               // EventDispatcher.call(new ScoreDeathUpdateEvent(player));
                 return;
             }
 
             if (block == Block.LAVA) {
-                System.out.println("Player " + player.getUsername() + " hit lava, teleporting to spawn.");
                 lastBlockBelow = block;
                 EventDispatcher.call(new PlayerLavaEvent(player));
                 return;
@@ -79,7 +77,7 @@ public final class PlayerJumpTask {
         if (player.getVelocity().y() < 0) {
             long now = System.currentTimeMillis();
             if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
-                double pushStrength = pushData.getPush(foundJumpBlock) * 10;
+                double pushStrength = pushData.getPush(foundJumpBlock) * 10D;
                 Vec push = new Vec(0, pushStrength, 0); // Only push upwards
                 player.setVelocity(push);
                 lastPushTime = now;
