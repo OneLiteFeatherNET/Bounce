@@ -64,5 +64,9 @@ public final class SetupInventorySwitchListener implements Consumer<SetupInvento
         if (event.getTarget() == SwitchTarget.PUSH_LAYER_VIEW) {
             data.openPushValueInventory();
         }
+
+        if (event.getTarget() == SwitchTarget.GROUND_BLOCK_VIEW) {
+            data.openGroundBlockView();
+        }
     }
 }

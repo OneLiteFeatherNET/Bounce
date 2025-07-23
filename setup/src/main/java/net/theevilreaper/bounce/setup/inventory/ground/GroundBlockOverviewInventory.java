@@ -43,7 +43,7 @@ public class GroundBlockOverviewInventory extends GlobalInventoryBuilder {
                     .build();
             layout.setItem(slots[i], stack, this::handleClick);
         }
-        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.GROUND_BLOCKS_OVERVIEW));
+        layout.setItem(getType().getSize() - 1, new SwitchTargetSlot(SwitchTarget.GROUND_BLOCK_VIEW));
         this.setLayout(layout);
     }
 
