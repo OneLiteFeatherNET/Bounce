@@ -89,7 +89,7 @@ public final class BounceSetup implements ListenerHandling {
                 this.setupItems::setOverViewItem,
                 player -> this.mapProvider.teleportToSpawn(player, false))
         );
-        node.addListener(PlayerDisconnectEvent.class, new PlayerDisconnectListener(this.setupDataService::get));
+        node.addListener(PlayerDisconnectEvent.class, new PlayerDisconnectListener(this.setupDataService::remove));
         node.addListener(MapSetupSelectEvent.class, new MapSetupSelectListener(this.fileHandler, this.setupDataService));
 
         PlayerConsumer instanceSwitcher = player -> {
