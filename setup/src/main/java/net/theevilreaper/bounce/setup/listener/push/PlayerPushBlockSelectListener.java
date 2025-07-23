@@ -47,7 +47,7 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
         PushEntry entry = mapBuilder.getPushDataBuilder().getPushValues().get(blockSelectIndex);
 
         entry.setBlock(block);
-        bounceData.triggerPushViewUpdate(blockSelectIndex);
+        bounceData.triggerPushViewUpdate();
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToPushEntry(true));
     }
 
