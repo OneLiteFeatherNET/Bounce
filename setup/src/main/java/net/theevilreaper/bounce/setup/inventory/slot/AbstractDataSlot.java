@@ -1,13 +1,15 @@
 package net.theevilreaper.bounce.setup.inventory.slot;
 
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.condition.InventoryConditionResult;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
+import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.inventory.slot.Slot;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 public abstract class AbstractDataSlot extends Slot {
 
@@ -21,8 +23,9 @@ public abstract class AbstractDataSlot extends Slot {
     protected abstract void click(
             @NotNull Player player,
             int slot,
-            @NotNull ClickType clickType,
-            @NotNull InventoryConditionResult result
+            @NotNull Click clickType,
+            @NotNull ItemStack stack,
+            @NotNull Consumer<ClickHolder> result
     );
 
     /**
@@ -34,8 +37,8 @@ public abstract class AbstractDataSlot extends Slot {
      */
     protected @NotNull ItemStack.Builder asBuilder(@NotNull ItemStack stack) {
         ItemStack.Builder builder = ItemStack.builder(stack.material());
-        if (stack.has(ItemComponent.CUSTOM_NAME)) {
-            builder.customName(stack.get(ItemComponent.CUSTOM_NAME));
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
+            builder.customName(stack.get(DataComponents.CUSTOM_NAME));
         }
         return builder;
     }

@@ -2,12 +2,14 @@ package net.theevilreaper.bounce.setup.inventory.slot;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.condition.InventoryConditionResult;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
+import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 import static net.theevilreaper.bounce.setup.util.SetupMessages.DELETE_CLICK;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.NO_SPACE_SEPARATOR;
@@ -39,7 +41,7 @@ public class StringSlot extends AbstractDataSlot {
     }
 
     @Override
-    protected void click(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
-        result.setCancel(true);
+    protected void click(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+        result.accept(ClickHolder.cancelClick());
     }
 }
