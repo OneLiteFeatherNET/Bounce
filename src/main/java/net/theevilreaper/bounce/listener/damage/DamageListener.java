@@ -4,7 +4,7 @@ import io.github.togar2.pvp.events.FinalDamageEvent;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -18,7 +18,7 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
     public void accept(@NotNull FinalDamageEvent event) {
         if (event.getEntity().getEntityType() != EntityType.PLAYER) return;
 
-        DynamicRegistry.Key<DamageType> type = event.getDamage().getType();
+        RegistryKey<DamageType> type = event.getDamage().getType();
         Player originPlayer = (Player) event.getEntity();
 
         // TODO: Check in a future state why MinestomPVP doesn't handle LAVA damage correctly
