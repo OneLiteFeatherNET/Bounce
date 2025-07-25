@@ -5,10 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
-import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.event.player.PlayerUseItemEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Instance;
 import net.onelitefeather.guira.SetupDataService;
 import net.onelitefeather.guira.event.SetupFinishEvent;
@@ -26,6 +23,7 @@ import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
+import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.event.push.PlayerPushBlockSelectEvent;
 import net.theevilreaper.bounce.setup.event.push.PlayerPushIndexChangeEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
@@ -33,6 +31,8 @@ import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerDisconnectListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
+import net.theevilreaper.bounce.setup.listener.dialog.PlayerCustomClickEventListener;
+import net.theevilreaper.bounce.setup.listener.dialog.PlayerDeletePromptListener;
 import net.theevilreaper.bounce.setup.listener.entity.EntityAddToInstanceListener;
 import net.theevilreaper.bounce.setup.listener.ground.PlayerBlockSelectListener;
 import net.theevilreaper.bounce.setup.listener.inventory.SetupInventorySwitchListener;
@@ -108,7 +108,8 @@ public final class BounceSetup implements ListenerHandling {
 
         node.addListener(PlayerPushBlockSelectEvent.class, new PlayerPushBlockSelectListener(this.setupDataService::get));
         node.addListener(PlayerPushIndexChangeEvent.class, new PlayerPushIndexChangeListener(this.setupDataService::get));
-
+        node.addListener(PlayerDeletePromptEvent.class, new PlayerDeletePromptListener(dialogRegistry));
+        node.addListener(PlayerCustomClickEvent.class, new PlayerCustomClickEventListener(this.dialogRegistry, this.setupDataService::get));
         node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier, setupItems));
 
     }
