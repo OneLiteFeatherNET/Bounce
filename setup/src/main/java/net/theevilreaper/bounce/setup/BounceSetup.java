@@ -20,6 +20,8 @@ import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
+import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
+import net.theevilreaper.bounce.setup.dialog.SetupDialogRegistry;
 import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
@@ -56,6 +58,7 @@ public final class BounceSetup implements ListenerHandling {
     private final InventoryService inventoryService;
     private final SetupItems setupItems;
     private final FileHandler fileHandler;
+    private final DialogRegistry dialogRegistry;
 
     public BounceSetup() {
         Path path = Path.of("");
@@ -64,6 +67,7 @@ public final class BounceSetup implements ListenerHandling {
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.setupItems = new SetupItems();
         this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
+        this.dialogRegistry = new SetupDialogRegistry();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
     }
 
