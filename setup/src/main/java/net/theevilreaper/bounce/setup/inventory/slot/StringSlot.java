@@ -2,9 +2,12 @@ package net.theevilreaper.bounce.setup.inventory.slot;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
+import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
+import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +44,14 @@ public class StringSlot extends AbstractDataSlot {
     }
 
     @Override
-    protected void click(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    protected void click(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
+
+        if (click instanceof Click.Right) {
+            EventDispatcher.call(new PlayerDeletePromptEvent(player, OverviewType.NAME));
+            return;
+        }
+
+        EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_NAME));
     }
 }

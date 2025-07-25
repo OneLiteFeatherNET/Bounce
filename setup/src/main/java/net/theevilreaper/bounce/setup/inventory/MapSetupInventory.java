@@ -68,7 +68,6 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
             return dataLayout;
         });
         this.invalidateDataLayout();
-        this.register();
     }
 
     /**
