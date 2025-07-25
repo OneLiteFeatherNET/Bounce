@@ -8,10 +8,11 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.common.ShowDialogPacket;
 import net.theevilreaper.bounce.setup.dialog.DialogTemplate;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public final class NameInputDialog implements DialogTemplate {
+public final class NameInputDialog implements DialogTemplate<String> {
 
     private static final Key DIALOG_KEY = Key.key("bounce", "name_setup_dialog");
 
@@ -25,8 +26,13 @@ public final class NameInputDialog implements DialogTemplate {
         this.cancelComponent = cancelComponent;
     }
 
-    @Override
-    public void open(@NotNull Player player) {
+    /**
+     * Opens the name input dialog for the given player with the provided data.
+     * @param player the player to open the dialog for
+     * @param data the initial data to pre-fill the input field, can be null
+     */
+    public void open(@NotNull Player player, @Nullable String  data) {
+        String initialName = data == null ? "" : data;
         var packet = new ShowDialogPacket(new Dialog.Confirmation(
                 new DialogMetadata(
                         header,
@@ -38,7 +44,7 @@ public final class NameInputDialog implements DialogTemplate {
                                 new DialogBody.PlainMessage(Component.text("aa"), 10)
                         ),
                         List.of(
-                                new DialogInput.Text("name", 200, Component.text("Map Name"), false, "", 32, null)
+                                new DialogInput.Text("name", 200, Component.text("Map Name"), false, initialName, 32, null)
                         )
                 ),
                 new DialogActionButton(
