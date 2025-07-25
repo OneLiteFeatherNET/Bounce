@@ -11,7 +11,9 @@ import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.dialog.*;
 import net.theevilreaper.bounce.setup.dialog.type.AuthorInputDialog;
 import net.theevilreaper.bounce.setup.dialog.type.AuthorRequestDialog;
+import net.theevilreaper.bounce.setup.dialog.type.DeleteDialog;
 import net.theevilreaper.bounce.setup.dialog.type.NameInputDialog;
+import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,8 +45,9 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
 
         if (dialogTemplate == null) return;
 
-
         CompoundBinaryTag dialogData = (CompoundBinaryTag) payload;
+
+        System.out.println("PlayerCustomClickEvent: " + key.asString() + " with payload: " + dialogData);
 
         if (dialogTemplate instanceof AuthorRequestDialog) {
             int amount = dialogData.getInt("amount", 1);
@@ -55,10 +58,23 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
 
         setupDataGetter.get(player.getUuid()).ifPresent(setupData -> {
             BounceData data = (BounceData) setupData;
-            if (dialogTemplate instanceof NameInputDialog) {
-                String name = dialogData.getString("name");
-                data.getMapBuilder().name(name);
+
+            switch (dialogTemplate) {
+                case NameInputDialog ignored -> {
+                    String name = dialogData.getString("name");
+                    data.getMapBuilder().name(name);
+                }
+                case DeleteDialog ignored -> {
+                    int type = dialogData.getInt("type");
+                    OverviewType mappedType = OverviewType.fromOrdinal(type);
+                    System.out.println("Delete dialog type: " + mappedType);
+                }
+
+                default ->
+                        throw new IllegalStateException("Unexpected dialog type: " + dialogTemplate.getClass().getCanonicalName());
             }
+
+
         });
 
     }
