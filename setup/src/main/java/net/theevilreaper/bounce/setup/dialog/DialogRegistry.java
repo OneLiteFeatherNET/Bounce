@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface DialogRegistry {
 
-    @Nullable DialogTemplate get(@Nullable Key key);
+    @Nullable DialogTemplate<?> get(@Nullable Key key);
 
     boolean contains(@NotNull Key key);
 }

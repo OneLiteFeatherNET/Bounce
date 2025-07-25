@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.theevilreaper.bounce.setup.dialog.type.AuthorInputDialog;
 import net.theevilreaper.bounce.setup.dialog.type.AuthorRequestDialog;
+import net.theevilreaper.bounce.setup.dialog.type.DeleteDialog;
 import net.theevilreaper.bounce.setup.dialog.type.NameInputDialog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,16 +35,20 @@ public class SetupDialogRegistry implements DialogRegistry {
                 cancelButton
                 // Default to 1 author
         ));
-        //this.registerDialog(new AuthorRequestDialog());
+        this.registerDialog(new DeleteDialog());
+
+        for (Key key : dialogMap.keySet()) {
+            System.out.println("Registered dialog: " + key.asString());
+        }
     }
 
-    private void registerDialog(@NotNull DialogTemplate dialog) {
+    private void registerDialog(@NotNull DialogTemplate<?> dialog) {
         dialogMap.put(dialog.key(), dialog);
     }
 
     @Override
     public @Nullable DialogTemplate get(@Nullable Key key) {
-        return null;
+        return this.dialogMap.getOrDefault(key, null);
     }
 
     @Override

@@ -9,11 +9,13 @@ import net.minestom.server.network.packet.server.common.ShowDialogPacket;
 import net.theevilreaper.bounce.setup.dialog.DialogTemplate;
 import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class AuthorInputDialog implements DialogTemplate {
+public class AuthorInputDialog implements DialogTemplate<List<String>> {
 
     public static final Key DIALOG_KEY = Key.key("bounce", "bounce_author_setup");
 
@@ -28,7 +30,7 @@ public class AuthorInputDialog implements DialogTemplate {
     }
 
     @Override
-    public void open(@NotNull Player player) {
+    public void open(@NotNull Player player, @Nullable List<String> data) {
         int amount = player.getTag(SetupTags.AUTHOR_AMOUNT_TAG);
         List<DialogInput> inputFields = new ArrayList<>();
         for (int i = 0; i < amount; i++) {

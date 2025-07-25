@@ -6,27 +6,23 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.common.ShowDialogPacket;
-import net.theevilreaper.bounce.setup.dialog.DialogTemplate;
+import net.theevilreaper.bounce.setup.dialog.AbstractDialogTemplate;
+import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class AuthorRequestDialog implements DialogTemplate<Void> {
+public class DeleteDialog extends AbstractDialogTemplate<OverviewType> {
 
-    private static final Key DIALOG_KEY = Key.key("bounce", "author_amount_dialog");
+    public static final Key DIALOG_KEY = Key.key("bounce", "delete_dialog");
 
-    private final Component header;
-    private final Component submitComponent;
-    private final Component cancelComponent;
-
-    public AuthorRequestDialog(@NotNull Component header, @NotNull Component submitComponent, @NotNull Component cancelComponent) {
-        this.header = header;
-        this.submitComponent = submitComponent;
-        this.cancelComponent = cancelComponent;
+    public DeleteDialog() {
+        super(Component.text("Confirm data deletion"), Component.text("Yes"), Component.text("No"));
     }
 
     @Override
-    public void open(@NotNull Player player, Void test) {
+    public void open(@NotNull Player player, @Nullable OverviewType data) {
         var packet = new ShowDialogPacket(new Dialog.Confirmation(
                 new DialogMetadata(
                         header,
@@ -35,17 +31,21 @@ public class AuthorRequestDialog implements DialogTemplate<Void> {
                         false,
                         DialogAfterAction.CLOSE,
                         List.of(
-                                new DialogBody.PlainMessage(Component.text("aa"), 10)
+                                new DialogBody.PlainMessage(Component.text("The following map data would be deleted:"), 150),
+                                new DialogBody.PlainMessage(Component.empty(), 1),
+                                new DialogBody.PlainMessage(Component.text(data == null ? "No data provided" : data.getName()), 100)
                         ),
-                        List.of(
-                                new DialogInput.NumberRange("amount", 200, Component.text("Amount"), "", 1, 10, 1f, 1f)
-                        )
+                        List.of()
                 ),
                 new DialogActionButton(
                         submitComponent,
                         Component.text("§7Click to submit"),
                         100,
-                        new DialogAction.DynamicCustom(DIALOG_KEY, CompoundBinaryTag.builder().build())
+                        new DialogAction.DynamicCustom(DIALOG_KEY, CompoundBinaryTag
+                                .builder()
+                                .putInt("type", data.ordinal())
+                                .build()
+                        )
                 ),
                 new DialogActionButton(
                         cancelComponent,
