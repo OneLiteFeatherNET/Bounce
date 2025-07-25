@@ -31,10 +31,10 @@ public class SetupDialogRegistry implements DialogRegistry {
         this.registerDialog(new AuthorInputDialog(
                 Component.text("Setup Author(s)"),
                 saveButton,
-                cancelButton,
+                cancelButton
                 // Default to 1 author
         ));
-        this.registerDialog(new AuthorRequestDialog());
+        //this.registerDialog(new AuthorRequestDialog());
     }
 
     private void registerDialog(@NotNull DialogTemplate dialog) {
