@@ -93,4 +93,11 @@ public enum OverviewType {
     public static @NotNull OverviewType[] getValues() {
         return VALUES;
     }
+
+    public static @NotNull OverviewType fromOrdinal(int ordinal) {
+        if (ordinal < 0 || ordinal >= VALUES.length) {
+            throw new IndexOutOfBoundsException("Invalid ordinal for OverviewType: " + ordinal);
+        }
+        return VALUES[ordinal];
+    }
 }

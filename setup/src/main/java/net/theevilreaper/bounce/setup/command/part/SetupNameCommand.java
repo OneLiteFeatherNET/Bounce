@@ -9,6 +9,8 @@ import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.event.EventDispatcher;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.GameMapBuilderStateNotifyEvent;
@@ -16,8 +18,6 @@ import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
@@ -25,9 +25,9 @@ import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class SetupNameCommand extends Command {
 
-    private final Function<UUID, Optional<BounceData>> setupDataFunction;
+    private final OptionalSetupDataGetter setupDataFunction;
 
-    public SetupNameCommand(@NotNull Function<UUID, Optional<BounceData>> setupDataFunction) {
+    public SetupNameCommand(@NotNull OptionalSetupDataGetter setupDataFunction) {
         super("name");
         this.setupDataFunction = setupDataFunction;
         this.setCondition(Conditions::playerOnly);
@@ -48,13 +48,13 @@ public final class SetupNameCommand extends Command {
             return;
         }
 
-        Optional<BounceData> fetchedData = this.setupDataFunction.apply(sender.identity().uuid());
+        Optional<SetupData> fetchedData = this.setupDataFunction.get(sender.identity().uuid());
         if (fetchedData.isEmpty()) {
             sender.sendMessage(SELECT_MAP_FIRST);
             return;
         }
 
-        BounceData setupData = fetchedData.get();
+        BounceData setupData = ((BounceData) fetchedData.get());
 
         if (setupData.getMapBuilder() == null) {
             sender.sendMessage("No map is currently selected. Please select a map first.");

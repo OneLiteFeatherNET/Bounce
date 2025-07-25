@@ -14,7 +14,7 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.theevilreaper.aves.map.MapProvider;
+import net.theevilreaper.aves.map.provider.MapProvider;
 import net.theevilreaper.bounce.commands.StartCommand;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.config.GameConfig;

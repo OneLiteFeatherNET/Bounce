@@ -5,12 +5,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.condition.InventoryConditionResult;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
+import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
@@ -23,6 +23,7 @@ import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static net.theevilreaper.bounce.setup.util.SetupTags.PUSH_SLOT_INDEX;
 
@@ -71,27 +72,36 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         });
     }
 
-    private void handlePushButton(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
-        result.setCancel(true);
-        player.closeInventory();
+    /**
+     * Handles the click on a push button click in the inventory.
+     *
+     * @param player    the player who clicked
+     * @param slot      the slot that was clicked
+     * @param clickType the type of click (e.g., LEFT, RIGHT)
+     * @param stack     the item stack that was clicked
+     * @param result    the consumer to handle the click result
+     */
+    private void handlePushButton(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+        result.accept(ClickHolder.cancelClick());
+        if (!stack.hasTag(PUSH_SLOT_INDEX)) return;
 
-        if (!result.getClickedItem().hasTag(PUSH_SLOT_INDEX)) return;
-
-        int pushIndex = result.getClickedItem().getTag(PUSH_SLOT_INDEX);
+        int pushIndex = stack.getTag(PUSH_SLOT_INDEX);
 
         EventDispatcher.call(new PlayerPushIndexChangeEvent(player, pushIndex));
     }
 
+
     /**
      * Handles the button click for the ground layer inventory.
      *
-     * @param player    the player who clicked the button
+     * @param player    the player who clicked
      * @param slot      the slot that was clicked
-     * @param clickType the type of click that occurred
-     * @param result    the result of the click action, which can be modified to cancel the action
+     * @param clickType the type of click (e.g., LEFT, RIGHT)
+     * @param stack     the item stack that was clicked
+     * @param result    the consumer to handle the click result
      */
-    private void handleGroundButton(@NotNull Player player, int slot, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
-        result.setCancel(true);
+    private void handleGroundButton(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+        result.accept(ClickHolder.cancelClick());
         player.closeInventory();
 
         if (groundValueInventory == null) {

@@ -25,7 +25,7 @@ public abstract class SetupItemTestBase extends MapDataTestBase {
 
     protected static FileHandler fileHandler;
     protected static SetupItems setupItems;
-    protected static SetupDataService<BounceData> setupDataService;
+    protected static SetupDataService setupDataService;
     protected static PlayerConsumer nopFunction = player -> {
         // No operation function for player
     };

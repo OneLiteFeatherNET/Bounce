@@ -28,15 +28,15 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("shadow", "8.3.8")
-            version("bom", "1.2.4")
-            version("aonyx", "0.3.1")
-            version("pvp", "dfb8f0c342")
+            version("bom", "1.4.2")
+            version("aonyx", "0.5.1")
+            version("pvp", "56a831b41c")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
             library("pvp", "com.github.TogAr2", "MinestomPvP").versionRef("pvp")
-            library("minestom", "net.minestom", "minestom-snapshots").withoutVersion()
+            library("minestom", "net.minestom", "minestom").withoutVersion()
             library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
             library("cyano", "net.onelitefeather", "cyano").withoutVersion()
             library("guira", "net.onelitefeather", "guira").withoutVersion()

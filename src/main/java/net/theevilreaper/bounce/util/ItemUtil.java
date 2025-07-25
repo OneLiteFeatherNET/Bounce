@@ -2,8 +2,8 @@ package net.theevilreaper.bounce.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.EnchantmentList;
@@ -24,7 +24,7 @@ public final class ItemUtil {
     public ItemUtil() {
         this.feather = ItemStack.builder(Material.FEATHER)
                 .customName(Component.text("Recoil-pushing recoil pusher", NamedTextColor.LIGHT_PURPLE))
-                .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Enchantment.KNOCKBACK, 3))
+                .set(DataComponents.ENCHANTMENTS, new EnchantmentList(Enchantment.KNOCKBACK, 3))
                 .build();
     }
 

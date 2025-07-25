@@ -67,7 +67,7 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
             case SPAWN -> new PositionSlot(type, this.builder.getSpawn());
             case GAME_SPAWN -> new PositionSlot(type, this.builder.getGameSpawn());
             case NAME -> new StringSlot(type, builder.getName());
-            case BUILDER -> new MultiStringSlot(type, builder.getAuthors());
+            case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
         };
     }
 }

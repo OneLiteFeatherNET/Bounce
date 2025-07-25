@@ -2,7 +2,7 @@ package net.theevilreaper.bounce.setup.inventory.slot;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
@@ -21,9 +21,9 @@ class SwitchTargetSlotTest {
         ItemStack item = switchTargetSlot.getItem();
         assertNotNull(item);
         assertEquals(Material.BARRIER, item.material());
-        assertTrue(item.has(ItemComponent.CUSTOM_NAME));
+        assertTrue(item.has(DataComponents.CUSTOM_NAME));
 
-        Component customName = item.get(ItemComponent.CUSTOM_NAME);
+        Component customName = item.get(DataComponents.CUSTOM_NAME);
         assertNotNull(customName);
         String text = PlainTextComponentSerializer.plainText().serialize(customName);
         assertNotNull(text);

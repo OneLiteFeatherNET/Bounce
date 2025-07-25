@@ -4,6 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
@@ -13,15 +15,13 @@ import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSelectEvent> {
 
-    private final Function<UUID, Optional<BounceData>> bounceDataSupplier;
+    private final OptionalSetupDataGetter bounceDataSupplier;
 
-    public PlayerPushBlockSelectListener(@NotNull Function<UUID, Optional<BounceData>> bounceDataSupplier) {
+    public PlayerPushBlockSelectListener(@NotNull OptionalSetupDataGetter bounceDataSupplier) {
         this.bounceDataSupplier = bounceDataSupplier;
     }
 
@@ -31,12 +31,12 @@ public class PlayerPushBlockSelectListener implements Consumer<PlayerPushBlockSe
 
         if (!player.hasTag(SetupTags.PUSH_SLOT_INDEX)) return;
 
-        Optional<BounceData> data = bounceDataSupplier.apply(event.getPlayer().getUuid());
+        Optional<SetupData> data = bounceDataSupplier.get(event.getPlayer().getUuid());
 
         if (data.isEmpty()) return;
         int blockSelectIndex = player.getTag(SetupTags.PUSH_SLOT_INDEX);
 
-        BounceData bounceData = data.get();
+        BounceData bounceData = ((BounceData) data.get());
         Material material = event.getMaterial();
         Block block = material.block();
         GameMapBuilder mapBuilder = bounceData.getMapBuilder();

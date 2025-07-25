@@ -2,9 +2,9 @@ package net.theevilreaper.bounce.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.EnchantmentList;
@@ -38,18 +38,18 @@ class ItemUtilIntegrationTest {
         assertNotEquals(ItemStack.AIR, itemStack);
         assertEquals(Material.FEATHER, itemStack.material());
 
-        assertTrue(itemStack.has(ItemComponent.CUSTOM_NAME));
+        assertTrue(itemStack.has(DataComponents.CUSTOM_NAME));
 
-        assertTrue(itemStack.has(ItemComponent.ENCHANTMENTS));
+        assertTrue(itemStack.has(DataComponents.ENCHANTMENTS));
 
-        Component customName = itemStack.get(ItemComponent.CUSTOM_NAME);
+        Component customName = itemStack.get(DataComponents.CUSTOM_NAME);
         assertNotNull(customName);
         String displayName = PlainTextComponentSerializer.plainText().serialize(customName);
 
         assertNotNull(displayName);
         assertTrue(displayName.contains("Recoil-pushing recoil pusher"));
 
-        EnchantmentList enchantmentList = itemStack.get(ItemComponent.ENCHANTMENTS);
+        EnchantmentList enchantmentList = itemStack.get(DataComponents.ENCHANTMENTS);
 
         assertNotNull(enchantmentList);
         assertEquals(1, enchantmentList.enchantments().size());

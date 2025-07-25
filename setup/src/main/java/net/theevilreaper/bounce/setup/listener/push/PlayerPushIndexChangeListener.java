@@ -2,22 +2,23 @@ package net.theevilreaper.bounce.setup.listener.push;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
+import net.onelitefeather.guira.functional.SetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.push.PlayerPushIndexChangeEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.util.SetupTags.PUSH_SLOT_INDEX;
 
 public final class PlayerPushIndexChangeListener implements Consumer<PlayerPushIndexChangeEvent> {
 
-    private final Function<UUID, Optional<BounceData>> profileGetter;
+    private final OptionalSetupDataGetter profileGetter;
 
-    public PlayerPushIndexChangeListener(Function<UUID, Optional<BounceData>> profileGetter) {
+    public PlayerPushIndexChangeListener(OptionalSetupDataGetter profileGetter) {
         this.profileGetter = profileGetter;
     }
 
@@ -26,14 +27,14 @@ public final class PlayerPushIndexChangeListener implements Consumer<PlayerPushI
         Player player = event.getPlayer();
         int index = event.getIndex();
 
-        Optional<BounceData> optionalData = this.profileGetter.apply(player.getUuid());
+        Optional<SetupData> optionalData = this.profileGetter.get(player.getUuid());
 
         if (optionalData.isEmpty()) {
             player.sendMessage("You do not have a setup profile.");
             return;
         }
 
-        BounceData setupData = optionalData.get();
+        BounceData setupData = ((BounceData) optionalData.get());
 
         setupData.triggerPushValueUpdate(index);
         player.closeInventory();
