@@ -73,8 +73,9 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
      * @param dialogData the dialog data containing the value to update
      */
     private void handleValueUpdate(@NotNull Player player, @NotNull BounceData data, @NotNull CompoundBinaryTag dialogData) {
-        int amount = dialogData.getInt("bounce_amount");
+        int amount = dialogData.getInt("bounce_amount", 0);
         int valueIndex = player.getTag(SetupTags.PUSH_SLOT_INDEX);
+        player.removeTag(SetupTags.PUSH_SLOT_INDEX);
         data.getMapBuilder().getPushDataBuilder().getPushValues().get(valueIndex).setValue(amount);
         data.triggerPushValueUpdate(valueIndex);
     }
