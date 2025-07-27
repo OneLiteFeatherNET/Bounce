@@ -2,10 +2,7 @@ package net.theevilreaper.bounce.setup.dialog;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.theevilreaper.bounce.setup.dialog.type.AuthorInputDialog;
-import net.theevilreaper.bounce.setup.dialog.type.AuthorRequestDialog;
-import net.theevilreaper.bounce.setup.dialog.type.DeleteDialog;
-import net.theevilreaper.bounce.setup.dialog.type.NameInputDialog;
+import net.theevilreaper.bounce.setup.dialog.type.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +38,7 @@ public class SetupDialogRegistry implements DialogRegistry {
                 // Default to 1 author
         ));
         this.registerDialog(new DeleteDialog());
+        this.registerDialog(new ValueInputDialog());
     }
 
     private void registerDialog(@NotNull DialogTemplate<?> dialog) {

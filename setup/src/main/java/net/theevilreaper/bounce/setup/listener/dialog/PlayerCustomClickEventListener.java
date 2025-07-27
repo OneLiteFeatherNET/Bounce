@@ -8,10 +8,7 @@ import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.dialog.*;
-import net.theevilreaper.bounce.setup.dialog.type.AuthorInputDialog;
-import net.theevilreaper.bounce.setup.dialog.type.AuthorRequestDialog;
-import net.theevilreaper.bounce.setup.dialog.type.DeleteDialog;
-import net.theevilreaper.bounce.setup.dialog.type.NameInputDialog;
+import net.theevilreaper.bounce.setup.dialog.type.*;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
@@ -62,10 +59,24 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
                 case NameInputDialog ignored -> this.handleNameSet(data, dialogData);
                 case AuthorInputDialog ignored -> handleAuthorSet(data, dialogData);
                 case DeleteDialog ignored -> this.handleDataDelete(data, dialogData);
+                case ValueInputDialog ignored -> this.handleValueUpdate(player, data, dialogData);
                 default ->
                         throw new IllegalStateException("Unexpected dialog type: " + dialogTemplate.getClass().getCanonicalName());
             }
         });
+    }
+
+    /**
+     * Handles the update of a value based on the dialog data provided.
+     * @param player the player who triggered the dialog
+     * @param data the BounceData instance containing the map builder
+     * @param dialogData the dialog data containing the value to update
+     */
+    private void handleValueUpdate(@NotNull Player player, @NotNull BounceData data, @NotNull CompoundBinaryTag dialogData) {
+        int amount = dialogData.getInt("bounce_amount");
+        int valueIndex = player.getTag(SetupTags.PUSH_SLOT_INDEX);
+        data.getMapBuilder().getPushDataBuilder().getPushValues().get(valueIndex).setValue(amount);
+        data.triggerPushValueUpdate(valueIndex);
     }
 
     /**

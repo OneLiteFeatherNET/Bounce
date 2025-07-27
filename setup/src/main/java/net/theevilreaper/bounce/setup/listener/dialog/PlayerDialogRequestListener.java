@@ -7,6 +7,7 @@ import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.dialog.type.AuthorInputDialog;
 import net.theevilreaper.bounce.setup.dialog.type.AuthorRequestDialog;
 import net.theevilreaper.bounce.setup.dialog.type.NameInputDialog;
+import net.theevilreaper.bounce.setup.dialog.type.ValueInputDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -25,12 +26,13 @@ public final class PlayerDialogRequestListener implements Consumer<PlayerDialogR
     public void accept(@NotNull PlayerDialogRequestEvent event) {
         Player player = event.getPlayer();
         Target target = event.getTarget();
-
         DialogTemplate<?> dialogTemplate;
+
         switch (target) {
             case Target.SETUP_NAME -> dialogTemplate = dialogRegistry.get(NameInputDialog.DIALOG_KEY);
             case Target.SETUP_AUTHOR -> dialogTemplate = dialogRegistry.get(AuthorInputDialog.DIALOG_KEY);
             case Target.SETUP_REQUEST_AUTHOR -> dialogTemplate = dialogRegistry.get(AuthorRequestDialog.DIALOG_KEY);
+            case Target.SETUP_BLOCK_BOUNCE -> dialogTemplate = dialogRegistry.get(ValueInputDialog.DIALOG_KEY);
             default -> throw new IllegalArgumentException("Unknown target: " + target);
         }
 
