@@ -62,7 +62,7 @@ public final class SetupNameCommand extends Command {
         }
 
 
-        setupData.getMapBuilder().setName(name);
+        setupData.getMapBuilder().name(name);
         Component message = Messages.withPrefix(Component.text("The name of the map now is: ", NamedTextColor.GRAY))
                 .append(Component.text(name, NamedTextColor.AQUA));
         sender.sendMessage(message);

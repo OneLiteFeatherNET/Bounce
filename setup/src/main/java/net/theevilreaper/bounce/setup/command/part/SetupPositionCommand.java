@@ -19,8 +19,6 @@ import net.theevilreaper.bounce.setup.data.BounceData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
@@ -66,7 +64,7 @@ public final class SetupPositionCommand extends Command {
                 stateChange = GameMapBuilderState.StateChange.SPAWN;
                 break;
             case "game":
-                setupData.getMapBuilder().setGameSpawn(player.getPosition());
+                setupData.getMapBuilder().gameSpawn(player.getPosition());
                 stateChange = GameMapBuilderState.StateChange.GAME_SPAWN;
                 break;
             default:
