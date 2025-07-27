@@ -19,6 +19,7 @@ import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
 import net.theevilreaper.bounce.setup.dialog.SetupDialogRegistry;
+import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
@@ -33,6 +34,7 @@ import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
 import net.theevilreaper.bounce.setup.listener.dialog.PlayerCustomClickEventListener;
 import net.theevilreaper.bounce.setup.listener.dialog.PlayerDeletePromptListener;
+import net.theevilreaper.bounce.setup.listener.dialog.PlayerDialogRequestListener;
 import net.theevilreaper.bounce.setup.listener.entity.EntityAddToInstanceListener;
 import net.theevilreaper.bounce.setup.listener.ground.PlayerBlockSelectListener;
 import net.theevilreaper.bounce.setup.listener.inventory.SetupInventorySwitchListener;
@@ -105,11 +107,11 @@ public final class BounceSetup implements ListenerHandling {
         node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
         node.addListener(GameMapBuilderStateNotifyEvent.class, new GameMapBuilderStateNotifyListener());
         node.addListener(AbstractStateNotifyEvent.PushDataStateNotifyEvent.class, new PushValueStateNotifierListener());
-
         node.addListener(PlayerPushBlockSelectEvent.class, new PlayerPushBlockSelectListener(this.setupDataService::get));
         node.addListener(PlayerPushIndexChangeEvent.class, new PlayerPushIndexChangeListener(this.setupDataService::get));
         node.addListener(PlayerDeletePromptEvent.class, new PlayerDeletePromptListener(dialogRegistry));
         node.addListener(PlayerCustomClickEvent.class, new PlayerCustomClickEventListener(this.dialogRegistry, this.setupDataService::get));
+        node.addListener(PlayerDialogRequestEvent.class, new PlayerDialogRequestListener(this.dialogRegistry));
         node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier, setupItems));
 
     }
