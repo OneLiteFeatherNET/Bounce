@@ -49,9 +49,6 @@ public class StringSlot extends AbstractDataSlot {
 
         if (click instanceof Click.Right) {
             EventDispatcher.call(new PlayerDeletePromptEvent(player, OverviewType.NAME));
-            return;
         }
-
-        EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_NAME));
     }
 }

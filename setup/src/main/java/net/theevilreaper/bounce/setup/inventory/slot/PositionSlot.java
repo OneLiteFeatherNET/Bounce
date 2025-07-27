@@ -4,10 +4,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.util.Components;
+import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,10 +63,13 @@ public class PositionSlot extends AbstractDataSlot {
     @Override
     protected void click(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
-        if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
-        if (click instanceof Click.Left && position != null) {
+        if ((!(click instanceof Click.Left || click instanceof Click.Right)) || position == null) return;
+        if (click instanceof Click.Left) {
             player.closeInventory();
             player.teleport(position);
+            return;
         }
+
+        EventDispatcher.call(new PlayerDeletePromptEvent(player, this.type));
     }
 }
