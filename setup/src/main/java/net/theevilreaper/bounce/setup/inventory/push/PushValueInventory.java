@@ -12,6 +12,7 @@ import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
@@ -47,13 +48,13 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         if (index < 0 || index >= this.gameMapBuilder.getPushDataBuilder().getPushValues().size()) {
             throw new IndexOutOfBoundsException("Invalid push entry index: " + index);
         }
-        this.setDataLayoutFunction(dataLayoutFunction -> {
+            this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
 
             dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
             PushEntry pushEntry = this.gameMapBuilder.getPushDataBuilder().getPushValues().get(index);
 
-            var stack = ItemStack.builder(pushEntry.getBlock().registry().material())
+            ItemStack stack = ItemStack.builder(pushEntry.getBlock().registry().material())
                     .build();
 
             dataLayout.setItem(BLOCK_SLOT, stack, this::handleBlockClick);
@@ -77,17 +78,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 
         int index = player.getTag(PUSH_SLOT_INDEX);
-
-        PushEntry pushEntry = this.gameMapBuilder.getPushDataBuilder().getPushValues().get(index);
-        int oldValue = pushEntry.getValue();
-        if (click instanceof Click.Left) {
-            pushEntry.incrementValue();
-        } else {
-            pushEntry.decrementValue();
-        }
-
-        if (pushEntry.getValue() != oldValue) {
-            this.invalidateDataLayout();
-        }
+        player.setTag(PUSH_SLOT_INDEX, index);
+        EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_BOUNCE));
     }
 }
