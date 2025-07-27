@@ -35,7 +35,7 @@ public class PlayerBlockSelectListener implements Consumer<PlayerGroundBlockSele
 
     private void handleGroundBlockChange(@NotNull BounceData bounceData, @NotNull Block block) {
         GameMapBuilder mapBuilder = bounceData.getMapBuilder();
-        mapBuilder.setGroundBlock(block);
+        mapBuilder.groundBlock(block);
         bounceData.triggerGroundViewUpdate();
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> bounceData.backToGroundBlock(true));
     }
