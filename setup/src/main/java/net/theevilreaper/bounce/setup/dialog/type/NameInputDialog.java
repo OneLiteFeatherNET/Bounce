@@ -14,7 +14,7 @@ import java.util.List;
 
 public final class NameInputDialog implements DialogTemplate<String> {
 
-    private static final Key DIALOG_KEY = Key.key("bounce", "name_setup_dialog");
+    public static final Key DIALOG_KEY = Key.key("bounce", "name_setup_dialog");
 
     private final Component header;
     private final Component submitComponent;
@@ -41,10 +41,10 @@ public final class NameInputDialog implements DialogTemplate<String> {
                         false,
                         DialogAfterAction.CLOSE,
                         List.of(
-                                new DialogBody.PlainMessage(Component.text("aa"), 10)
+                                new DialogBody.PlainMessage(Component.text("How the name of the map should be?"), 200)
                         ),
                         List.of(
-                                new DialogInput.Text("name", 200, Component.text("Map Name"), false, initialName, 32, null)
+                                new DialogInput.Text("name", 200, Component.text("Name"), true, initialName, 32, null)
                         )
                 ),
                 new DialogActionButton(

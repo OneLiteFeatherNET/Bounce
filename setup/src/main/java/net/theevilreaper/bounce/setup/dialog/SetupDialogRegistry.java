@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class SetupDialogRegistry implements DialogRegistry {
 
-    private final Map<Key, DialogTemplate> dialogMap;
+    private final Map<Key, DialogTemplate<?>> dialogMap;
 
     public SetupDialogRegistry() {
         this.dialogMap = new HashMap<>();
@@ -29,6 +29,11 @@ public class SetupDialogRegistry implements DialogRegistry {
                         cancelButton
                 )
         );
+        this.registerDialog(new AuthorRequestDialog(
+                Component.text("Request Author(s)"),
+                saveButton,
+                cancelButton
+        ));
         this.registerDialog(new AuthorInputDialog(
                 Component.text("Setup Author(s)"),
                 saveButton,
@@ -36,10 +41,6 @@ public class SetupDialogRegistry implements DialogRegistry {
                 // Default to 1 author
         ));
         this.registerDialog(new DeleteDialog());
-
-        for (Key key : dialogMap.keySet()) {
-            System.out.println("Registered dialog: " + key.asString());
-        }
     }
 
     private void registerDialog(@NotNull DialogTemplate<?> dialog) {

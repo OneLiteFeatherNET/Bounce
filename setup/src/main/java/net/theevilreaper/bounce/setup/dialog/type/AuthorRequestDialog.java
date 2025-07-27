@@ -3,6 +3,7 @@ package net.theevilreaper.bounce.setup.dialog.type;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.common.ShowDialogPacket;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class AuthorRequestDialog implements DialogTemplate<Void> {
 
-    private static final Key DIALOG_KEY = Key.key("bounce", "author_amount_dialog");
+    public static final Key DIALOG_KEY = Key.key("bounce", "author_amount_dialog");
 
     private final Component header;
     private final Component submitComponent;
@@ -35,21 +36,21 @@ public class AuthorRequestDialog implements DialogTemplate<Void> {
                         false,
                         DialogAfterAction.CLOSE,
                         List.of(
-                                new DialogBody.PlainMessage(Component.text("aa"), 10)
+                                new DialogBody.PlainMessage(Component.text("How many builders should the map have?"), 200)
                         ),
                         List.of(
-                                new DialogInput.NumberRange("amount", 200, Component.text("Amount"), "", 1, 10, 1f, 1f)
+                                new DialogInput.NumberRange("amount", 200, Component.text("Amount"), "options.generic_value", 1, 10, 1f, 1f)
                         )
                 ),
                 new DialogActionButton(
                         submitComponent,
-                        Component.text("§7Click to submit"),
+                        Component.text("Click to confirm", NamedTextColor.GREEN),
                         100,
                         new DialogAction.DynamicCustom(DIALOG_KEY, CompoundBinaryTag.builder().build())
                 ),
                 new DialogActionButton(
                         cancelComponent,
-                        Component.text("§7Click to cancel"),
+                        Component.text("Click to cancel", NamedTextColor.RED),
                         101,
                         null
                 )

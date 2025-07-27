@@ -3,6 +3,7 @@ package net.theevilreaper.bounce.setup.dialog.type;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.common.ShowDialogPacket;
@@ -13,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class AuthorInputDialog implements DialogTemplate<List<String>> {
 
@@ -36,7 +36,7 @@ public class AuthorInputDialog implements DialogTemplate<List<String>> {
         for (int i = 0; i < amount; i++) {
             inputFields.add(
                     new DialogInput.Text(
-                            "name",
+                            "author" + i,
                             200,
                             Component.text("Author " + i),
                             false,
@@ -54,19 +54,23 @@ public class AuthorInputDialog implements DialogTemplate<List<String>> {
                         false,
                         DialogAfterAction.CLOSE,
                         List.of(
-                                new DialogBody.PlainMessage(Component.text("aa"), 10)
+                                new DialogBody.PlainMessage(Component.text("Please enter the builder(s)"), 200)
                         ),
                         inputFields
                 ),
                 new DialogActionButton(
                         submitComponent,
-                        Component.text("§7Click to submit"),
+                        Component.text("Click to confirm", NamedTextColor.GREEN),
                         100,
-                        new DialogAction.DynamicCustom(DIALOG_KEY, CompoundBinaryTag.builder().build())
+                        new DialogAction.DynamicCustom(DIALOG_KEY,
+                                CompoundBinaryTag.builder()
+                                        .putInt("amount", amount)
+                                        .build()
+                        )
                 ),
                 new DialogActionButton(
                         cancelComponent,
-                        Component.text("§7Click to cancel"),
+                        Component.text("Click to cancel", NamedTextColor.RED),
                         101,
                         null
                 )

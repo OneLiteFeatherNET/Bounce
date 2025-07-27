@@ -3,6 +3,7 @@ package net.theevilreaper.bounce.setup.dialog.type;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.dialog.*;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.common.ShowDialogPacket;
@@ -39,7 +40,7 @@ public class DeleteDialog extends AbstractDialogTemplate<OverviewType> {
                 ),
                 new DialogActionButton(
                         submitComponent,
-                        Component.text("§7Click to submit"),
+                        Component.text("Click to confirm", NamedTextColor.GREEN),
                         100,
                         new DialogAction.DynamicCustom(DIALOG_KEY, CompoundBinaryTag
                                 .builder()
@@ -49,7 +50,7 @@ public class DeleteDialog extends AbstractDialogTemplate<OverviewType> {
                 ),
                 new DialogActionButton(
                         cancelComponent,
-                        Component.text("§7Click to cancel"),
+                        Component.text("Click to cancel", NamedTextColor.RED),
                         101,
                         null
                 )
