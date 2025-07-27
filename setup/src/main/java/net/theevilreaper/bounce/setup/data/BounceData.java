@@ -91,7 +91,6 @@ public final class BounceData implements SetupData {
             }, () -> this.gameMapBuilder = new GameMapBuilder());
         }
 
-        System.out.println("Call");
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);
         this.groundViewInventory.register();
 
