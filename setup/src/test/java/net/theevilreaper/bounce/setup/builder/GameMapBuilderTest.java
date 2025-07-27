@@ -42,7 +42,7 @@ class GameMapBuilderTest {
     void testGameMapBuilderInitializationWithExistingData() {
         GameMapBuilder gameMapBuilder = new GameMapBuilder();
         gameMapBuilder.gameSpawn(new Pos(1, 2, 3));
-        gameMapBuilder.setName("Test Map");
+        gameMapBuilder.name("Test Map");
         gameMapBuilder.spawn(new Pos(4, 5, 6));
         gameMapBuilder.builder("Test");
 
