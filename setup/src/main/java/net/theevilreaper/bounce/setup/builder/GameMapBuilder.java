@@ -40,31 +40,33 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
-     * Sets the name of the map.
-     *
-     * @param name the name of the map
-     * @return this builder instance for chaining
-     */
-    public @NotNull GameMapBuilder setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
      * Sets the ground block for the map.
      *
      * @param groundBlock the block to set as the ground block
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder setGroundBlock(Block groundBlock) {
+    public @NotNull GameMapBuilder groundBlock(Block groundBlock) {
         PushEntry pushEntry = this.pushDataBuilder.getPushValues().getFirst();
         pushEntry.setBlock(groundBlock);
         return this;
     }
 
-    public @NotNull GameMapBuilder setGameSpawn(Pos gameSpawn) {
+    /**
+     * Sets the spawn position for the map.
+     *
+     * @param gameSpawn the spawn position
+     * @return this builder instance for chaining
+     */
+    public @NotNull GameMapBuilder gameSpawn(Pos gameSpawn) {
         this.gameSpawn = gameSpawn;
         return this;
+    }
+
+    /**
+     * Clears all builders from the data structure.
+     */
+    public void clearBuilders() {
+        this.builders.clear();
     }
 
     /**
@@ -74,7 +76,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     @Override
     public @NotNull GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build());
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders.toArray(String[]::new));
     }
 
     /**
