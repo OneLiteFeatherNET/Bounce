@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.entity.Player;
+import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
@@ -34,6 +35,7 @@ public class GameFinishListener implements Consumer<BounceGameFinishEvent> {
         profileService.clear(profile -> {
             profile.getJumpRunnable().cancel();
             Player player = winnerProfile.getPlayer();
+            AttributeHelper.resetJumpStrength(player);
             boolean isWinner = profile.equals(winnerProfile);
             profile.sendStats(isWinner);
             var title = Title.title(player.getDisplayName(), Component.text("wons the game", NamedTextColor.GRAY), Title.DEFAULT_TIMES);
