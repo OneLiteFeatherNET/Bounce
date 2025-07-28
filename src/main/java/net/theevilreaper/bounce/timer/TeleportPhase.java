@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.aves.util.functional.VoidConsumer;
+import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.util.ItemUtil;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,7 @@ public class TeleportPhase extends TimedPhase {
         for (Player onlinePlayer : onlinePlayers) {
             itemUtil.setItem(onlinePlayer);
             teleport.accept(onlinePlayer);
+            AttributeHelper.disableJumpStrength(onlinePlayer);
         }
     }
 }
