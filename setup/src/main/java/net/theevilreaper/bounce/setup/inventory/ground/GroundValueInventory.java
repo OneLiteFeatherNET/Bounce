@@ -4,12 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
+import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
@@ -18,6 +19,8 @@ import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarg
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import net.theevilreaper.bounce.setup.util.LoreHelper;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 
@@ -50,21 +53,18 @@ public class GroundValueInventory extends PersonalInventoryBuilder {
         });
     }
 
-    private void handleBlockClick(@NotNull Player player, int i, @NotNull ClickType clickType, @NotNull InventoryConditionResult result) {
-        result.setCancel(true);
+    private void handleBlockClick(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+        result.accept(ClickHolder.cancelClick());
         player.closeInventory();
         EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.GROUND_BLOCKS_OVERVIEW));
     }
 
-    private void handlePushButtonClick(@NotNull Player player, int slot, @NotNull ClickType type, @NotNull InventoryConditionResult result) {
-        result.setCancel(true);
-
-        if (type != ClickType.LEFT_CLICK && type != ClickType.RIGHT_CLICK) {
-            return;
-        }
+    private void handlePushButtonClick(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+        result.accept(ClickHolder.cancelClick());
+        if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 
         int oldValue = this.pushEntry.getValue();
-        if (type == ClickType.LEFT_CLICK) {
+        if (click instanceof Click.Left) {
             this.pushEntry.incrementValue();
         } else {
             this.pushEntry.decrementValue();

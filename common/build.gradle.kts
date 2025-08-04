@@ -14,7 +14,6 @@ java {
 dependencies {
     implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
-    implementation(enforcedPlatform("net.kyori:adventure-bom:4.20.0"))
     compileOnly(libs.adventure)
     compileOnly(libs.minestom)
     compileOnly(libs.aves)

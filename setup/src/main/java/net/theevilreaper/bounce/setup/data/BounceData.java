@@ -6,7 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.anvil.AnvilLoader;
-import net.onelitefeather.guira.data.BaseSetupData;
+import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.map.MapEntry;
@@ -23,10 +23,12 @@ import java.nio.file.Files;
 import java.util.Optional;
 import java.util.UUID;
 
-public final class BounceData extends BaseSetupData<GameMap> {
+public final class BounceData implements SetupData {
 
     private static final Pos SPAWN_POINT = new Pos(0, 100, 0);
     private final FileHandler fileHandler;
+    private final UUID owner;
+    private final MapEntry mapEntry;
     private final Player player;
 
     private InstanceContainer instance;
@@ -36,7 +38,8 @@ public final class BounceData extends BaseSetupData<GameMap> {
     private PushValueInventory pushValueInventory;
 
     public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry, @NotNull FileHandler fileHandler) {
-        super(owner, mapEntry);
+        this.owner = owner;
+        this.mapEntry = mapEntry;
         this.fileHandler = fileHandler;
         Player foundPlayer = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(owner);
 
@@ -58,9 +61,9 @@ public final class BounceData extends BaseSetupData<GameMap> {
         if (!Files.exists(mapEntry.getMapFile())) {
             this.mapEntry.createFile();
         }
-        this.map = this.gameMapBuilder.build();
+        GameMap map = this.gameMapBuilder.build();
         this.fileHandler.save(mapEntry.getMapFile(), map);
-        EventDispatcher.call(new SetupFinishEvent<>(this));
+        EventDispatcher.call(new SetupFinishEvent(this));
     }
 
     @Override
@@ -84,7 +87,6 @@ public final class BounceData extends BaseSetupData<GameMap> {
             Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
             // Initialize with a new BaseMap if loading fails
             mapData.ifPresentOrElse(gameMap -> {
-                this.map = gameMap;
                 this.gameMapBuilder = new GameMapBuilder(gameMap);
             }, () -> this.gameMapBuilder = new GameMapBuilder());
         }
@@ -164,5 +166,13 @@ public final class BounceData extends BaseSetupData<GameMap> {
 
     public void openGroundBlockView() {
         this.groundViewInventory.openGroundBlockValueInventory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull UUID getId() {
+        return this.owner;
     }
 }

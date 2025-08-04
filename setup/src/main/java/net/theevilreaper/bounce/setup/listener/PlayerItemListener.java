@@ -1,5 +1,8 @@
 package net.theevilreaper.bounce.setup.listener;
 
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
+import net.onelitefeather.guira.functional.SetupDataGetter;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerUseItemEvent;
@@ -19,11 +22,11 @@ import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
 
     private final PlayerConsumer invOpener;
-    private final Function<UUID, Optional<BounceData>> saveFunction;
+    private final OptionalSetupDataGetter saveFunction;
 
     public PlayerItemListener(
             @NotNull PlayerConsumer invOpener,
-            @NotNull Function<UUID, Optional<BounceData>> saveFunction
+            @NotNull OptionalSetupDataGetter saveFunction
     ) {
         this.invOpener = invOpener;
         this.saveFunction = saveFunction;
@@ -45,10 +48,10 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
 
         if (!player.hasTag(SETUP_TAG)) return;
 
-        Optional<BounceData> fetchedData = this.saveFunction.apply(player.getUuid());
+        Optional<SetupData> fetchedData = this.saveFunction.get(player.getUuid());
         if (fetchedData.isEmpty()) return;
 
-       BounceData setupData = fetchedData.get();
+        BounceData setupData = ((BounceData) fetchedData.get());
 
         if (itemId == OVERVIEW_FLAG) {
             setupData.openInventory();

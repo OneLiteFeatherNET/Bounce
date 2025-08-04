@@ -11,14 +11,14 @@ import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.onelitefeather.guira.data.SetupData;
+import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.aves.util.Components;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.SELECT_MAP_FIRST;
@@ -26,9 +26,9 @@ import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class SetupPositionCommand extends Command {
 
-    private final Function<UUID, Optional<BounceData>> setupDataFunction;
+    private final OptionalSetupDataGetter setupDataFunction;
 
-    public SetupPositionCommand(@NotNull Function<UUID, Optional<BounceData>> setupDataFunction) {
+    public SetupPositionCommand(@NotNull OptionalSetupDataGetter setupDataFunction) {
         super("position");
         this.setCondition(Conditions::playerOnly);
         this.setupDataFunction = setupDataFunction;
@@ -44,14 +44,14 @@ public final class SetupPositionCommand extends Command {
 
         String type = context.get("spawnType");
 
-        Optional<BounceData> fetchedData = setupDataFunction.apply(sender.identity().uuid());
+        Optional<SetupData> fetchedData = setupDataFunction.get(sender.identity().uuid());
         if (fetchedData.isEmpty()) {
             sender.sendMessage(SELECT_MAP_FIRST);
             return;
         }
 
         Player player = (Player) sender;
-        BounceData setupData = fetchedData.get();
+        BounceData setupData = ((BounceData) fetchedData.get());
 
         if (setupData.getMapBuilder() == null) {
             sender.sendMessage("No map is currently selected. Please select a map first.");
@@ -60,11 +60,11 @@ public final class SetupPositionCommand extends Command {
         GameMapBuilderState.StateChange stateChange;
         switch (type) {
             case "spawn":
-                setupData.getMapBuilder().setSpawn(player.getPosition());
+                setupData.getMapBuilder().spawn(player.getPosition());
                 stateChange = GameMapBuilderState.StateChange.SPAWN;
                 break;
             case "game":
-                setupData.getMapBuilder().setGameSpawn(player.getPosition());
+                setupData.getMapBuilder().gameSpawn(player.getPosition());
                 stateChange = GameMapBuilderState.StateChange.GAME_SPAWN;
                 break;
             default:

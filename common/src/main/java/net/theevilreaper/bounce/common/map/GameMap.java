@@ -28,10 +28,11 @@ public final class GameMap extends BaseMap {
      * @param gameSpawn the spawn position during the game
      * @param pushData  the {@link PushData} which includes information about push values
      */
-    public GameMap(@NotNull String name, @NotNull Pos spawn, @NotNull Pos gameSpawn, @NotNull PushData pushData) {
-        super(name, spawn, "Team");
+    public GameMap(@NotNull String name, @NotNull Pos spawn, @NotNull Pos gameSpawn, @NotNull PushData pushData, @NotNull String... builders) {
+        super(name, spawn, builders);
         this.gameSpawn = gameSpawn;
         this.pushData = pushData;
+
     }
 
     /**

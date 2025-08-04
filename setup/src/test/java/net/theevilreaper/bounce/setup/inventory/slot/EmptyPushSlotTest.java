@@ -2,7 +2,7 @@ package net.theevilreaper.bounce.setup.inventory.slot;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.slot.Slot;
@@ -38,10 +38,10 @@ class EmptyPushSlotTest {
 
         ItemStack item = slot.getItem();
 
-        assertTrue(item.has(ItemComponent.CUSTOM_NAME));
-        assertTrue(item.has(ItemComponent.LORE));
+        assertTrue(item.has(DataComponents.CUSTOM_NAME));
+        assertTrue(item.has(DataComponents.LORE));
 
-        List<Component> lore = item.get(ItemComponent.LORE);
+        List<Component> lore = item.get(DataComponents.LORE);
 
         assertNotNull(lore);
         assertFalse(lore.isEmpty());

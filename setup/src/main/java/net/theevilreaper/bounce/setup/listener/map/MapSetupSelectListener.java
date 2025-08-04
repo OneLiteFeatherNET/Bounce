@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.timer.Task;
 import net.onelitefeather.guira.SetupDataService;
+import net.onelitefeather.guira.data.SetupData;
 import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.util.Messages;
@@ -24,11 +25,11 @@ import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 public final class MapSetupSelectListener implements Consumer<MapSetupSelectEvent> {
 
     private final FileHandler fileHandler;
-    private final SetupDataService<BounceData> setupDataService;
+    private final SetupDataService setupDataService;
 
     public MapSetupSelectListener(
             @NotNull FileHandler fileHandler,
-            @NotNull SetupDataService<BounceData> setupDataService
+            @NotNull SetupDataService setupDataService
     ) {
         this.fileHandler = fileHandler;
         this.setupDataService = setupDataService;
@@ -38,7 +39,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
     public void accept(@NotNull MapSetupSelectEvent event) {
         Player player = event.getPlayer();
 
-        Optional<BounceData> setupData = this.setupDataService.get(player.getUuid());
+        Optional<SetupData> setupData = this.setupDataService.get(player.getUuid());
 
         if (setupData.isPresent()) {
             // If this condition is reached the setup is fucked up
