@@ -71,7 +71,7 @@ public final class SetupPositionCommand extends Command {
                 sender.sendMessage(Component.text("Invalid spawn type! Use 'spawn' or 'game'.", NamedTextColor.RED));
                 return;
         }
-        Component posAsComponent = Components.convertPoint(Pos.fromPoint(player.getPosition()));
+        Component posAsComponent = Components.convertPoint(player.getPosition().asPos());
         Component argComponent = Component.text(type, NamedTextColor.GREEN);
         Component message = Messages.withPrefix(Component.text("The ", NamedTextColor.GRAY)
                 .append(argComponent)
