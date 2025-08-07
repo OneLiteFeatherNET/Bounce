@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libs") {
-            version("shadow", "8.3.9")
+            version("shadow", "9.0.0")
             version("bom", "1.4.2")
             version("aonyx", "0.5.1")
             version("pvp", "56a831b41c")
