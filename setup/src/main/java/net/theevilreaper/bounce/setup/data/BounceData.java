@@ -113,7 +113,7 @@ public final class BounceData implements SetupData {
 
     public void backToPushEntry(boolean closeCurrentInventory) {
         if (closeCurrentInventory) {
-            this.player.closeInventory(false);
+            this.player.closeInventory();
         }
         pushValueInventory.invalidateDataLayout();
         pushValueInventory.open();
@@ -121,7 +121,7 @@ public final class BounceData implements SetupData {
 
     public void backToGroundBlock(boolean closeCurrentInventory) {
         if (closeCurrentInventory) {
-            this.player.closeInventory(false);
+            this.player.closeInventory();
         }
         this.groundViewInventory.openGroundBlockValueInventory();
     }

@@ -53,7 +53,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
         Component message = Messages.withPrefix(Component.text("You selected the map: ", NamedTextColor.GRAY))
                 .append(Component.text(mapEntry.getDirectoryRoot().getFileName().toString(), NamedTextColor.AQUA));
         player.sendMessage(message);
-        player.closeInventory(false);
+        player.closeInventory();
         player.getInventory().setItemStack(0, ItemStack.AIR);
         player.setGameMode(GameMode.CREATIVE);
         player.setAllowFlying(true);
