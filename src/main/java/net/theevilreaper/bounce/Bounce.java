@@ -66,7 +66,7 @@ public class Bounce implements ListenerHandling {
         this.gameConfig = new GameConfigReader(path.resolve("config")).getConfig();
         this.mapProvider = new BounceMapProvider(path);
         this.itemUtil = new ItemUtil();
-        this.phaseSeries = new LinearPhaseSeries<>();
+        this.phaseSeries = new LinearPhaseSeries<>("Game");
         this.profileService = new ProfileService();
         this.playerUtil = new PlayerUtil(this.profileService, ((BounceMapProvider) this.mapProvider).getActiveMap().getPushData());
         this.scoreboard = new BounceScoreboard();
