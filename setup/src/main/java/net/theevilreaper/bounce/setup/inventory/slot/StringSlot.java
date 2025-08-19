@@ -6,7 +6,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
-import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;

@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundBlockOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushBlockInventory;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
