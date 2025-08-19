@@ -19,17 +19,15 @@ public class LobbyPhase extends TimedPhase {
 
     private static final Sound PLING = Sound.sound(SoundEvent.BLOCK_NOTE_BLOCK_BELL, Sound.Source.MASTER, 1.0f, 1.0f);
     private final int minPlayers;
-    private final int maxPlayers;
     private final int lobbyPhaseTime;
     private boolean forceStarted;
 
-    public LobbyPhase(int minPlayers, int maxPlayers, int lobbyPhaseTime) {
+    public LobbyPhase(int minPlayers, int lobbyPhaseTime) {
         super("Lobby", ChronoUnit.SECONDS, 1);
         this.setPaused(true);
         this.setCurrentTicks(30);
         this.setTickDirection(TickDirection.DOWN);
         this.minPlayers = minPlayers;
-        this.maxPlayers = maxPlayers;
         this.lobbyPhaseTime = lobbyPhaseTime;
     }
 
@@ -107,7 +105,7 @@ public class LobbyPhase extends TimedPhase {
     }
 
     public void checkStopCondition() {
-        if (getConnectionManager().getOnlinePlayers().size() - 1 <= this.maxPlayers) {
+        if (getConnectionManager().getOnlinePlayers().size() - 1 <= this.minPlayers) {
             this.setPaused(true);
             this.setCurrentTicks(this.lobbyPhaseTime);
             setLevel();
@@ -134,7 +132,7 @@ public class LobbyPhase extends TimedPhase {
         game.getGameUtil().preparePlayers();
         new TeleportTask(game).start();
     }
-    
+
     @Override
     public void onTick() {
         if (game.getMapManager().getMap().getMinPlayers() > Bukkit.getOnlinePlayers().size()) {
