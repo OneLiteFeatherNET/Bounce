@@ -62,11 +62,11 @@ public final class BounceSetup implements ListenerHandling {
 
     public BounceSetup() {
         Path path = Path.of("");
-        this.mapProvider = new BounceSetupMapProvider(path);
+        this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
+        this.mapProvider = new BounceSetupMapProvider(this.fileHandler, path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.setupItems = new SetupItems();
-        this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
         this.dialogRegistry = new SetupDialogRegistry();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
     }
