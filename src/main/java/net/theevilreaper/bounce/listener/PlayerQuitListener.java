@@ -33,9 +33,7 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
         switch (phase) {
             case LobbyPhase lobbyPhase -> handleLobbyQuit(lobbyPhase, player);
             case PlayingPhase playingPhase -> handleGameQuit(playingPhase, player);
-            default -> {
-                Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
-            }
+            default -> this.handleDefaultLeave(player);
         }
     }
 
@@ -52,12 +50,22 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
 
     /**
      * Handles the quit logic for the {@link PlayingPhase}.
+     *
      * @param playingPhase the reference from the phase
-     * @param player the player which is involved
+     * @param player       the player which is involved
      */
     private void handleGameQuit(@NotNull PlayingPhase playingPhase, @NotNull Player player) {
         Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
         this.playerLeave.accept(player);
         playingPhase.handlePlayerCheck();
+    }
+
+    /**
+     * Handles the default quit logic.
+     *
+     * @param player the player which is involved
+     */
+    private void handleDefaultLeave(@NotNull Player player) {
+        Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
     }
 }
