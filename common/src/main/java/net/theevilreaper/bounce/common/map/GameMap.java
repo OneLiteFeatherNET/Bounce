@@ -3,7 +3,6 @@ package net.theevilreaper.bounce.common.map;
 import net.minestom.server.coordinate.Pos;
 import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.bounce.common.push.PushData;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
  * @version 1.1.0
  * @since 0.1.0
  */
-@ApiStatus.NonExtendable
 public final class GameMap extends BaseMap {
 
     private final Pos gameSpawn;

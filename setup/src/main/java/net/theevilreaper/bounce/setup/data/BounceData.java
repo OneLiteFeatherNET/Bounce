@@ -74,9 +74,9 @@ public final class BounceData implements SetupData {
             this.overviewInventory.unregister();
         }
 
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-            MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
-        });
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() ->
+                MinecraftServer.getInstanceManager().unregisterInstance(this.instance)
+        );
     }
 
     @Override
@@ -86,9 +86,10 @@ public final class BounceData implements SetupData {
         } else {
             Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
             // Initialize with a new BaseMap if loading fails
-            mapData.ifPresentOrElse(gameMap -> {
-                this.gameMapBuilder = new GameMapBuilder(gameMap);
-            }, () -> this.gameMapBuilder = new GameMapBuilder());
+            mapData.ifPresentOrElse(gameMap ->
+                    this.gameMapBuilder = new GameMapBuilder(gameMap),
+                    () -> this.gameMapBuilder = new GameMapBuilder()
+            );
         }
 
         this.groundViewInventory = new GroundViewInventory(this.player, this.gameMapBuilder);

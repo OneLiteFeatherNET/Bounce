@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.setup.event;
 
 import net.minestom.server.event.Event;
-import net.theevilreaper.bounce.common.push.PushDataBuilder;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import org.jetbrains.annotations.NotNull;
@@ -34,24 +33,6 @@ public abstract class AbstractStateNotifyEvent implements Event {
 
         public enum StateChange {
             NAME, BUILDERS, SPAWN, GAME_SPAWN;
-        }
-    }
-
-    public record PushDataState(@NotNull PushDataBuilder pushDataBuilder, @NotNull BounceData bounceData    ) implements StateModel {
-    }
-
-    public final class PushDataStateNotifyEvent extends AbstractStateNotifyEvent {
-
-        public PushDataStateNotifyEvent(PushDataState pushDataState) {
-            super(pushDataState);
-        }
-
-        @Override
-        public @NotNull PushDataState getStateModel() {
-            if (!(this.stateModel instanceof PushDataState pushDataState)) {
-                throw new IllegalStateException("State model is not of type PushDataState");
-            }
-            return pushDataState;
         }
     }
 

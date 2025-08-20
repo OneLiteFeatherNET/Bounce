@@ -5,7 +5,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-@ApiStatus.NonExtendable
 @ApiStatus.Internal
 public final class SetupBlocks {
 

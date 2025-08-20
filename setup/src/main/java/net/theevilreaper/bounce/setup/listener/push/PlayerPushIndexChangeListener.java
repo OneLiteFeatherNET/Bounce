@@ -4,7 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
-import net.onelitefeather.guira.functional.SetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.push.PlayerPushIndexChangeEvent;
 import org.jetbrains.annotations.NotNull;

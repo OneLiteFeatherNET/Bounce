@@ -6,7 +6,6 @@ import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.file.GsonFileHandler;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.util.GsonUtil;
-import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.inventory.MapDataTestBase;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.junit.jupiter.api.BeforeAll;

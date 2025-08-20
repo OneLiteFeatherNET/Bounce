@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.setup.listener;
 
 import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
-import net.onelitefeather.guira.functional.SetupDataGetter;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerUseItemEvent;
@@ -11,9 +10,7 @@ import net.theevilreaper.bounce.setup.data.BounceData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static net.theevilreaper.bounce.setup.util.SetupItems.ITEM_TAG;
 import static net.theevilreaper.bounce.setup.util.SetupItems.OVERVIEW_FLAG;

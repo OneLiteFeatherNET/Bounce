@@ -12,12 +12,10 @@ import net.minestom.server.timer.TaskSchedule;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-@ApiStatus.NonExtendable
 public final class PlayerJumpTask {
 
     private static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown

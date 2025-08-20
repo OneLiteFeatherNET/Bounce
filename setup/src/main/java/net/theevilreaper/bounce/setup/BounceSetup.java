@@ -20,7 +20,6 @@ import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
 import net.theevilreaper.bounce.setup.dialog.SetupDialogRegistry;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
-import net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
@@ -43,7 +42,6 @@ import net.theevilreaper.bounce.setup.listener.map.SetupFinishListener;
 import net.theevilreaper.bounce.setup.listener.push.PlayerPushBlockSelectListener;
 import net.theevilreaper.bounce.setup.listener.push.PlayerPushIndexChangeListener;
 import net.theevilreaper.bounce.setup.listener.state.GameMapBuilderStateNotifyListener;
-import net.theevilreaper.bounce.setup.listener.state.PushValueStateNotifierListener;
 import net.theevilreaper.bounce.setup.map.BounceSetupMapProvider;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.jetbrains.annotations.NotNull;
@@ -64,11 +62,11 @@ public final class BounceSetup implements ListenerHandling {
 
     public BounceSetup() {
         Path path = Path.of("");
-        this.mapProvider = new BounceSetupMapProvider(path);
+        this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
+        this.mapProvider = new BounceSetupMapProvider(this.fileHandler, path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.setupItems = new SetupItems();
-        this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
         this.dialogRegistry = new SetupDialogRegistry();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
     }
@@ -106,7 +104,6 @@ public final class BounceSetup implements ListenerHandling {
         node.addListener(PlayerGroundBlockSelectEvent.class, new PlayerBlockSelectListener(this.setupDataService::get));
         node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
         node.addListener(GameMapBuilderStateNotifyEvent.class, new GameMapBuilderStateNotifyListener());
-        node.addListener(AbstractStateNotifyEvent.PushDataStateNotifyEvent.class, new PushValueStateNotifierListener());
         node.addListener(PlayerPushBlockSelectEvent.class, new PlayerPushBlockSelectListener(this.setupDataService::get));
         node.addListener(PlayerPushIndexChangeEvent.class, new PlayerPushIndexChangeListener(this.setupDataService::get));
         node.addListener(PlayerDeletePromptEvent.class, new PlayerDeletePromptListener(dialogRegistry));
