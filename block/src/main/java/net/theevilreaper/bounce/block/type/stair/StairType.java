@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.block.type.stair;
 
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 public enum StairType {
 
@@ -21,5 +20,4 @@ public enum StairType {
     public Block getBlock() {
         return block;
     }
-
 }
