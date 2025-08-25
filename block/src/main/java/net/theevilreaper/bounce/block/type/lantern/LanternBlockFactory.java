@@ -16,7 +16,7 @@ public interface LanternBlockFactory {
         return new LanternBlockHandler(type.getBlock());
     }
 
-    public enum Type {
+    enum Type {
 
         LANTERN(Block.LANTERN),
         SOUL_LANTERN(Block.SOUL_LANTERN);
