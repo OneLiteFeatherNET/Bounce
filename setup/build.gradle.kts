@@ -11,6 +11,7 @@ description = "Bounce Setup Server"
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":block"))
     implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
     implementation(libs.adventure)
