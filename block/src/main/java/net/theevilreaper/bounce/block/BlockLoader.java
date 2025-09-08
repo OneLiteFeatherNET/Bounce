@@ -1,5 +1,6 @@
 package net.theevilreaper.bounce.block;
 
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import org.jetbrains.annotations.Contract;
 
@@ -25,4 +26,39 @@ public sealed interface BlockLoader permits BlockLoaderBuilder {
      * @return this builder instance for chaining
      */
     BlockLoader lanternVariant(Type type);
+
+    /**
+     * Registers a new head variant.
+     *
+     * @return this builder instance for chaining
+     */
+    BlockLoader playerHead();
+
+    /**
+     * Registers a new wall head variant.
+     *
+     * @return this builder instance for chaining
+     */
+    BlockLoader playerWallHead();
+
+    /**
+     * Registers a new barrel variant.
+     *
+     * @return this builder instance for chaining
+     */
+    BlockLoader barrel();
+
+    /**
+     * Registers a new iron bars variant.
+     *
+     * @return this builder instance for chaining
+     */
+    BlockLoader ironBars();
+
+    /**
+     * Registers a new grindstone variant.
+     *
+     * @return this builder instance for chaining
+     */
+    BlockLoader grindStone();
 }
