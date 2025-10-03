@@ -7,6 +7,7 @@ rootProject.name = "Bounce"
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        maven("https://jitpack.io")
         maven("https://central.sonatype.com/repository/maven-snapshots/")
         maven("https://repository.derklaro.dev/snapshots/")
         maven {
