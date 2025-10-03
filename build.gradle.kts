@@ -13,10 +13,12 @@ dependencies {
     implementation(project(":common"))
     implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
+    implementation(platform(libs.cloudnet.bom))
     implementation(libs.adventure)
     implementation(libs.pvp)
     implementation(libs.minestom)
     implementation(libs.aves)
+    implementation(libs.bundles.cloudnet)
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     // implementation("org.slf4j:slf4j-api:2.0.17")
     implementation(libs.xerus)
@@ -36,7 +38,7 @@ application {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(24))
     }
 }
 
