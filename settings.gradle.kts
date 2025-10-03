@@ -8,6 +8,8 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         maven("https://jitpack.io")
+        maven("https://central.sonatype.com/repository/maven-snapshots/")
+        maven("https://repository.derklaro.dev/snapshots/")
         maven {
             name = "OneLiteFeatherRepository"
             url = uri("https://repo.onelitefeather.dev/onelitefeather")
@@ -34,6 +36,7 @@ dependencyResolutionManagement {
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
+            version("cloudnet", "4.0.0-RC15-SNAPSHOT")
 
             library("pvp", "com.github.TogAr2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
@@ -47,7 +50,25 @@ dependencyResolutionManagement {
             library("aves", "net.theevilreaper", "aves").withoutVersion()
             library("xerus", "net.theevilreaper", "xerus").withoutVersion()
 
+            library("cloudnet-bom", "eu.cloudnetservice.cloudnet", "bom").versionRef("cloudnet")
+            library("cloudnet-bridge", "eu.cloudnetservice.cloudnet", "bridge-api").withoutVersion()
+            library("cloudnet-bridge-impl", "eu.cloudnetservice.cloudnet", "bridge-impl").withoutVersion()
+            library("cloudnet-driver-impl", "eu.cloudnetservice.cloudnet", "driver-impl").withoutVersion()
+            library("cloudnet-platform-inject", "eu.cloudnetservice.cloudnet", "platform-inject-api").withoutVersion()
+            library("cloudnet-jvm-wrapper", "eu.cloudnetservice.cloudnet", "wrapper-jvm-api").withoutVersion()
+
             plugin("shadow", "com.gradleup.shadow").versionRef("shadow")
+
+            bundle(
+                "cloudnet",
+                listOf(
+                    "cloudnet-bridge",
+                    "cloudnet-bridge-impl",
+                    "cloudnet-driver-impl",
+                    "cloudnet-platform-inject",
+                    "cloudnet-jvm-wrapper"
+                )
+            )
         }
     }
 }
