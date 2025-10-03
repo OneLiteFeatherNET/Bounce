@@ -75,4 +75,3 @@ dependencyResolutionManagement {
 
 include("common")
 include("setup")
-include("cloud")
