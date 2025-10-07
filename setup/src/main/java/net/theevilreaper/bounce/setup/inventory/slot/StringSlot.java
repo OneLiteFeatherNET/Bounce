@@ -6,6 +6,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
+import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,11 @@ public class StringSlot extends AbstractDataSlot {
     @Override
     protected void click(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
+
+        if (data == null || data.isEmpty()) {
+            EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_NAME));
+            return;
+        }
 
         if (click instanceof Click.Right) {
             EventDispatcher.call(new PlayerDeletePromptEvent(player, OverviewType.NAME));
