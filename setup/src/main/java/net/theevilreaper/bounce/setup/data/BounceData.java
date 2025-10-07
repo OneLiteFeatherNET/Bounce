@@ -58,7 +58,7 @@ public final class BounceData implements SetupData {
 
     @Override
     public void save() {
-        if (!Files.exists(mapEntry.getMapFile())) {
+        if (mapEntry.getMapFile() == null || !Files.exists(mapEntry.getMapFile())) {
             this.mapEntry.createFile();
         }
         GameMap map = this.gameMapBuilder.build();
