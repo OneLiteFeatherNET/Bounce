@@ -6,6 +6,7 @@ rootProject.name = "Bounce"
 
 dependencyResolutionManagement {
     repositories {
+        mavenLocal()
         mavenCentral()
         maven("https://jitpack.io")
         maven("https://central.sonatype.com/repository/maven-snapshots/")
@@ -36,7 +37,7 @@ dependencyResolutionManagement {
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
-            version("cloudnet", "4.0.0-RC15-SNAPSHOT")
+            version("cloudnet", "4.0.0-RC14")
 
             library("pvp", "com.github.TogAr2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
