@@ -33,7 +33,7 @@ dependencyResolutionManagement {
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
-            version("cloudnet", "4.0.0-RC14")
+            version("cloudnet", "4.0.0-RC16-SNAPSHOT")
 
             library("pvp", "com.github.TogAr2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
