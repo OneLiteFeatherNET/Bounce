@@ -6,9 +6,16 @@ import eu.cloudnetservice.modules.bridge.impl.platform.minestom.MinestomBridgeEx
 import io.github.togar2.pvp.MinestomPvP;
 import net.minestom.server.MinecraftServer;
 
+/**
+ * Initializes some necessary components and starts the {@link MinecraftServer} which is required for the game to run.
+ *
+ * @version 1.0.0
+ * @since .1.0
+ * @author theEvilReaper
+ */
 public class BounceServer {
 
-    public static void main(String[] args) {
+    static void main() {
         MinecraftServer minecraftServer = MinecraftServer.init();
         MinestomPvP.init();
         Bounce bounce = new Bounce();
