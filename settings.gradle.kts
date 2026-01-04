@@ -2,9 +2,7 @@ rootProject.name = "Bounce"
 
 dependencyResolutionManagement {
     repositories {
-        mavenLocal()
         mavenCentral()
-        maven("https://jitpack.io")
         maven("https://central.sonatype.com/repository/maven-snapshots/")
         maven("https://repository.derklaro.dev/snapshots/")
         maven {
@@ -29,13 +27,13 @@ dependencyResolutionManagement {
             version("shadow", "9.3.0")
             version("bom", "1.6.0")
             version("aonyx", "0.6.0")
-            version("pvp", "56a831b41c")
+            version("pvp", "2025.12.29-1.21.11")
 
             library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
             version("cloudnet", "4.0.0-RC16-SNAPSHOT")
 
-            library("pvp", "com.github.TogAr2", "MinestomPvP").versionRef("pvp")
+            library("pvp", "io.github.togar2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
             library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
             library("cyano", "net.onelitefeather", "cyano").withoutVersion()
