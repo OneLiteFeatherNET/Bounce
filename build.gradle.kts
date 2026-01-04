@@ -14,6 +14,7 @@ dependencies {
     implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
     implementation(platform(libs.cloudnet.bom))
+    implementation(project(":block"))
     implementation(libs.adventure)
     implementation(libs.pvp)
     implementation(libs.minestom)
