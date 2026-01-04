@@ -1,9 +1,13 @@
 package net.theevilreaper.bounce.block;
 
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.theevilreaper.bounce.block.type.BarrelBlockHandler;
+import net.theevilreaper.bounce.block.type.CandleBlockHandler;
 import net.theevilreaper.bounce.block.type.GrindstoneBlockHandler;
+import net.theevilreaper.bounce.block.type.IronChainBlockHandler;
+import net.theevilreaper.bounce.block.type.grates.IronGrateBlockHandler;
 import net.theevilreaper.bounce.block.type.lantern.LanternBlockFactory;
 import net.theevilreaper.bounce.block.type.player.PlayerHeadBlockHandler;
 import net.theevilreaper.bounce.block.type.player.PlayerWallHeadBlockHandler;
@@ -69,6 +73,8 @@ public final class BlockLoaderBuilder implements BlockLoader {
      */
     @Override
     public BlockLoader ironBars() {
+        BlockHandler blockHandler = new IronGrateBlockHandler();
+        blockManager.registerHandler(blockHandler.getKey(), () -> blockHandler);
         return this;
     }
 
@@ -78,6 +84,20 @@ public final class BlockLoaderBuilder implements BlockLoader {
     @Override
     public BlockLoader grindStone() {
         BlockHandler blockHandler = new GrindstoneBlockHandler();
+        blockManager.registerHandler(blockHandler.getKey(), () -> blockHandler);
+        return this;
+    }
+
+    @Override
+    public BlockLoader ironChain() {
+        BlockHandler blockHandler = new IronChainBlockHandler();
+        blockManager.registerHandler(blockHandler.getKey(), () -> blockHandler);
+        return this;
+    }
+
+    @Override
+    public BlockLoader candle() {
+        BlockHandler blockHandler = new CandleBlockHandler(Block.RED_CANDLE.key());
         blockManager.registerHandler(blockHandler.getKey(), () -> blockHandler);
         return this;
     }

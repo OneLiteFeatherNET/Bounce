@@ -1,6 +1,5 @@
 package net.theevilreaper.bounce.block;
 
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import org.jetbrains.annotations.Contract;
 
@@ -61,4 +60,8 @@ public sealed interface BlockLoader permits BlockLoaderBuilder {
      * @return this builder instance for chaining
      */
     BlockLoader grindStone();
+
+    BlockLoader candle();
+
+    BlockLoader ironChain();
 }
