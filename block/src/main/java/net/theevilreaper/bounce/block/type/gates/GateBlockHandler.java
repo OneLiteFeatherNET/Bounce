@@ -12,6 +12,7 @@ public class GateBlockHandler implements BlockHandler {
     private final Key key;
 
     public GateBlockHandler(Key key) {
+        this.key = key;
     }
 
     @Override
