@@ -14,7 +14,13 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockManager;
 import net.theevilreaper.aves.map.provider.MapProvider;
+import net.theevilreaper.bounce.block.BlockLoader;
+import net.theevilreaper.bounce.block.BlockLoaderBuilder;
+import net.theevilreaper.bounce.block.type.lantern.LanternBlockFactory;
 import net.theevilreaper.bounce.commands.StartCommand;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.config.GameConfig;
@@ -92,6 +98,7 @@ public class Bounce implements ListenerHandling {
                 .add(CombatFeatures.VANILLA_ENCHANTMENT)
                 .build();
         globalEventHandler.addChild(featureSet.createNode());
+        loadBlocks();
     }
 
     public void unload() {
@@ -152,5 +159,22 @@ public class Bounce implements ListenerHandling {
     private void handleGeneralJoin(@NotNull Player player) {
         this.mapProvider.teleportToSpawn(player, false);
         this.scoreboard.addViewer(player);
+    }
+
+    private void loadBlocks() {
+        BlockManager blockHandler = MinecraftServer.getBlockManager();
+        BlockLoader blockLoader = BlockLoader.builder(blockHandler);
+        blockLoader
+                .torch()
+                .candle()
+                .barrel()
+                .fenceGate()
+                .ironBars()
+                .grindStone()
+                .lanternVariant(LanternBlockFactory.Type.LANTERN)
+                .ironChain()
+                .stairs()
+                .slab()
+                .flowerPot();
     }
 }
