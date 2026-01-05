@@ -18,6 +18,10 @@ public sealed interface BlockLoader permits BlockLoaderBuilder {
         return new BlockLoaderBuilder(blockManager);
     }
 
+    BlockLoader torch();
+
+    BlockLoader fenceGate();
+
     /**
      * Registers a new torch variant.
      *
@@ -64,4 +68,10 @@ public sealed interface BlockLoader permits BlockLoaderBuilder {
     BlockLoader candle();
 
     BlockLoader ironChain();
+
+    BlockLoader stairs();
+
+    BlockLoader slab();
+
+    BlockLoader flowerPot();
 }

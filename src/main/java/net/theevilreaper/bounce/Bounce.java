@@ -165,12 +165,16 @@ public class Bounce implements ListenerHandling {
         BlockManager blockHandler = MinecraftServer.getBlockManager();
         BlockLoader blockLoader = BlockLoader.builder(blockHandler);
         blockLoader
+                .torch()
                 .candle()
                 .barrel()
+                .fenceGate()
                 .ironBars()
                 .grindStone()
                 .lanternVariant(LanternBlockFactory.Type.LANTERN)
-                .ironChain();
-
+                .ironChain()
+                .stairs()
+                .slab()
+                .flowerPot();
     }
 }
