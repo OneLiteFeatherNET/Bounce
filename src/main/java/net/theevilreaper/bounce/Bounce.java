@@ -14,12 +14,9 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.theevilreaper.aves.map.provider.MapProvider;
 import net.theevilreaper.bounce.block.BlockLoader;
-import net.theevilreaper.bounce.block.BlockLoaderBuilder;
 import net.theevilreaper.bounce.block.type.lantern.LanternBlockFactory;
 import net.theevilreaper.bounce.commands.StartCommand;
 import net.theevilreaper.bounce.common.ListenerHandling;
@@ -47,7 +44,6 @@ import net.theevilreaper.bounce.timer.PlayingPhase;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.timer.RestartPhase;
 import net.theevilreaper.bounce.timer.TeleportPhase;
-import net.theevilreaper.bounce.util.ItemUtil;
 import net.theevilreaper.bounce.util.PlayerUtil;
 import net.theevilreaper.bounce.util.BounceScoreboard;
 import net.theevilreaper.xerus.api.phase.LinearPhaseSeries;
@@ -62,7 +58,6 @@ public class Bounce implements ListenerHandling {
     private ProfileService profileService;
     private final GameConfig gameConfig;
     private final BounceScoreboard scoreboard;
-    private final ItemUtil itemUtil;
     private final MapProvider mapProvider;
     private final LinearPhaseSeries<Phase> phaseSeries;
     private final PlayerUtil playerUtil;
@@ -71,7 +66,6 @@ public class Bounce implements ListenerHandling {
         Path path = Paths.get("");
         this.gameConfig = new GameConfigReader(path.resolve("config")).getConfig();
         this.mapProvider = new BounceMapProvider(path);
-        this.itemUtil = new ItemUtil();
         this.phaseSeries = new LinearPhaseSeries<>("Game");
         this.profileService = new ProfileService();
         this.playerUtil = new PlayerUtil(this.profileService, ((BounceMapProvider) this.mapProvider).getActiveMap().getPushData());
@@ -108,7 +102,7 @@ public class Bounce implements ListenerHandling {
 
     private void registerPhases() {
         this.phaseSeries.add(new LobbyPhase(this.gameConfig.minPlayers(), this.gameConfig.lobbyTime()));
-        this.phaseSeries.add(new TeleportPhase(this.itemUtil, ((BounceMapProvider) this.mapProvider)::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
+        this.phaseSeries.add(new TeleportPhase(((BounceMapProvider) this.mapProvider)::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
         this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName, () -> {
             this.profileService.start(((BounceMapProvider) this.mapProvider).getActiveMap(), scoreboard::createPlayerLine);
         }));

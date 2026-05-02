@@ -14,14 +14,12 @@ import java.util.Collection;
 
 public class TeleportPhase extends TimedPhase {
 
-    private final ItemUtil itemUtil;
     private final PlayerConsumer teleport;
     private final VoidConsumer startTrigger;
 
-    public TeleportPhase(@NotNull ItemUtil itemUtil, @NotNull PlayerConsumer teleport, @NotNull VoidConsumer startTrigger) {
+    public TeleportPhase(@NotNull PlayerConsumer teleport, @NotNull VoidConsumer startTrigger) {
         super("Teleport", ChronoUnit.SECONDS, 1);
         this.setCurrentTicks(3);
-        this.itemUtil = itemUtil;
         this.teleport = teleport;
         this.startTrigger = startTrigger;
     }
@@ -40,7 +38,7 @@ public class TeleportPhase extends TimedPhase {
     protected void onFinish() {
         Collection<@NotNull Player> onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
         for (Player onlinePlayer : onlinePlayers) {
-            itemUtil.setItem(onlinePlayer);
+            ItemUtil.setItem(onlinePlayer);
             teleport.accept(onlinePlayer);
             AttributeHelper.disableJumpStrength(onlinePlayer);
         }

@@ -27,10 +27,8 @@ class ItemUtilIntegrationTest {
 
         assertEquals(ItemStack.AIR, player.getInventory().getItemStack(0));
 
-        ItemUtil itemUtil = new ItemUtil();
-
         // Test setting an item stack
-        itemUtil.setItem(player);
+        ItemUtil.setItem(player);
 
         ItemStack itemStack = player.getInventory().getItemStack(0);
 
@@ -57,5 +55,4 @@ class ItemUtilIntegrationTest {
 
         env.destroyInstance(instance, true);
     }
-
 }
