@@ -6,10 +6,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * The class holds all item reference which are required in the setup process of a map.
+ * The class holds all item references that are required in the setup process of a map.
  * Each item uses a {@link Tag<Byte>} to identify which functionality the item has.
  * This behaviour is easier to use because it doesn't require additional references in the event class to check the item.
  *
@@ -26,25 +25,25 @@ public final class SetupItems {
             .customName(Component.empty())
             .build();
 
-    private final ItemStack overview;
-    private final ItemStack save;
-    private final ItemStack viewItem;
-    private final ItemStack groundItem;
+    private static final ItemStack OVERVIEW;
+    private static final ItemStack SAVE;
+    private static final ItemStack VIEW_ITEM;
+    private static final ItemStack GROUND_ITEM;
 
-    public SetupItems() {
-        this.overview = ItemStack.builder(Material.CHEST)
+    static  {
+        OVERVIEW = ItemStack.builder(Material.CHEST)
                 .customName(Component.text("Maps", NamedTextColor.GREEN))
                 .set(ITEM_TAG, 0x00)
                 .build();
-        this.save = ItemStack.builder(Material.BELL)
+        SAVE = ItemStack.builder(Material.BELL)
                 .customName(Component.text("Save map", NamedTextColor.RED))
                 .set(ITEM_TAG, 0x01)
                 .build();
-        this.viewItem = ItemStack.builder(Material.COMPASS)
+        VIEW_ITEM = ItemStack.builder(Material.COMPASS)
                 .customName(Component.text("View data", NamedTextColor.AQUA))
                 .set(ITEM_TAG, OVERVIEW_FLAG)
                 .build();
-        this.groundItem = ItemStack.builder(Material.CARTOGRAPHY_TABLE)
+        GROUND_ITEM = ItemStack.builder(Material.CARTOGRAPHY_TABLE)
                 .customName(Component.text("Ground Layer", NamedTextColor.GREEN))
                 .set(ITEM_TAG, 0x04)
                 .build();
@@ -55,9 +54,9 @@ public final class SetupItems {
      *
      * @param player the player to set the item
      */
-    public void setOverViewItem(@NotNull Player player) {
+    public static void setOverViewItem(Player player) {
         player.getInventory().clear();
-        player.getInventory().setItemStack(0x00, this.overview);
+        player.getInventory().setItemStack(0x00, OVERVIEW);
         player.setHeldItemSlot((byte) 0);
     }
 
@@ -66,11 +65,15 @@ public final class SetupItems {
      *
      * @param player the player to set the item
      */
-    public void setSetupItems(@NotNull Player player) {
+    public static void setSetupItems(Player player) {
         player.getInventory().clear();
-        player.getInventory().setItemStack(0x06, this.save);
-        player.getInventory().setItemStack(0x04, this.groundItem);
-        player.getInventory().setItemStack(0x02, this.viewItem);
+        player.getInventory().setItemStack(0x06, SAVE);
+        player.getInventory().setItemStack(0x04, GROUND_ITEM);
+        player.getInventory().setItemStack(0x02, VIEW_ITEM);
         player.setHeldItemSlot((byte) 0);
+    }
+
+    private SetupItems() {
+        // Nothing do to here
     }
 }
