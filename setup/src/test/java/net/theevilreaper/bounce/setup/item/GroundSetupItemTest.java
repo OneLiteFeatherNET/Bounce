@@ -12,6 +12,7 @@ import net.minestom.testing.Env;
 import net.onelitefeather.guira.data.SetupData;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
+import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ class GroundSetupItemTest extends SetupItemTestBase {
 
         env.process().eventHandler().addListener(PlayerUseItemEvent.class, playerItemListener);
 
-        setupItems.setSetupItems(player);
+        SetupItems.setSetupItems(player);
         player.setTag(SETUP_TAG, 1);
         ItemStack stack = player.getInventory().getItemStack(0x04);
         assertNotEquals(ItemStack.AIR, stack);

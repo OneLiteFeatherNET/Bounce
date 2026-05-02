@@ -56,7 +56,6 @@ public final class BounceSetup implements ListenerHandling {
     private final MapProvider mapProvider;
     private final SetupDataService setupDataService;
     private final InventoryService inventoryService;
-    private final SetupItems setupItems;
     private final FileHandler fileHandler;
     private final DialogRegistry dialogRegistry;
 
@@ -66,7 +65,6 @@ public final class BounceSetup implements ListenerHandling {
         this.mapProvider = new BounceSetupMapProvider(this.fileHandler, path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
-        this.setupItems = new SetupItems();
         this.dialogRegistry = new SetupDialogRegistry();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
     }
@@ -89,7 +87,6 @@ public final class BounceSetup implements ListenerHandling {
         node.addListener(AsyncPlayerConfigurationEvent.class, new PlayerConfigurationListener(instanceSupplier));
         node.addListener(PlayerUseItemEvent.class, new PlayerItemListener(this.inventoryService::openMapSetupInventory, this.setupDataService::get));
         node.addListener(PlayerSpawnEvent.class, new PlayerSpawnListener(
-                this.setupItems::setOverViewItem,
                 player -> this.mapProvider.teleportToSpawn(player, false))
         );
         node.addListener(PlayerDisconnectEvent.class, new PlayerDisconnectListener(this.setupDataService::remove));
@@ -97,7 +94,7 @@ public final class BounceSetup implements ListenerHandling {
 
         PlayerConsumer instanceSwitcher = player -> {
             mapProvider.teleportToSpawn(player, true);
-            setupItems.setOverViewItem(player);
+            SetupItems.setOverViewItem(player);
         };
 
         node.addListener(SetupFinishEvent.class, new SetupFinishListener(instanceSwitcher));
@@ -109,7 +106,7 @@ public final class BounceSetup implements ListenerHandling {
         node.addListener(PlayerDeletePromptEvent.class, new PlayerDeletePromptListener(dialogRegistry));
         node.addListener(PlayerCustomClickEvent.class, new PlayerCustomClickEventListener(this.dialogRegistry, this.setupDataService::get));
         node.addListener(PlayerDialogRequestEvent.class, new PlayerDialogRequestListener(this.dialogRegistry));
-        node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier, setupItems));
+        node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier));
 
     }
 }

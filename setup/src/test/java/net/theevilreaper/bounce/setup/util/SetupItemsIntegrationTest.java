@@ -7,8 +7,6 @@ import net.minestom.server.item.Material;
 import net.minestom.testing.Env;
 import net.minestom.testing.extension.MicrotusExtension;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -18,25 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MicrotusExtension.class)
 class SetupItemsIntegrationTest {
 
-    private static SetupItems setupItems;
-
-    @BeforeAll
-    static void setUp() {
-        setupItems = new SetupItems();
-    }
-
-    @AfterAll
-    static void tearDown() {
-        setupItems = null;
-    }
-
     @Test
     void testOverViewItem(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         Player player = env.createPlayer(instance);
         assertNotNull(player);
 
-        setupItems.setOverViewItem(player);
+        SetupItems.setOverViewItem(player);
         ItemStack overViewItem = player.getInventory().getItemStack(0x00);
         assertNotNull(overViewItem);
         assertNotEquals(Material.AIR, overViewItem.material());
@@ -54,7 +40,7 @@ class SetupItemsIntegrationTest {
         Player player = env.createPlayer(instance);
         assertNotNull(player);
 
-        setupItems.setSetupItems(player);
+        SetupItems.setSetupItems(player);
         ItemStack saveItem = player.getInventory().getItemStack(0x06);
         assertNotNull(saveItem);
         assertNotEquals(Material.AIR, saveItem.material());
