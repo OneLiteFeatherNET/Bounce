@@ -7,7 +7,6 @@ import net.theevilreaper.aves.file.GsonFileHandler;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.inventory.MapDataTestBase;
-import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -23,7 +22,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 public abstract class SetupItemTestBase extends MapDataTestBase {
 
     protected static FileHandler fileHandler;
-    protected static SetupItems setupItems;
     protected static SetupDataService setupDataService;
     protected static PlayerConsumer nopFunction = player -> {
         // No operation function for player
@@ -32,7 +30,6 @@ public abstract class SetupItemTestBase extends MapDataTestBase {
     @BeforeAll
     static void setUp() {
         fileHandler = new GsonFileHandler(GsonUtil.GSON);
-        setupItems = new SetupItems();
         setupDataService = SetupDataService.create();
     }
 }

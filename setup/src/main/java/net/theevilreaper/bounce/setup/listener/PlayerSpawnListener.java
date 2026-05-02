@@ -8,17 +8,16 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.util.Messages;
+import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
 public class PlayerSpawnListener implements Consumer<PlayerSpawnEvent> {
 
-    private final PlayerConsumer itemConsumer;
     private final PlayerConsumer teleportConsumer;
 
-    public PlayerSpawnListener(@NotNull PlayerConsumer itemConsumer, @NotNull PlayerConsumer teleportConsumer) {
-        this.itemConsumer = itemConsumer;
+    public PlayerSpawnListener(@NotNull PlayerConsumer teleportConsumer) {
         this.teleportConsumer = teleportConsumer;
     }
 
@@ -32,7 +31,7 @@ public class PlayerSpawnListener implements Consumer<PlayerSpawnEvent> {
                     .append(Component.text("joined the server", NamedTextColor.GRAY));
             Audience.audience(MinecraftServer.getConnectionManager().getOnlinePlayers())
                     .sendMessage(joinMessage);
-            this.itemConsumer.accept(player);
+            SetupItems.setOverViewItem(player);
             this.teleportConsumer.accept(player);
         }
     }
