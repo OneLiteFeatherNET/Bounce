@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public final class BounceSetupMapProvider extends AbstractMapProvider {
+public final class SetupMapProvider extends AbstractMapProvider {
 
-    public BounceSetupMapProvider(@NotNull FileHandler fileHandler, @NotNull Path path) {
+    public SetupMapProvider(@NotNull FileHandler fileHandler, @NotNull Path path) {
         super(fileHandler, MapFilters::filterMapsForSetup);
         this.mapEntries = loadMapEntries(path.resolve("maps"));
 

@@ -42,7 +42,7 @@ import net.theevilreaper.bounce.setup.listener.map.SetupFinishListener;
 import net.theevilreaper.bounce.setup.listener.push.PlayerPushBlockSelectListener;
 import net.theevilreaper.bounce.setup.listener.push.PlayerPushIndexChangeListener;
 import net.theevilreaper.bounce.setup.listener.state.GameMapBuilderStateNotifyListener;
-import net.theevilreaper.bounce.setup.map.BounceSetupMapProvider;
+import net.theevilreaper.bounce.setup.map.SetupMapProvider;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +62,7 @@ public final class BounceSetup implements ListenerHandling {
     public BounceSetup() {
         Path path = Path.of("");
         this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
-        this.mapProvider = new BounceSetupMapProvider(this.fileHandler, path);
+        this.mapProvider = new SetupMapProvider(this.fileHandler, path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.dialogRegistry = new SetupDialogRegistry();
