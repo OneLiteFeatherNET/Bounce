@@ -5,7 +5,7 @@ import net.theevilreaper.bounce.setup.BounceSetup;
 
 public class BounceSetupServer {
 
-    public static void main(String[] args) {
+    static void main() {
         MinecraftServer minecraftServer = MinecraftServer.init();
         BounceSetup bounceSetup = new BounceSetup();
         bounceSetup.initialize();
