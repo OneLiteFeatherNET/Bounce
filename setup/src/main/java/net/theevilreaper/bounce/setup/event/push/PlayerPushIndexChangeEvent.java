@@ -4,6 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("java:S6206")
 public final class PlayerPushIndexChangeEvent implements PlayerEvent {
 
     private final Player player;
