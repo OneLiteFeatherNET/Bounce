@@ -101,10 +101,12 @@ public class Bounce implements ListenerHandling {
     }
 
     private void registerPhases() {
+        BounceMapProvider bounceProvider = (BounceMapProvider) this.mapProvider;
+
         this.phaseSeries.add(new LobbyPhase(this.gameConfig.minPlayers(), this.gameConfig.lobbyTime()));
-        this.phaseSeries.add(new TeleportPhase(((BounceMapProvider) this.mapProvider)::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
+        this.phaseSeries.add(new TeleportPhase(bounceProvider::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
         this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName, () ->
-                this.profileService.start(((BounceMapProvider) this.mapProvider).getActiveMap(), scoreboard::createPlayerLine))
+                this.profileService.start(bounceProvider.getActiveMap(), scoreboard::createPlayerLine))
         );
         this.phaseSeries.add(new RestartPhase());
     }
