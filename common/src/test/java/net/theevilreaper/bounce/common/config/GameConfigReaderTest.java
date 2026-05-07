@@ -60,7 +60,7 @@ class GameConfigReaderTest {
     }
 
     @Test
-    @DisabledOnOs(OS.WINDOWS) // File permissions funktionieren auf Windows nicht zuverlässig
+    @DisabledOnOs(OS.WINDOWS)
     void testUnreadableFileReturnsDefaultConfig() throws IOException {
         Path config = tempDir.resolve("config.properties");
         Files.writeString(config, "minPlayers=2\n");
