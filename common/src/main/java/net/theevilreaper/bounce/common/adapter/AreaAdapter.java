@@ -12,17 +12,23 @@ import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.ground.GroundArea;
 import net.theevilreaper.bounce.common.push.PushData;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 
+/**
+ * Serializer and Deserializer implementation for {@link Area} object.
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public final class AreaAdapter implements JsonSerializer<Area>, JsonDeserializer<Area> {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NotNull Area deserialize(
-            @NotNull JsonElement element,
-            @NotNull Type type,
-            @NotNull JsonDeserializationContext context
-    ) {
+    public Area deserialize(JsonElement element, Type type, JsonDeserializationContext context) {
         JsonObject jsonObject = element.getAsJsonObject();
 
         Vec min = context.deserialize(jsonObject.get("min"), Vec.class);
@@ -39,8 +45,11 @@ public final class AreaAdapter implements JsonSerializer<Area>, JsonDeserializer
         return new GroundArea(min, max, groundBlock, pushData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NotNull JsonElement serialize(@NotNull Area area, @NotNull Type type, @NotNull JsonSerializationContext context) {
+    public JsonElement serialize(Area area, Type type, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.add("min", context.serialize(area.min(), Vec.class));
         jsonObject.add("max", context.serialize(area.max(), Vec.class));

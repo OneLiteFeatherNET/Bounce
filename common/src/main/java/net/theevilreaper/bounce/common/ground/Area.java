@@ -3,8 +3,14 @@ package net.theevilreaper.bounce.common.ground;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.push.PushData;
-import org.jetbrains.annotations.NotNull;
 
+/**
+ * The {@link Area} interface represents an area in the game.
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 0.1.0
+ */
 public interface Area {
 
     void calculatePositions();
@@ -21,26 +27,26 @@ public interface Area {
      *
      * @return the point as {@link Vec}
      */
-    @NotNull Vec min();
+    Vec min();
 
     /**
      * Returns the maximum point of the area.
      *
      * @return the point as {@link Vec}
      */
-    @NotNull Vec max();
+    Vec max();
 
     /**
      * Returns the push data associated with this area.
      *
      * @return the push data as {@link PushData}
      */
-    @NotNull PushData data();
+    PushData data();
 
     /**
      * Returns the ground block of this area.
      *
      * @return the ground block
      */
-    @NotNull Block groundBlock();
+    Block groundBlock();
 }

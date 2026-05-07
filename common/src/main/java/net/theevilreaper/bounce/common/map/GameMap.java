@@ -3,7 +3,6 @@ package net.theevilreaper.bounce.common.map;
 import net.minestom.server.coordinate.Pos;
 import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.bounce.common.push.PushData;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link GameMap} contains all relevant information about a map which is used in the context of the game.
@@ -26,7 +25,7 @@ public final class GameMap extends BaseMap {
      * @param gameSpawn the spawn position during the game
      * @param pushData  the {@link PushData} which includes information about push values
      */
-    public GameMap(@NotNull String name, @NotNull Pos spawn, @NotNull Pos gameSpawn, @NotNull PushData pushData, @NotNull String... builders) {
+    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, String... builders) {
         super(name, spawn, builders);
         this.gameSpawn = gameSpawn;
         this.pushData = pushData;
@@ -38,7 +37,7 @@ public final class GameMap extends BaseMap {
      *
      * @return the reference
      */
-    public @NotNull PushData getPushData() {
+    public PushData getPushData() {
         return this.pushData;
     }
 
@@ -47,7 +46,7 @@ public final class GameMap extends BaseMap {
      *
      * @return the game spawn position
      */
-    public @NotNull Pos getGameSpawn() {
+    public Pos getGameSpawn() {
         return gameSpawn;
     }
 }

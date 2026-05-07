@@ -11,18 +11,20 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.common.push.PushEntry;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 
+/**
+ * Serializer and Deserializer implementation for {@link PushData} object.
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializer<PushData> {
 
     @Override
-    public @NotNull PushData deserialize(
-            @NotNull JsonElement element,
-            @NotNull Type type,
-            @NotNull JsonDeserializationContext context
-    ) {
+    public PushData deserialize(JsonElement element, Type type, JsonDeserializationContext context) {
         JsonArray jsonArray = element.getAsJsonArray();
         PushData.Builder builder = PushData.builder();
 
@@ -47,7 +49,7 @@ public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializ
     }
 
     @Override
-    public @NotNull JsonElement serialize(@NotNull PushData data, @NotNull Type type, @NotNull JsonSerializationContext context) {
+    public JsonElement serialize(PushData data, Type type, JsonSerializationContext context) {
         JsonArray jsonArray = new JsonArray();
 
         data.push().forEach(pushEntry -> {

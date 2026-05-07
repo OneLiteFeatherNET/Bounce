@@ -20,7 +20,7 @@ public final class GroundArea implements Area {
     private final Block groundBlock;
     private final List<Vec> positions;
 
-    public GroundArea(@NotNull Vec min, @NotNull Vec max, @NotNull Block groundBlock, @NotNull PushData pushData) {
+    public GroundArea(Vec min, Vec max, Block groundBlock, PushData pushData) {
         this.min = min;
         this.max = max;
         this.data = pushData;
@@ -28,6 +28,9 @@ public final class GroundArea implements Area {
         this.positions = new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void calculatePositions() {
         // Avoid double calculations
@@ -59,7 +62,7 @@ public final class GroundArea implements Area {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull PushData data() {
+    public PushData data() {
         return data;
     }
 
@@ -67,7 +70,7 @@ public final class GroundArea implements Area {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Vec max() {
+    public Vec max() {
         return max;
     }
 
@@ -75,14 +78,14 @@ public final class GroundArea implements Area {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Vec min() {
+    public Vec min() {
         return min;
     }
 
     /**
      * {@inheritDoc}
      */
-    public @NotNull Block groundBlock() {
+    public Block groundBlock() {
         return groundBlock;
     }
 }

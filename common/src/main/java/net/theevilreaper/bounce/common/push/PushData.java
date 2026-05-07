@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  *
  * @param push a map where the key is a {@link Block} and the value is a {@code double} representing the push value for that block.
  * @author theEvilReaper
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.1.0
  */
-public record PushData(@NotNull List<PushEntry> push) {
+public record PushData(List<PushEntry> push) {
 
     private static Map<Block, Integer> pushMap;
 
@@ -31,7 +31,7 @@ public record PushData(@NotNull List<PushEntry> push) {
      * @param block the block to check for presence in the push data
      * @return true when the provided block is in the data otherwise false
      */
-    public boolean hasBlock(@NotNull Block block) {
+    public boolean hasBlock(Block block) {
         return pushMap.containsKey(block);
     }
 
@@ -41,7 +41,7 @@ public record PushData(@NotNull List<PushEntry> push) {
      * @return a new {@link PushData.Builder} instance to build a {@link PushData} object
      */
     @Contract(pure = true)
-    public static @NotNull PushData.Builder builder() {
+    public static PushData.Builder builder() {
         return new PushDataBuilder();
     }
 
@@ -52,7 +52,7 @@ public record PushData(@NotNull List<PushEntry> push) {
      * @return a new {@link PushData.Builder} instance containing the push values from the provided {@link PushData}
      */
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull PushData.Builder builder(@NotNull PushData pushData) {
+    public static PushData.Builder builder(PushData pushData) {
         return new PushDataBuilder(pushData);
     }
 
@@ -62,7 +62,7 @@ public record PushData(@NotNull List<PushEntry> push) {
      * @param block the block for which the push value is requested
      * @return the push value associated with the block, or 0.0 if the block is not present in the map
      */
-    public int getPush(@NotNull Block block) {
+    public int getPush(Block block) {
         return pushMap.getOrDefault(block, 0);
     }
 
@@ -83,7 +83,7 @@ public record PushData(@NotNull List<PushEntry> push) {
          * @param entry the {@link PushEntry} containing the block and its push value
          * @return the builder instance for method chaining
          */
-        @NotNull Builder add(@NotNull PushEntry entry);
+        Builder add(PushEntry entry);
 
         /**
          * Adds a block with its associated push value at a specific index in the push data.
@@ -92,7 +92,7 @@ public record PushData(@NotNull List<PushEntry> push) {
          * @param entry the {@link PushEntry} containing the block and its push value
          * @return the builder instance for method chaining
          */
-        @NotNull Builder add(int index, @NotNull PushEntry entry);
+        Builder add(int index, PushEntry entry);
 
 
         /**
@@ -109,6 +109,6 @@ public record PushData(@NotNull List<PushEntry> push) {
          *
          * @return a new {@link PushData} instance containing the accumulated push values
          */
-        @NotNull PushData build();
+        PushData build();
     }
 }

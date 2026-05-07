@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.common.map;
 
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.config.GameConfig;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,11 +9,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * The class is a utility class which provides a method to filter through a stream of paths and returns a list of maps.
+ * The class is a utility class that provides a method to filter through a stream of paths and returns a list of maps.
  * It is used to filter the available maps for the game and setup.
  *
  * @author theEvilReaper
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public interface MapFilters {
@@ -25,9 +24,9 @@ public interface MapFilters {
      * Filters through the given stream of paths and returns a list of maps which are available for the game.
      *
      * @param mapStream a stream of paths
-     * @return a list which contains different maps which are available for the game
+     * @return a list that contains different maps which are available for the game
      */
-    static @NotNull List<MapEntry> filterMapsForGame(@NotNull Stream<Path> mapStream) {
+    static List<MapEntry> filterMapsForGame(Stream<Path> mapStream) {
         return mapStream
                 .filter(Files::isDirectory)
                 .filter(path -> Files.exists(path.resolve(REGION_FOLDER)))
@@ -42,7 +41,7 @@ public interface MapFilters {
      * @param mapStream a stream of paths
      * @return a list which contains different maps which are available for the setup
      */
-    static @NotNull List<MapEntry> filterMapsForSetup(@NotNull Stream<Path> mapStream) {
+    static List<MapEntry> filterMapsForSetup(Stream<Path> mapStream) {
         return mapStream
                 .filter(Files::isDirectory)
                 .filter(path -> Files.exists(path.resolve(REGION_FOLDER)))

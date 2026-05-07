@@ -1,6 +1,5 @@
 package net.theevilreaper.bounce.common.config;
 
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,7 @@ import java.util.Properties;
  *     <li>gameTime</li>
  * </ul>
  * <p>
- * If a property can not be found in the file, the default value will be used.
+ * If a property cannot be found in the file, the default value will be used.
  * The default values are defined in the {@link InternalGameConfig} class.
  *
  * @author theEvilReaper
@@ -41,7 +40,7 @@ public final class GameConfigReader {
      *
      * @param path the root directory of the game
      */
-    public GameConfigReader(@NotNull Path path) {
+    public GameConfigReader(Path path) {
         this.path = path.resolve("config.properties");
     }
 
@@ -51,7 +50,7 @@ public final class GameConfigReader {
      *
      * @return the new game configuration
      */
-    public @NotNull GameConfig getConfig() {
+    public GameConfig getConfig() {
         if (!Files.exists(path)) {
             CONFIG_LOGGER.warn("No config file found. Using default values");
             return InternalGameConfig.defaultConfig();
