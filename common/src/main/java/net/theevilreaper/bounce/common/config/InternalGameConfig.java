@@ -1,7 +1,5 @@
 package net.theevilreaper.bounce.common.config;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * The {@link InternalGameConfig} is the fallback configuration if no other configuration is available.
  * It provides default values for the game configuration.
@@ -27,7 +25,7 @@ record InternalGameConfig(
      *
      * @return the default configuration
      */
-    public static @NotNull GameConfig defaultConfig() {
+    public static GameConfig defaultConfig() {
         return Instances.INTERNAL;
     }
 

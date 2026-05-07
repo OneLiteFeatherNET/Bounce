@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.common.push;
 
 import net.minestom.server.instance.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -27,7 +26,7 @@ public final class PushEntry {
      * @param value  the initial value for this PushEntry
      * @return a new PushEntry instance representing a ground block entry
      */
-    public static @NotNull PushEntry groundEntry(@NotNull Block block, int value) {
+    public static PushEntry groundEntry(Block block, int value) {
        return new PushEntry(block, value, true);
     }
 
@@ -38,7 +37,7 @@ public final class PushEntry {
      * @param value the initial value for this PushEntry
      * @return a new PushEntry instance
      */
-    public static @NotNull PushEntry pushEntry(@NotNull Block block, int value) {
+    public static PushEntry pushEntry(Block block, int value) {
         return new PushEntry(block, value, false);
     }
 
@@ -109,7 +108,7 @@ public final class PushEntry {
      *
      * @return the block associated with this PushEntry
      */
-    public @NotNull Block getBlock() {
+    public Block getBlock() {
         return block;
     }
 

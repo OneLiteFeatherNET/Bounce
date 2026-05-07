@@ -25,7 +25,7 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
      * @return the builder instance
      */
     @Contract(pure = true)
-    static @NotNull Builder builder() {
+    static Builder builder() {
         return new GameConfigBuilder();
     }
 
@@ -73,7 +73,7 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
          * @param minPlayers the minimum number of players
          * @return the builder instance
          */
-        @NotNull Builder minPlayers(int minPlayers);
+        Builder minPlayers(int minPlayers);
 
         /**
          * Sets the maximum number of players allowed in the game.
@@ -81,7 +81,7 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
          * @param maxPlayers the maximum number of players
          * @return the builder instance
          */
-        @NotNull Builder maxPlayers(int maxPlayers);
+        Builder maxPlayers(int maxPlayers);
 
         /**
          * Sets the lobby time in seconds.
@@ -90,7 +90,7 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
          * @return the builder instance
          * @throws IllegalArgumentException if the lobby time is than the {@link GameConfig#FORCE_START_TIME}
          */
-        @NotNull Builder lobbyTime(int lobbyTime);
+        Builder lobbyTime(int lobbyTime);
 
         /**
          * Sets the maximum game time in seconds.
@@ -98,14 +98,14 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
          * @param gameTime the maximum game time
          * @return the builder instance
          */
-        @NotNull Builder gameTime(int gameTime);
+        Builder gameTime(int gameTime);
 
         /**
          * Builds the game configuration.
          *
          * @return the created configuration
          */
-        @NotNull GameConfig build();
+        GameConfig build();
     }
 
 }

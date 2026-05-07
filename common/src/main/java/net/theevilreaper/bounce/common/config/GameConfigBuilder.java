@@ -1,7 +1,12 @@
 package net.theevilreaper.bounce.common.config;
 
-import org.jetbrains.annotations.NotNull;
-
+/**
+ * Concrete implementation of the {@link GameConfig.Builder} interface.
+ *
+ * @author theEvilReaper
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public final class GameConfigBuilder implements GameConfig.Builder {
 
     private int minPlayers;
@@ -9,20 +14,33 @@ public final class GameConfigBuilder implements GameConfig.Builder {
     private int lobbyTime;
     private int maxGameTime;
 
+    GameConfigBuilder() {
+        // Hide the public constructor
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public GameConfig.@NotNull Builder minPlayers(int minPlayers) {
+    public GameConfig.Builder minPlayers(int minPlayers) {
         this.minPlayers = minPlayers;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public GameConfig.@NotNull Builder maxPlayers(int maxPlayers) {
+    public GameConfig.Builder maxPlayers(int maxPlayers) {
         this.maxPlayers = maxPlayers;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public GameConfig.@NotNull Builder lobbyTime(int lobbyTime) {
+    public GameConfig.Builder lobbyTime(int lobbyTime) {
         if (lobbyTime <= GameConfig.FORCE_START_TIME) {
             throw new IllegalArgumentException("Lobby time must be greater than " + GameConfig.FORCE_START_TIME);
         }
@@ -30,14 +48,20 @@ public final class GameConfigBuilder implements GameConfig.Builder {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public GameConfig.@NotNull Builder gameTime(int gameTime) {
+    public GameConfig.Builder gameTime(int gameTime) {
         this.maxGameTime = gameTime;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public @NotNull GameConfig build() {
+    public GameConfig build() {
         return new GameConfigImpl(minPlayers, maxPlayers, lobbyTime, maxGameTime);
     }
 }
