@@ -12,7 +12,6 @@ java {
 }
 
 dependencies {
-    implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
     compileOnly(libs.adventure)
     compileOnly(libs.minestom)

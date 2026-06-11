@@ -12,7 +12,7 @@ java {
 }
 
 dependencies {
-    implementation(platform(libs.mycelium.bom))
+    implementation(platform(libs.aonyx.bom))
     compileOnly(libs.minestom)
 
     testImplementation(libs.minestom)

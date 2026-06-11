@@ -25,11 +25,9 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("shadow", "9.4.2")
-            version("bom", "1.6.4")
             version("aonyx", "0.7.1")
             version("pvp", "2026.05.30-26.1.1")
 
-            library("mycelium.bom", "net.onelitefeather", "mycelium-bom").versionRef("bom")
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
             version("cloudnet", "4.0.0-RC17-SNAPSHOT")
 

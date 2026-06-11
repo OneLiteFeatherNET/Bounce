@@ -11,7 +11,6 @@ description = "Bounce"
 
 dependencies {
     implementation(project(":common"))
-    implementation(platform(libs.mycelium.bom))
     implementation(platform(libs.aonyx.bom))
     implementation(platform(libs.cloudnet.bom))
     implementation(project(":block"))
