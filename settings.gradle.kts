@@ -27,9 +27,9 @@ dependencyResolutionManagement {
             version("shadow", "9.4.2")
             version("aonyx", "0.7.1")
             version("pvp", "2026.05.30-26.1.1")
+            version("cloudnet", "4.0.0-RC17-SNAPSHOT")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
-            version("cloudnet", "4.0.0-RC17-SNAPSHOT")
 
             library("pvp", "io.github.togar2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
