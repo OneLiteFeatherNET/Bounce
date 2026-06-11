@@ -9,4 +9,8 @@ dependencies {
 
     testImplementation(libs.minestom)
     testImplementation(libs.cyano)
+    testImplementation(libs.junit.api)
+    testImplementation(libs.junit.params)
+    testImplementation(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.engine)
 }
