@@ -1,12 +1,10 @@
 plugins {
-    java
     `maven-publish`
     application
     alias(libs.plugins.shadow)
+    id("bounce.java-conventions")
 }
 
-group = "net.theevilreaper"
-version = "0.0.1"
 description = "Bounce Setup Server"
 
 dependencies {
@@ -35,23 +33,8 @@ application {
     mainClass.set("net.theevilreaper.bounce.BounceSetupServer")
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
-    }
-}
-
 tasks {
     jar {
         dependsOn("shadowJar")
     }
-
-    test {
-        jvmArgs("-Dminestom.inside-test=true")
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
-        }
-    }
 }
-
