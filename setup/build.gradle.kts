@@ -15,8 +15,7 @@ dependencies {
     implementation(libs.pvp)
     implementation(libs.minestom)
     implementation(libs.aves)
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    implementation("org.slf4j:slf4j-simple:2.0.18")
+    implementation(libs.slf4j.api)
     implementation(libs.xerus)
     implementation(libs.guira)
 
