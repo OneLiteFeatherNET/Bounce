@@ -18,7 +18,7 @@ public class BounceMapProvider extends AbstractMapProvider {
 
     public BounceMapProvider(@NotNull Path path) {
         super(new GsonFileHandler(GsonUtil.GSON), MapFilters::filterMapsForGame);
-        this.mapEntries = this.loadMapEntries(path.resolve("maps"));
+        this.loadMapEntries(path.resolve("maps"));
         this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
         MapEntry mapEntry = this.getEntries().getFirst();
@@ -48,7 +48,7 @@ public class BounceMapProvider extends AbstractMapProvider {
     }
 
     public String getMapName() {
-        return this.activeMap.getName();
+        return this.activeMap.name();
     }
 
     public @NotNull GameMap getActiveMap() {

@@ -31,7 +31,6 @@ class GameMapBuilderTest {
          assertAll(
                  "Assert null values",
                  () -> assertNull(gameMapBuilder.getGameSpawn()),
-                    () -> assertNull(gameMapBuilder.getName()),
                     () -> assertNull(gameMapBuilder.getSpawn())
          );
 
@@ -52,16 +51,16 @@ class GameMapBuilderTest {
 
         assertNotNull(gameMap, "GameMap should not be null after initialization");
         assertEquals(new Pos(1, 2, 3), gameMap.getGameSpawn(), "Game spawn position should match");
-        assertEquals("Test Map", gameMap.getName(), "Game map name should match");
-        assertEquals(new Pos(4, 5, 6), gameMap.getSpawn(), "Spawn position should match");
+        assertEquals("Test Map", gameMap.name(), "Game map name should match");
+        assertEquals(new Pos(4, 5, 6), gameMap.spawn(), "Spawn position should match");
         assertEquals(1, gameMap.getPushData().getPush(Block.STONE), "Push value for STONE should be 1");
 
         GameMapBuilder anotherBuilder = new GameMapBuilder(gameMap);
 
         assertNotNull(anotherBuilder, "GameMapBuilder should not be null after initialization with existing data");
         assertEquals(gameMap.getGameSpawn(), anotherBuilder.getGameSpawn(), "Game spawn position should match");
-        assertEquals(gameMap.getName(), anotherBuilder.getName(), "Game map name should match");
-        assertEquals(gameMap.getSpawn(), anotherBuilder.getSpawn(), "Spawn position should match");
+        assertEquals(gameMap.name(), anotherBuilder.getName(), "Game map name should match");
+        assertEquals(gameMap.spawn(), anotherBuilder.getSpawn(), "Spawn position should match");
 
         PushData.Builder anotherPushDataBuilder = anotherBuilder.getPushDataBuilder();
         assertNotNull(anotherPushDataBuilder, "PushDataBuilder should not be null after initialization with existing data");

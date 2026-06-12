@@ -16,7 +16,7 @@ public final class SetupMapProvider extends AbstractMapProvider {
 
     public SetupMapProvider(@NotNull FileHandler fileHandler, @NotNull Path path) {
         super(fileHandler, MapFilters::filterMapsForSetup);
-        this.mapEntries = loadMapEntries(path.resolve("maps"));
+        this.loadMapEntries(path.resolve("maps"));
 
         Optional<MapEntry> fetchedEntry = this.mapEntries.stream()
                 .filter(MapEntry::hasMapFile)

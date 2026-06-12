@@ -4,6 +4,8 @@ import net.minestom.server.coordinate.Pos;
 import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.bounce.common.push.PushData;
 
+import java.util.List;
+
 /**
  * The {@link GameMap} contains all relevant information about a map which is used in the context of the game.
  * It holds data about the used positions and other things.
@@ -25,11 +27,10 @@ public final class GameMap extends BaseMap {
      * @param gameSpawn the spawn position during the game
      * @param pushData  the {@link PushData} which includes information about push values
      */
-    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, String... builders) {
+    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders) {
         super(name, spawn, builders);
         this.gameSpawn = gameSpawn;
         this.pushData = pushData;
-
     }
 
     /**

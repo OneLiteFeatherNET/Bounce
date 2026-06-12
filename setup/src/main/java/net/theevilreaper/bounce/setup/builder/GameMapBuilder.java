@@ -76,7 +76,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     @Override
     public @NotNull GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders.toArray(String[]::new));
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders);
     }
 
     /**
