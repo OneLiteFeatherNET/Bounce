@@ -28,9 +28,11 @@ dependencyResolutionManagement {
             version("aonyx", "0.7.3")
             version("pvp", "2026.05.30-26.1.1")
             version("cloudnet", "4.0.0-RC17-SNAPSHOT")
+            version("slf4j", "2.0.18")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
+            library("slf4j.api", "org.slf4j", "slf4j-api").versionRef("slf4j")
             library("pvp", "io.github.togar2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
             library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
