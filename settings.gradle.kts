@@ -25,7 +25,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("shadow", "9.4.2")
-            version("aonyx", "0.7.3")
+            version("aonyx", "0.8.0")
             version("pvp", "2026.05.30-26.1.1")
             version("cloudnet", "4.0.0-RC17-SNAPSHOT")
             version("slf4j", "2.0.18")
