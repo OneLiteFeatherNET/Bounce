@@ -4,7 +4,6 @@ plugins {
     java
 }
 
-group = "net.theevilreaper"
 version = "0.0.1"
 
 java {
