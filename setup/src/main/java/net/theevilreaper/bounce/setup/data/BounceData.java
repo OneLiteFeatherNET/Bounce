@@ -8,9 +8,9 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.event.SetupFinishEvent;
-import net.theevilreaper.aves.file.FileHandler;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.map.GameMap;
+import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
@@ -26,7 +26,6 @@ import java.util.UUID;
 public final class BounceData implements SetupData {
 
     private static final Pos SPAWN_POINT = new Pos(0, 100, 0);
-    private final FileHandler fileHandler;
     private final UUID owner;
     private final MapEntry mapEntry;
     private final Player player;
@@ -37,10 +36,9 @@ public final class BounceData implements SetupData {
     private GroundViewInventory groundViewInventory;
     private PushValueInventory pushValueInventory;
 
-    public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry, @NotNull FileHandler fileHandler) {
+    public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry) {
         this.owner = owner;
         this.mapEntry = mapEntry;
-        this.fileHandler = fileHandler;
         Player foundPlayer = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(owner);
 
         if (foundPlayer == null) {
@@ -62,7 +60,7 @@ public final class BounceData implements SetupData {
             this.mapEntry.createFile();
         }
         GameMap map = this.gameMapBuilder.build();
-        this.fileHandler.save(mapEntry.getMapFile(), map);
+        GsonUtil.GSON_FILE_HANDLER.save(mapEntry.getMapFile(), map);
         EventDispatcher.call(new SetupFinishEvent(this));
     }
 
@@ -84,7 +82,7 @@ public final class BounceData implements SetupData {
         if (this.mapEntry.getMapFile() == null) {
             this.gameMapBuilder = new GameMapBuilder();
         } else {
-            Optional<GameMap> mapData = this.fileHandler.load(mapEntry.getMapFile(), GameMap.class);
+            Optional<GameMap> mapData = GsonUtil.GSON_FILE_HANDLER.load(mapEntry.getMapFile(), GameMap.class);
             // Initialize with a new BaseMap if loading fails
             mapData.ifPresentOrElse(gameMap ->
                     this.gameMapBuilder = new GameMapBuilder(gameMap),

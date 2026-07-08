@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.theevilreaper.aves.file.FileHandler;
+import net.theevilreaper.aves.file.GsonFileHandler;
 import net.theevilreaper.aves.file.gson.KeyGsonAdapter;
 import net.theevilreaper.aves.file.gson.PositionGsonAdapter;
 import net.theevilreaper.bounce.common.adapter.AreaAdapter;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 public final class GsonUtil {
 
     public static final Gson GSON;
+    public static final FileHandler GSON_FILE_HANDLER;
 
     static {
         PositionGsonAdapter positionAdapter = new PositionGsonAdapter();
@@ -27,6 +30,8 @@ public final class GsonUtil {
                 .registerTypeAdapter(Area.class, new AreaAdapter())
                 .registerTypeAdapter(PushData.class, new PushDataAdapter())
                 .create();
+
+        GSON_FILE_HANDLER = new GsonFileHandler(GSON);
     }
 
 

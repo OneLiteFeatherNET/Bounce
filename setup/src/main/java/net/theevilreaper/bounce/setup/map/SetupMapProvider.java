@@ -7,6 +7,7 @@ import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.aves.map.provider.AbstractMapProvider;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.map.MapFilters;
+import net.theevilreaper.bounce.common.util.GsonUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -14,8 +15,8 @@ import java.util.Optional;
 
 public final class SetupMapProvider extends AbstractMapProvider {
 
-    public SetupMapProvider(@NotNull FileHandler fileHandler, @NotNull Path path) {
-        super(fileHandler, MapFilters::filterMapsForSetup);
+    public SetupMapProvider(@NotNull Path path) {
+        super(GsonUtil.GSON_FILE_HANDLER, MapFilters::filterMapsForSetup);
         this.loadMapEntries(path.resolve("maps"));
 
         Optional<MapEntry> fetchedEntry = this.mapEntries.stream()

@@ -9,12 +9,9 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Instance;
 import net.onelitefeather.guira.SetupDataService;
 import net.onelitefeather.guira.event.SetupFinishEvent;
-import net.theevilreaper.aves.file.FileHandler;
-import net.theevilreaper.aves.file.GsonFileHandler;
 import net.theevilreaper.aves.map.provider.MapProvider;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
-import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
@@ -56,13 +53,11 @@ public final class BounceSetup implements ListenerHandling {
     private final MapProvider mapProvider;
     private final SetupDataService setupDataService;
     private final InventoryService inventoryService;
-    private final FileHandler fileHandler;
     private final DialogRegistry dialogRegistry;
 
     public BounceSetup() {
         Path path = Path.of("");
-        this.fileHandler = new GsonFileHandler(GsonUtil.GSON);
-        this.mapProvider = new SetupMapProvider(this.fileHandler, path);
+        this.mapProvider = new SetupMapProvider(path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.dialogRegistry = new SetupDialogRegistry();
@@ -90,7 +85,7 @@ public final class BounceSetup implements ListenerHandling {
                 player -> this.mapProvider.teleportToSpawn(player, false))
         );
         node.addListener(PlayerDisconnectEvent.class, new PlayerDisconnectListener(this.setupDataService::remove));
-        node.addListener(MapSetupSelectEvent.class, new MapSetupSelectListener(this.fileHandler, this.setupDataService));
+        node.addListener(MapSetupSelectEvent.class, new MapSetupSelectListener(this.setupDataService));
 
         PlayerConsumer instanceSwitcher = player -> {
             mapProvider.teleportToSpawn(player, true);

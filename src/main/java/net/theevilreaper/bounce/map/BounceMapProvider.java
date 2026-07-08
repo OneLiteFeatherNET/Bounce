@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.map;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.theevilreaper.aves.file.GsonFileHandler;
 import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.aves.map.provider.AbstractMapProvider;
@@ -17,7 +16,7 @@ import java.util.Optional;
 public class BounceMapProvider extends AbstractMapProvider {
 
     public BounceMapProvider(@NotNull Path path) {
-        super(new GsonFileHandler(GsonUtil.GSON), MapFilters::filterMapsForGame);
+        super(GsonUtil.GSON_FILE_HANDLER, MapFilters::filterMapsForGame);
         this.loadMapEntries(path.resolve("maps"));
         this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
