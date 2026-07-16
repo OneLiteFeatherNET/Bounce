@@ -23,6 +23,7 @@ dependencies {
     runtimeOnly(libs.slf4j.simple)
     implementation(libs.xerus)
     implementation(libs.guira)
+    implementation(libs.pica)
 
     implementation(platform(libs.minestom.extensions.bom))
     implementation(libs.minestom.extensions)
