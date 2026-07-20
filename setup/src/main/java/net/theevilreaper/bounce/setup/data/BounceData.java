@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.anvil.AnvilLoader;
+import net.minestom.server.world.DimensionType;
 import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.map.MapEntry;
@@ -100,7 +101,7 @@ public final class BounceData implements SetupData {
         this.pushValueInventory.register();
 
         this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
-        AnvilLoader anvilLoader = new AnvilLoader(this.mapEntry.getDirectoryRoot());
+        AnvilLoader anvilLoader = new AnvilLoader(this.mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.instance.setChunkLoader(anvilLoader);
 
         MinecraftServer.getInstanceManager().registerInstance(this.instance);
