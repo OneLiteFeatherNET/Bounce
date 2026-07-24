@@ -63,13 +63,6 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
-     * Clears all builders from the data structure.
-     */
-    public void clearBuilders() {
-        this.builders.clear();
-    }
-
-    /**
      * Builds a new {@link GameMap} instance with the current properties.
      *
      * @return a new GameMap instance

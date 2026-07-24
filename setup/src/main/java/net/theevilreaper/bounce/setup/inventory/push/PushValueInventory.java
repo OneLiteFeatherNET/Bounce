@@ -6,7 +6,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
-import net.theevilreaper.aves.inventory.InventoryLayout;
+import net.theevilreaper.aves.inventory.layout.InventoryLayout;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
@@ -48,7 +48,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         if (index < 0 || index >= this.gameMapBuilder.getPushDataBuilder().getPushValues().size()) {
             throw new IndexOutOfBoundsException("Invalid push entry index: " + index);
         }
-            this.setDataLayoutFunction(dataLayoutFunction -> {
+        this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
 
             dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
