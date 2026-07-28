@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "net.theevilreaper"
-version = "0.5.0" // x-release-please-version
+version = "0.5.1-SNAPSHOT" // x-release-please-version
 description = "Bounce"
 
 dependencies {
