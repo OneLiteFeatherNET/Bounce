@@ -19,6 +19,8 @@ public class GameMessages extends Messages {
     public static final Component INVALID_PLAYER_NAME;
     public static final Component PLAYER_NOT_FOUND;
 
+    public static final Component WON_COMPONENT;
+
     public static final Component STATS_LINE;
 
     private static final Component LEAVE_PART;
@@ -46,6 +48,8 @@ public class GameMessages extends Messages {
         POINT_PART = Component.space().append(Component.text("Points", NamedTextColor.GRAY));
 
         STATS_LINE = Component.text("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n", NamedTextColor.GRAY);
+
+        WON_COMPONENT = Component.text("won the game", NamedTextColor.GRAY);
     }
 
     @Contract

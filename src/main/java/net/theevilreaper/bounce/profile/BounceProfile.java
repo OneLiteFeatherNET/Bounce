@@ -170,6 +170,16 @@ public final class BounceProfile implements Comparable<BounceProfile> {
     }
 
     /**
+     * Stops and cancels the active jump task for this profile, if registered.
+     */
+    public void stopJumpTask() {
+        if (this.jumpRunnable != null) {
+            this.jumpRunnable.cancel();
+            this.jumpRunnable = null;
+        }
+    }
+
+    /**
      * Returns the jump runnable associated with this profile's player.
      *
      * @return the jump runnable, or null if it has not been registered
