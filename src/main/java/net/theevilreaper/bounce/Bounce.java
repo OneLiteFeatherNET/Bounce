@@ -57,7 +57,7 @@ public class Bounce implements ListenerHandling {
     private ProfileService profileService;
     private final GameConfig gameConfig;
     private final BounceScoreboard scoreboard;
-    private final MapProvider mapProvider;
+    private final BounceMapProvider mapProvider;
     private final LinearPhaseSeries<Phase> phaseSeries;
     private final PlayerUtil playerUtil;
 
@@ -67,7 +67,7 @@ public class Bounce implements ListenerHandling {
         this.mapProvider = new BounceMapProvider(path);
         this.phaseSeries = new LinearPhaseSeries<>("Game");
         this.profileService = new ProfileService();
-        this.playerUtil = new PlayerUtil(this.profileService, ((BounceMapProvider) this.mapProvider).getActiveMap().getPushData());
+        this.playerUtil = new PlayerUtil(this.profileService, (this.mapProvider).getActiveMap().getPushData());
         this.scoreboard = new BounceScoreboard();
         this.registerPhases();
 
@@ -81,7 +81,7 @@ public class Bounce implements ListenerHandling {
         registerGameListener(globalEventHandler);
         this.registerCommands();
         this.phaseSeries.start();
-        this.scoreboard.initLobbyLayout(((BounceMapProvider) this.mapProvider).getMapName());
+        this.scoreboard.initLobbyLayout((this.mapProvider).getMapName());
 
         CombatFeatureSet featureSet = CombatFeatures.empty()
                 .add(CombatFeatures.VANILLA_ATTACK)
@@ -100,12 +100,10 @@ public class Bounce implements ListenerHandling {
     }
 
     private void registerPhases() {
-        BounceMapProvider bounceProvider = (BounceMapProvider) this.mapProvider;
-
         this.phaseSeries.add(new LobbyPhase(this.gameConfig.minPlayers(), this.gameConfig.lobbyTime()));
-        this.phaseSeries.add(new TeleportPhase(bounceProvider::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
+        this.phaseSeries.add(new TeleportPhase(this.mapProvider::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
         this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName, () ->
-                this.profileService.start(bounceProvider.getActiveMap(), scoreboard::createPlayerLine))
+                this.profileService.start(this.mapProvider.getActiveMap(), scoreboard::createPlayerLine))
         );
         this.phaseSeries.add(new RestartPhase());
     }
@@ -135,7 +133,7 @@ public class Bounce implements ListenerHandling {
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener());
         node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
-        node.addListener(PlayerLavaEvent.class, new PlayerLavaListener(this.profileService::get, ((BounceMapProvider) this.mapProvider).getActiveMap()::getGameSpawn));
+        node.addListener(PlayerLavaEvent.class, new PlayerLavaListener(this.profileService::get, (this.mapProvider).getActiveMap()::getGameSpawn));
     }
 
     private void registerCommands() {
