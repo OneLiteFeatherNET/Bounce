@@ -2,13 +2,12 @@ package net.theevilreaper.bounce.attribute;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link AttributeHelper} is a utility class to manage player attributes related to jumping.
  *
  * @author theEvilReaper
- * @version 1.0.0
+ * @version 1.0.1
  * @since 0.1.0
  */
 public final class AttributeHelper {
@@ -21,7 +20,7 @@ public final class AttributeHelper {
      *
      * @param player the player whose jump strength is to be disabled
      */
-    public static void disableJumpStrength(@NotNull Player player) {
+    public static void disableJumpStrength(Player player) {
         player.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(ZERO_JUMP);
     }
 
@@ -30,11 +29,11 @@ public final class AttributeHelper {
      *
      * @param player the player whose jump strength is to be reset
      */
-    public static void resetJumpStrength(@NotNull Player player) {
+    public static void resetJumpStrength(Player player) {
         player.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(DEFAULT_JUMP_HEIGHT);
     }
 
     private AttributeHelper() {
-
+        // Nothing to do here
     }
 }

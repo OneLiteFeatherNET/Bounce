@@ -9,13 +9,12 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link ItemUtil} is a small utility class which handles the creation and management of the used {@link ItemStack} in the game.
  *
  * @author theEvilReaper
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public final class ItemUtil {
@@ -34,7 +33,7 @@ public final class ItemUtil {
      *
      * @param paramPlayer the player who should get the {@link ItemStack}
      */
-    public static void setItem(@NotNull Player paramPlayer) {
+    public static void setItem(Player paramPlayer) {
         paramPlayer.getInventory().addItemStack(FEATHER);
     }
 

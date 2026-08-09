@@ -8,7 +8,6 @@ import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
@@ -22,7 +21,7 @@ public class PlayingPhase extends TimedPhase {
     private final VoidConsumer startTrigger;
     private BounceGameFinishEvent.Reason reason;
 
-    public PlayingPhase(@NotNull IntConsumer timeUpdater, @NotNull VoidConsumer startTrigger) {
+    public PlayingPhase(IntConsumer timeUpdater, VoidConsumer startTrigger) {
         super("GamePhase", ChronoUnit.SECONDS, 1);
         this.setTickDirection(TickDirection.DOWN);
         this.setCurrentTicks(300);
@@ -64,13 +63,13 @@ public class PlayingPhase extends TimedPhase {
     }
 
 
-    private void broadcast(@NotNull Component component) {
+    private void broadcast(Component component) {
         Audience.audience(getConnectionManager().getOnlinePlayers())
                 .sendMessage(component);
     }
 
     public void handlePlayerCheck() {
-        Collection<@NotNull Player> onlinePlayers = getConnectionManager().getOnlinePlayers();
+        Collection<Player> onlinePlayers = getConnectionManager().getOnlinePlayers();
 
         if (onlinePlayers.size() - 1 == 0) {
             this.reason = BounceGameFinishEvent.Reason.PLAYER_LEFT;

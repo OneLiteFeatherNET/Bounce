@@ -8,7 +8,6 @@ import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.util.Messages;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 public class GameMessages extends Messages {
 
@@ -50,29 +49,29 @@ public class GameMessages extends Messages {
     }
 
     @Contract
-    public static @NotNull Component getLobbyTime(int time) {
+    public static Component getLobbyTime(int time) {
         return withMiniPrefix("<gold>Starting in... <red>" + time);
     }
 
     @Contract
-    public static @NotNull Component getStopTime(int time) {
+    public static Component getStopTime(int time) {
         return  withMiniPrefix("<gold>Stopping in... <red>" + time);
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull Component getJoinMessage(@NotNull Player player) {
+    public static Component getJoinMessage(Player player) {
         return withPrefix(player.getDisplayName())
                 .append(Component.space()).append(JOIN_PART);
     }
 
     @Contract(value = "_ -> new", pure = true)
-    public static @NotNull Component getLeaveMessage(@NotNull Player player) {
+    public static Component getLeaveMessage(Player player) {
         return withPrefix(player.getDisplayName())
                 .append(Component.space()).append(LEAVE_PART);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull Component getCoinComponent(int coins, boolean add) {
+    public static Component getCoinComponent(int coins, boolean add) {
         Component base = add ? PLUS_POINTS : MINUS_POINTS;
         return base.append(Component.text(coins, NamedTextColor.GOLD)).append(POINT_PART);
     }

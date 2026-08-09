@@ -3,7 +3,7 @@ package net.theevilreaper.bounce.profile;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.map.GameMap;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,30 +17,30 @@ public class ProfileService {
         profileMap = new ConcurrentHashMap<>();
     }
 
-    public @NotNull BounceProfile add(@NotNull Player player) {
+    public BounceProfile add(Player player) {
         return this.profileMap.computeIfAbsent(player.getUuid(), uuid -> new BounceProfile(player));
     }
 
-    public BounceProfile remove(@NotNull Player player) {
+    public @Nullable BounceProfile remove(Player player) {
         return this.profileMap.remove(player.getUuid());
     }
 
-    public BounceProfile get(@NotNull Player player) {
+    public @Nullable BounceProfile get(Player player) {
         return this.profileMap.get(player.getUuid());
     }
 
-    public BounceProfile get(@NotNull UUID uuid) {
+    public @Nullable BounceProfile get(UUID uuid) {
         return this.profileMap.get(uuid);
     }
 
-    public void start(@NotNull GameMap gameMap, @NotNull PlayerConsumer consumer) {
+    public void start(GameMap gameMap, PlayerConsumer consumer) {
         for (BounceProfile value : this.profileMap.values()) {
             value.getJumpRunnable().start(gameMap);
             consumer.accept(value.getPlayer());
         }
     }
 
-    public BounceProfile getWinner() {
+    public @Nullable BounceProfile getWinner() {
         if (this.profileMap.isEmpty()) return null;
 
         return profileMap.values().stream()
@@ -53,7 +53,7 @@ public class ProfileService {
         this.profileMap.clear();
     }
 
-    public void clear(@NotNull Consumer<BounceProfile> callback) {
+    public void clear(Consumer<BounceProfile> callback) {
         if (this.profileMap.isEmpty()) return;
         for (BounceProfile value : this.profileMap.values()) {
             callback.accept(value);

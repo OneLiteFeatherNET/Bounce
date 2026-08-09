@@ -7,7 +7,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;
 
@@ -43,7 +42,7 @@ public class RestartPhase extends TimedPhase {
         }
     }
 
-    private void broadcast(@NotNull Component component) {
+    private void broadcast(Component component) {
         Audience.audience(getConnectionManager().getOnlinePlayers())
                 .sendMessage(component);
     }

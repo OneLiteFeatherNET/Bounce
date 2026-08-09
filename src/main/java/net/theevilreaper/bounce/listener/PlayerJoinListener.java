@@ -7,7 +7,6 @@ import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.Phase;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -19,16 +18,13 @@ public class PlayerJoinListener implements Consumer<PlayerSpawnEvent> {
     private final Supplier<Phase> phaseSupplier;
     private final PlayerConsumer spawnConsumer;
 
-    public PlayerJoinListener(
-            @NotNull Supplier<Phase> phaseSupplier,
-            @NotNull PlayerConsumer spawnConsumer
-    ) {
+    public PlayerJoinListener(Supplier<Phase> phaseSupplier, PlayerConsumer spawnConsumer) {
         this.phaseSupplier = phaseSupplier;
         this.spawnConsumer = spawnConsumer;
     }
 
     @Override
-    public void accept(@NotNull PlayerSpawnEvent event) {
+    public void accept(PlayerSpawnEvent event) {
         var player = event.getPlayer();
         player.setDisplayName(Component.text(player.getUsername()));
 

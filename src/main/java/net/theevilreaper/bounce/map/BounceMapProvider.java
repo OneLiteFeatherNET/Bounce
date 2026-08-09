@@ -8,14 +8,13 @@ import net.theevilreaper.aves.map.provider.AbstractMapProvider;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.map.MapFilters;
 import net.theevilreaper.bounce.common.util.GsonUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.Optional;
 
 public class BounceMapProvider extends AbstractMapProvider {
 
-    public BounceMapProvider(@NotNull Path path) {
+    public BounceMapProvider(Path path) {
         super(GsonUtil.GSON_FILE_HANDLER, MapFilters::filterMapsForGame);
         this.loadMapEntries(path.resolve("maps"));
         this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
@@ -38,11 +37,11 @@ public class BounceMapProvider extends AbstractMapProvider {
     }
 
     @Override
-    public void saveMap(@NotNull Path path, @NotNull BaseMap baseMap) {
+    public void saveMap(Path path, BaseMap baseMap) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void teleportToGameSpawn(@NotNull Player player) {
+    public void teleportToGameSpawn(Player player) {
         player.teleport(((GameMap) this.activeMap).getGameSpawn());
     }
 
@@ -50,7 +49,7 @@ public class BounceMapProvider extends AbstractMapProvider {
         return this.activeMap.name();
     }
 
-    public @NotNull GameMap getActiveMap() {
+    public GameMap getActiveMap() {
         if (!(this.activeMap instanceof GameMap gameMap)) {
             throw new IllegalStateException("Active map is not a GameMap");
         }

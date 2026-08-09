@@ -5,7 +5,6 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.registry.RegistryKey;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -15,7 +14,7 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
     }
 
     @Override
-    public void accept(@NotNull FinalDamageEvent event) {
+    public void accept(FinalDamageEvent event) {
         if (event.getEntity().getEntityType() != EntityType.PLAYER) return;
 
         RegistryKey<DamageType> type = event.getDamage().getType();
