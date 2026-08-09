@@ -9,21 +9,19 @@ import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
-
 
 public class GameFinishListener implements Consumer<BounceGameFinishEvent> {
 
     private final ProfileService profileService;
 
-    public GameFinishListener(@NotNull ProfileService profileService) {
+    public GameFinishListener(ProfileService profileService) {
         this.profileService = profileService;
     }
 
     @Override
-    public void accept(@NotNull BounceGameFinishEvent event) {
+    public void accept(BounceGameFinishEvent event) {
         if (event.getReason() == BounceGameFinishEvent.Reason.PLAYER_LEFT) return;
         BounceProfile winnerProfile = profileService.getWinner();
 

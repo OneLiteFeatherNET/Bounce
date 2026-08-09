@@ -9,7 +9,6 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.util.GameMessages;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -17,18 +16,19 @@ public class StatsCommand extends Command {
 
     private final Function<Player, BounceProfile> profileFunction;
     private final ArgumentString playerArgument;
-    public StatsCommand(@NotNull Function<Player, BounceProfile> profileFunction) {
+
+    public StatsCommand(Function<Player, BounceProfile> profileFunction) {
         super("stats");
         this.profileFunction = profileFunction;
         this.playerArgument = ArgumentType.String("player");
         addSyntax(this::handleOwnStats);
     }
 
-    private void handleOtherStats(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void handleOtherStats(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         String playerName = context.get(playerArgument);
 
-        if (playerName == null || playerName.isEmpty()) {
+        if (playerName.isEmpty()) {
             sender.sendMessage(GameMessages.INVALID_PLAYER_NAME);
             return;
         }
@@ -54,7 +54,7 @@ public class StatsCommand extends Command {
 
     }
 
-    private void handleOwnStats(@NotNull CommandSender sender, @NotNull CommandContext context) {
+    private void handleOwnStats(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
         BounceProfile profile = profileFunction.apply(player);
 

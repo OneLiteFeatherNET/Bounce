@@ -8,7 +8,6 @@ import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.timer.PlayingPhase;
 import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.Phase;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -20,13 +19,13 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
     private final Supplier<Phase> phaseSupplier;
     private final PlayerConsumer playerLeave;
 
-    public PlayerQuitListener(@NotNull Supplier<Phase> phaseSupplier, @NotNull PlayerConsumer playerLeave) {
+    public PlayerQuitListener(Supplier<Phase> phaseSupplier, PlayerConsumer playerLeave) {
         this.phaseSupplier = phaseSupplier;
         this.playerLeave = playerLeave;
     }
 
     @Override
-    public void accept(@NotNull PlayerDisconnectEvent event) {
+    public void accept(PlayerDisconnectEvent event) {
         Phase phase = phaseSupplier.get();
         Player player = event.getPlayer();
 
@@ -43,7 +42,7 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
      * @param lobbyPhase the reference from the phase
      * @param player     the player which is involved
      */
-    private void handleLobbyQuit(@NotNull LobbyPhase lobbyPhase, @NotNull Player player) {
+    private void handleLobbyQuit(LobbyPhase lobbyPhase, Player player) {
         lobbyPhase.checkStopCondition();
         Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
     }
@@ -54,7 +53,7 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
      * @param playingPhase the reference from the phase
      * @param player       the player which is involved
      */
-    private void handleGameQuit(@NotNull PlayingPhase playingPhase, @NotNull Player player) {
+    private void handleGameQuit(PlayingPhase playingPhase, Player player) {
         Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
         this.playerLeave.accept(player);
         playingPhase.handlePlayerCheck();
@@ -65,7 +64,7 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
      *
      * @param player the player which is involved
      */
-    private void handleDefaultLeave(@NotNull Player player) {
+    private void handleDefaultLeave(Player player) {
         Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
     }
 }

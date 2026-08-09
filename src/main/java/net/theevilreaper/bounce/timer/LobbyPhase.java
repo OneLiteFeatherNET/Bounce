@@ -8,7 +8,6 @@ import net.theevilreaper.bounce.event.GamePrepareEvent;
 import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.temporal.ChronoUnit;
 
@@ -80,7 +79,7 @@ public class LobbyPhase extends TimedPhase {
      *
      * @param player the player who should receive the update
      */
-    public void updatePlayerValues(@NotNull Player player) {
+    public void updatePlayerValues(Player player) {
         player.setLevel(getCurrentTicks());
         float currentExpCount = (float) this.getCurrentTicks() / getLobbyOrForceTime();
         player.setExp(currentExpCount);

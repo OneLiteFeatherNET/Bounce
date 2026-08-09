@@ -1,5 +1,7 @@
 package net.theevilreaper.bounce.commands;
 
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.Command;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.util.Messages;
 import net.theevilreaper.bounce.timer.LobbyPhase;
@@ -9,7 +11,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.condition.Conditions;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -19,24 +20,35 @@ import java.util.function.Supplier;
  * It checks if the game is paused if the timer is long enough, and if the game has already been force started.
  *
  * @author theEvilReaper
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  **/
-public class StartCommand extends net.minestom.server.command.builder.Command {
+public class StartCommand extends Command {
 
     private final Supplier<Phase> phaseSupplier;
     private final Component unableToStart = Messages.withPrefix(
             Component.text("Unable to start the game because the timer is to low!", NamedTextColor.RED)
     );
 
-    public StartCommand(@NotNull Supplier<Phase> phaseSupplier) {
+    /**
+     * Creates a new instance of the command with the given {@link Supplier<Phase>}.
+     *
+     * @param phaseSupplier which returns the current phase
+     */
+    public StartCommand(Supplier<Phase> phaseSupplier) {
         super("start");
         this.phaseSupplier = phaseSupplier;
         this.setCondition(Conditions::playerOnly);
         addSyntax(this::forceStart);
     }
 
-    private void forceStart(@NotNull net.minestom.server.command.CommandSender sender, @NotNull CommandContext commandContext) {
+    /**
+     * Handles the command logic to force start the game.
+     *
+     * @param sender         which is involved
+     * @param commandContext of the command
+     */
+    private void forceStart(CommandSender sender, CommandContext commandContext) {
         Phase phase = phaseSupplier.get();
 
         if (!(phase instanceof LobbyPhase lobbyPhase)) return;

@@ -8,7 +8,6 @@ import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.jump.PlayerJumpTask;
 import net.theevilreaper.bounce.util.GameMessages;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -24,11 +23,11 @@ import java.util.Objects;
 public final class BounceProfile implements Comparable<BounceProfile> {
 
     private final Player player;
-    private Player lastDamager;
+    private @Nullable Player lastDamager;
     private int points;
     private int kills;
     private int deaths;
-    private PlayerJumpTask jumpRunnable;
+    private @Nullable PlayerJumpTask jumpRunnable;
     private long firstReachTimestamp;
 
     /**
@@ -36,7 +35,7 @@ public final class BounceProfile implements Comparable<BounceProfile> {
      *
      * @param player the player associated with this profile
      */
-    public BounceProfile(@NotNull Player player) {
+    public BounceProfile(Player player) {
         this.player = player;
         this.points = 0;
     }
@@ -47,7 +46,7 @@ public final class BounceProfile implements Comparable<BounceProfile> {
      *
      * @param pushData the push data containing information about the jump
      */
-    public void registerJumpRunnable(@NotNull PushData pushData) {
+    public void registerJumpRunnable(PushData pushData) {
         this.jumpRunnable = new PlayerJumpTask(player, pushData);
     }
 
@@ -56,7 +55,7 @@ public final class BounceProfile implements Comparable<BounceProfile> {
      *
      * @param paramPlayer the player who last damaged this profile's player
      */
-    public void setLastDamager(@NotNull Player paramPlayer) {
+    public void setLastDamager(Player paramPlayer) {
         this.lastDamager = paramPlayer;
     }
 
@@ -140,7 +139,7 @@ public final class BounceProfile implements Comparable<BounceProfile> {
     }
 
     @Override
-    public int compareTo(@NotNull BounceProfile other) {
+    public int compareTo(BounceProfile other) {
         int pointComparison = Integer.compare(this.points, other.points); // Descending by points
         if (pointComparison != 0) return pointComparison;
 

@@ -12,7 +12,7 @@ import net.minestom.server.timer.TaskSchedule;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,17 +23,17 @@ public final class PlayerJumpTask {
     private final Player player;
     private final PushData pushData;
 
-    private GameMap map;
-    private Task task;
+    private @Nullable GameMap map;
+    private @Nullable Task task;
     private Block lastBlockBelow = Block.AIR; // Track previous block below player
     private long lastPushTime = 0;
 
-    public PlayerJumpTask(@NotNull Player player, @NotNull PushData pushData) {
+    public PlayerJumpTask(Player player, PushData pushData) {
         this.player = player;
         this.pushData = pushData;
     }
 
-    public void start(@NotNull GameMap bounceMap) {
+    public void start(GameMap bounceMap) {
         if (this.task != null) return;
         this.map = bounceMap;
         this.task = MinecraftServer.getSchedulerManager().buildTask(this::onTick)
@@ -84,7 +84,7 @@ public final class PlayerJumpTask {
         lastBlockBelow = foundJumpBlock;
     }
 
-    private @NotNull List<int[]> getCheckPositions() {
+    private List<int[]> getCheckPositions() {
         Pos playerPos = player.getPosition();
         double halfWidth = 0.3;
         double minX = playerPos.x() - halfWidth;

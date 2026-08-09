@@ -48,7 +48,6 @@ import net.theevilreaper.bounce.util.PlayerUtil;
 import net.theevilreaper.bounce.util.BounceScoreboard;
 import net.theevilreaper.xerus.api.phase.LinearPhaseSeries;
 import net.theevilreaper.xerus.api.phase.Phase;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -111,7 +110,7 @@ public class Bounce implements ListenerHandling {
         this.phaseSeries.add(new RestartPhase());
     }
 
-    private void registerListener(@NotNull EventNode<Event> node) {
+    private void registerListener(EventNode<Event> node) {
         node.addListener(AsyncPlayerConfigurationEvent.class, new PlayerConfigurationListener(
                 this.phaseSeries::getCurrentPhase,
                 this.mapProvider.getActiveInstance(),
@@ -130,7 +129,7 @@ public class Bounce implements ListenerHandling {
         node.addListener(PlayerChatEvent.class, new PlayerChatListener());
     }
 
-    private void registerGameListener(@NotNull EventNode<Event> node) {
+    private void registerGameListener(EventNode<Event> node) {
         node.addListener(BounceGameFinishEvent.class, new GameFinishListener(profileService));
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
@@ -143,7 +142,7 @@ public class Bounce implements ListenerHandling {
         MinecraftServer.getCommandManager().register(new StartCommand(this.phaseSeries::getCurrentPhase));
     }
 
-    private void handleGameLeave(@NotNull Player player) {
+    private void handleGameLeave(Player player) {
         BounceProfile profile = this.profileService.remove(player);
 
         if (profile == null) return;
@@ -152,7 +151,7 @@ public class Bounce implements ListenerHandling {
         this.scoreboard.removeViewer(player);
     }
 
-    private void handleGeneralJoin(@NotNull Player player) {
+    private void handleGeneralJoin(Player player) {
         this.mapProvider.teleportToSpawn(player, false);
         this.scoreboard.addViewer(player);
     }

@@ -5,14 +5,13 @@ import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
-import org.jetbrains.annotations.NotNull;
 
 public final class PlayerUtil {
 
     private final ProfileService profileService;
     private final PushData pushData;
 
-    public PlayerUtil(@NotNull ProfileService profileService, @NotNull PushData pushData) {
+    public PlayerUtil(ProfileService profileService, PushData pushData) {
         this.profileService = profileService;
         this.pushData = pushData;
     }

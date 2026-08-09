@@ -7,7 +7,6 @@ import net.minestom.server.scoreboard.Sidebar;
 import net.theevilreaper.aves.util.Strings;
 import net.theevilreaper.aves.util.TimeFormat;
 import net.theevilreaper.bounce.common.util.Messages;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -37,7 +36,7 @@ public final class BounceScoreboard {
      *
      * @param mapName the name of the map to display in the scoreboard
      */
-    public void initLobbyLayout(@NotNull String mapName) {
+    public void initLobbyLayout(String mapName) {
         sideBar.setTitle(Component.text("Bounce", NamedTextColor.DARK_AQUA));
 
         sideBar.createLine(new Sidebar.ScoreboardLine("header", Component.space(), 3));
@@ -73,7 +72,7 @@ public final class BounceScoreboard {
      *
      * @param player the player to add as a viewer
      */
-    public void addViewer(@NotNull Player player) {
+    public void addViewer(Player player) {
         this.sideBar.addViewer(player);
     }
 
@@ -82,7 +81,7 @@ public final class BounceScoreboard {
      *
      * @param player the player to remove from the viewers
      */
-    public void removeViewer(@NotNull Player player) {
+    public void removeViewer(Player player) {
         this.sideBar.removeViewer(player);
     }
 
@@ -92,7 +91,7 @@ public final class BounceScoreboard {
      *
      * @param player the player for whom to create a line
      */
-    public void createPlayerLine(@NotNull Player player) {
+    public void createPlayerLine(Player player) {
         this.sideBar.createLine(new Sidebar.ScoreboardLine(player.getUuid().toString(), player.getDisplayName(), 0));
     }
 
@@ -102,7 +101,7 @@ public final class BounceScoreboard {
      * @param uuid   the UUID of the player whose score is to be updated
      * @param points the points to set for the player
      */
-    public void updatePlayerLine(@NotNull UUID uuid, int points) {
+    public void updatePlayerLine(UUID uuid, int points) {
         this.sideBar.updateLineScore(uuid.toString(), points);
     }
 

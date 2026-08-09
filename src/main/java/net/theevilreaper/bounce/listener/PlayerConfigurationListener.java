@@ -8,7 +8,6 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.Instance;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.xerus.api.phase.Phase;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -20,11 +19,11 @@ public class PlayerConfigurationListener implements Consumer<AsyncPlayerConfigur
     private static final Component FULL_SERVER = Component.text("Unable to join because the server is full!", NamedTextColor.RED);
     private final int maxPlayers;
     private final Supplier<@Nullable Phase> phaseSupplier;
-    private final Supplier<@NotNull Instance> instanceSupplier;
+    private final Supplier<Instance> instanceSupplier;
 
     public PlayerConfigurationListener(
-            @NotNull Supplier<Phase> phaseSupplier,
-            @NotNull Supplier<Instance> instanceSupplier,
+            Supplier<Phase> phaseSupplier,
+            Supplier<Instance> instanceSupplier,
             int maxPlayers
     ) {
         this.phaseSupplier = phaseSupplier;
@@ -33,7 +32,7 @@ public class PlayerConfigurationListener implements Consumer<AsyncPlayerConfigur
     }
 
     @Override
-    public void accept(@NotNull AsyncPlayerConfigurationEvent event) {
+    public void accept(AsyncPlayerConfigurationEvent event) {
         Player player = event.getPlayer();
         if (MinecraftServer.getConnectionManager().getOnlinePlayers().size() >= maxPlayers) {
             player.kick(FULL_SERVER);
