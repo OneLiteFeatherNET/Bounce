@@ -44,8 +44,6 @@ public class PlayingPhase extends TimedPhase {
             case 3:
             case 2:
             case 1:
-                broadcast(Component.text("Works"));
-                // Bukkit.broadcastMessage(game.getPrefix() + "§cEs verbleiben noch §6" + getCurrentTime() + " §cSekunden");
                 break;
             default:
                 break;
@@ -61,7 +59,6 @@ public class PlayingPhase extends TimedPhase {
     public void onSkip() {
         EventDispatcher.call(new BounceGameFinishEvent(reason));
     }
-
 
     private void broadcast(Component component) {
         Audience.audience(getConnectionManager().getOnlinePlayers())
