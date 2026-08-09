@@ -145,7 +145,7 @@ public class Bounce implements ListenerHandling {
 
         if (profile == null) return;
 
-        profile.getJumpRunnable().cancel();
+        profile.stopJumpTask();
         this.scoreboard.removeViewer(player);
     }
 

@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.listener.game;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.entity.Player;
@@ -9,6 +8,7 @@ import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
+import net.theevilreaper.bounce.util.GameMessages;
 
 import java.util.function.Consumer;
 
@@ -26,17 +26,18 @@ public class GameFinishListener implements Consumer<BounceGameFinishEvent> {
         BounceProfile winnerProfile = profileService.getWinner();
 
         if (winnerProfile == null) {
-            profileService.clear(bounceProfile -> bounceProfile.getJumpRunnable().cancel());
+            profileService.clear(BounceProfile::stopJumpTask);
             return;
         }
 
         profileService.clear(profile -> {
-            profile.getJumpRunnable().cancel();
-            Player player = winnerProfile.getPlayer();
+            profile.stopJumpTask();
+            Player player = profile.getPlayer();
             AttributeHelper.resetJumpStrength(player);
             boolean isWinner = profile.equals(winnerProfile);
             profile.sendStats(isWinner);
-            var title = Title.title(player.getDisplayName(), Component.text("wons the game", NamedTextColor.GRAY), Title.DEFAULT_TIMES);
+            Component displayName = winnerProfile.getPlayer().getDisplayName();
+            Title title = Title.title(displayName, GameMessages.WON_COMPONENT, Title.DEFAULT_TIMES);
             player.sendTitlePart(TitlePart.TITLE, title.title());
             player.sendTitlePart(TitlePart.SUBTITLE, title.subtitle());
             player.sendTitlePart(TitlePart.TIMES, title.times());
