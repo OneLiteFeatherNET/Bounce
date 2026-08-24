@@ -7,6 +7,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.world.DimensionType;
+import net.onelitefeather.falco.anvil.FalcoAnvilLoader;
 import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.map.MapEntry;
@@ -17,9 +18,9 @@ import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushValueInventory;
 import net.theevilreaper.bounce.setup.util.SetupTags;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,12 +33,13 @@ public final class BounceData implements SetupData {
     private final Player player;
 
     private InstanceContainer instance;
+    private FalcoAnvilLoader loader;
     private GameMapBuilder gameMapBuilder;
     private MapOverviewInventory overviewInventory;
     private GroundViewInventory groundViewInventory;
     private PushValueInventory pushValueInventory;
 
-    public BounceData(@NotNull UUID owner, @NotNull MapEntry mapEntry) {
+    public BounceData(UUID owner, MapEntry mapEntry) {
         this.owner = owner;
         this.mapEntry = mapEntry;
         Player foundPlayer = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(owner);
@@ -50,7 +52,7 @@ public final class BounceData implements SetupData {
         this.loadData();
     }
 
-    public void teleport(@NotNull Player player) {
+    public void teleport(Player player) {
         Pos spawnPoint = this.gameMapBuilder.getSpawnOrDefault(SPAWN_POINT);
         player.setInstance(this.instance, spawnPoint);
     }
@@ -69,13 +71,18 @@ public final class BounceData implements SetupData {
     public void reset() {
         player.removeTag(SetupTags.SETUP_TAG);
         player.removeTag(SetupTags.PUSH_SLOT_INDEX);
-        if (this.overviewInventory != null) {
-            this.overviewInventory.unregister();
-        }
+        this.overviewInventory.unregister();
+        this.groundViewInventory.unregister();
+        this.pushValueInventory.unregister();
 
-        MinecraftServer.getSchedulerManager().scheduleNextTick(() ->
-                MinecraftServer.getInstanceManager().unregisterInstance(this.instance)
-        );
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
+           MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
+            try {
+                this.loader.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
@@ -101,13 +108,13 @@ public final class BounceData implements SetupData {
         this.pushValueInventory.register();
 
         this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
-        AnvilLoader anvilLoader = new AnvilLoader(this.mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
-        this.instance.setChunkLoader(anvilLoader);
+        this.loader = new FalcoAnvilLoader(this.mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
+        this.instance.setChunkLoader(this.loader);
 
         MinecraftServer.getInstanceManager().registerInstance(this.instance);
     }
 
-    public @Nullable GameMapBuilder getMapBuilder() {
+    public GameMapBuilder getMapBuilder() {
         return this.gameMapBuilder;
     }
 
@@ -135,22 +142,16 @@ public final class BounceData implements SetupData {
     }
 
     public void triggerGroundViewUpdate() {
-        if (this.groundViewInventory != null) {
-            this.groundViewInventory.invalidateDataLayout();
-            this.groundViewInventory.invalidateGroundValueInventory();
-        }
+        this.groundViewInventory.invalidateDataLayout();
+        this.groundViewInventory.invalidateGroundValueInventory();
     }
 
     public void triggerPushViewUpdate() {
-        if (this.groundViewInventory != null) {
-            this.groundViewInventory.invalidateDataLayout();
-        }
+        this.groundViewInventory.invalidateDataLayout();
     }
 
     public void triggerPushValueUpdate(int index) {
-        if (this.pushValueInventory != null) {
-            this.pushValueInventory.updateLayout(index);
-        }
+        this.pushValueInventory.updateLayout(index);
     }
 
     public void openPushValueInventory() {
@@ -172,7 +173,7 @@ public final class BounceData implements SetupData {
      * {@inheritDoc}
      */
     @Override
-    public @NotNull UUID getId() {
+    public UUID getId() {
         return this.owner;
     }
 }
