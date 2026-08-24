@@ -78,5 +78,9 @@ public class SetupInventorySwitchEvent implements PlayerEvent {
          * Switch to the overview of maps.
          */
         MAP_OVERVIEW,
+        /**
+         * Switch to the area selection view of the map.
+         */
+        AREA_VIEW,
     }
 }
