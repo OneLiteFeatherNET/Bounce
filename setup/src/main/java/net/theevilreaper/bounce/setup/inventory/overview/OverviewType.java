@@ -5,7 +5,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -23,7 +22,9 @@ public enum OverviewType {
     NAME("Map Name", Material.OAK_SIGN, NamedTextColor.YELLOW),
     BUILDER("Builder", Material.OAK_HANGING_SIGN, NamedTextColor.AQUA),
     SPAWN("Spawn Point", Material.COMPASS, NamedTextColor.RED),
-    GAME_SPAWN("Game Spawn Point", Material.RECOVERY_COMPASS, NamedTextColor.RED)
+    GAME_SPAWN("Game Spawn Point", Material.RECOVERY_COMPASS, NamedTextColor.RED),
+    AREA("Playing Area", Material.FILLED_MAP, NamedTextColor.GOLD),
+    SHUFFLE_INTERVAL("Reshuffle Interval", Material.CLOCK, NamedTextColor.LIGHT_PURPLE)
 
     ;
 
@@ -41,7 +42,7 @@ public enum OverviewType {
      * @param material the material associated with this overview type
      * @param color    the text color for this overview type
      */
-    OverviewType(@NotNull String name, @NotNull Material material, @NotNull TextColor color) {
+    OverviewType(String name, Material material, TextColor color) {
         this.name = name;
         this.material = material;
         this.color = color;
@@ -52,7 +53,7 @@ public enum OverviewType {
      *
      * @return the name of
      */
-    public @NotNull String getName() {
+    public String getName() {
         return name;
     }
 
@@ -61,7 +62,7 @@ public enum OverviewType {
      *
      * @return the material
      */
-    public @NotNull Material getMaterial() {
+    public Material getMaterial() {
         return material;
     }
 
@@ -70,7 +71,7 @@ public enum OverviewType {
      *
      * @return the text color
      */
-    public @NotNull TextColor getColor() {
+    public TextColor getColor() {
         return color;
     }
 
@@ -79,7 +80,7 @@ public enum OverviewType {
      *
      * @return the ItemStack for this overview type
      */
-    public @NotNull ItemStack getItem() {
+    public ItemStack getItem() {
         return itemCache.computeIfAbsent(this, type -> ItemStack.builder(type.getMaterial())
                 .customName(Component.text(type.getName(), type.getColor()))
                 .build());
@@ -90,11 +91,11 @@ public enum OverviewType {
      *
      * @return an array of all OverviewType values
      */
-    public static @NotNull OverviewType[] getValues() {
+    public static OverviewType[] getValues() {
         return VALUES;
     }
 
-    public static @NotNull OverviewType fromOrdinal(int ordinal) {
+    public static OverviewType fromOrdinal(int ordinal) {
         if (ordinal < 0 || ordinal >= VALUES.length) {
             throw new IndexOutOfBoundsException("Invalid ordinal for OverviewType: " + ordinal);
         }
