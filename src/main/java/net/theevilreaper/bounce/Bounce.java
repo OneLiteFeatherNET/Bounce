@@ -96,7 +96,7 @@ public class Bounce implements ListenerHandling {
 
     public void unload() {
         profileService.clear();
-        profileService = null;
+        this.mapProvider.cleanUp();
     }
 
     private void registerPhases() {
