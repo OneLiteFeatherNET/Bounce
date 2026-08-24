@@ -7,6 +7,8 @@ import net.onelitefeather.falco.anvil.FalcoAnvilLoader;
 import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.aves.map.provider.AbstractMapProvider;
+import net.theevilreaper.bounce.common.ground.Area;
+import net.theevilreaper.bounce.common.ground.AreaFiller;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.map.MapFilters;
 import net.theevilreaper.bounce.common.util.GsonUtil;
@@ -36,6 +38,7 @@ public class BounceMapProvider extends AbstractMapProvider {
             throw new  IllegalStateException("An error occurred while loading the map");
         }
 
+        GameMap gameMap = loadedDataMap.get();
         this.activeMap = loadedDataMap.get();
         this.falcoAnvilLoader = new FalcoAnvilLoader(mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.activeInstance.setChunkLoader(this.falcoAnvilLoader);
@@ -45,6 +48,11 @@ public class BounceMapProvider extends AbstractMapProvider {
             defaultClock.rate(0f);
         }
         MinecraftServer.getInstanceManager().registerInstance(this.activeInstance);
+
+        Area area = gameMap.getArea();
+        if (area != null) {
+            AreaFiller.fill(this.activeInstance, area);
+        }
     }
 
     @Override
