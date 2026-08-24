@@ -67,4 +67,54 @@ class PushEntryTest {
         entry2.setBlock(Block.STONE);
         assertNotEquals(entry1, entry2, "Entries with different blocks should not be equal");
     }
+
+    @Test
+    void testWeightDefaults() {
+        PushEntry ground = PushEntry.groundEntry(Block.SAND, 5);
+        assertEquals(1.0, ground.getWeight(), "Ground weight should default to 1.0");
+
+        PushEntry push = PushEntry.pushEntry(Block.SAND, 5);
+        assertEquals(0.05, push.getWeight(), "Push weight should default to 0.05");
+    }
+
+    @Test
+    void testWeightConstructorOverload() {
+        PushEntry pushEntry = PushEntry.pushEntry(Block.SAND, 5, 0.25);
+        assertEquals(0.25, pushEntry.getWeight());
+    }
+
+    @Test
+    void testIncrementWeight() {
+        PushEntry pushEntry = PushEntry.pushEntry(Block.SAND, 5, 0.05);
+        pushEntry.incrementWeight();
+        assertEquals(0.06, pushEntry.getWeight());
+    }
+
+    @Test
+    void testIncrementWeightMaxValue() {
+        PushEntry pushEntry = PushEntry.pushEntry(Block.SAND, 5, 1.0);
+        pushEntry.incrementWeight();
+        assertEquals(1.0, pushEntry.getWeight(), "Weight must not exceed 1.0");
+    }
+
+    @Test
+    void testDecrementWeight() {
+        PushEntry pushEntry = PushEntry.pushEntry(Block.SAND, 5, 0.05);
+        pushEntry.decrementWeight();
+        assertEquals(0.04, pushEntry.getWeight());
+    }
+
+    @Test
+    void testDecrementWeightNeverGoesNegative() {
+        PushEntry pushEntry = PushEntry.pushEntry(Block.SAND, 5, 0.0);
+        pushEntry.decrementWeight();
+        assertEquals(0.0, pushEntry.getWeight(), "Weight of 0 must stay 0, it means the entry is never picked");
+    }
+
+    @Test
+    void testSetWeight() {
+        PushEntry pushEntry = PushEntry.pushEntry(Block.SAND, 5);
+        pushEntry.setWeight(0.75);
+        assertEquals(0.75, pushEntry.getWeight());
+    }
 }
