@@ -24,9 +24,15 @@ public enum OverviewType {
     SPAWN("Spawn Point", Material.COMPASS, NamedTextColor.RED),
     GAME_SPAWN("Game Spawn Point", Material.RECOVERY_COMPASS, NamedTextColor.RED),
     AREA("Playing Area", Material.FILLED_MAP, NamedTextColor.GOLD),
-    SHUFFLE_INTERVAL("Reshuffle Interval", Material.CLOCK, NamedTextColor.LIGHT_PURPLE)
+    SHUFFLE_INTERVAL("Reshuffle Interval", Material.CLOCK, NamedTextColor.LIGHT_PURPLE),
+    LEFT_AREA_CORNER("Left Corner", Material.GREEN_WOOL, NamedTextColor.AQUA),
+    RIGHT_AREA_CORNER("Right Corner", Material.RED_WOOL, NamedTextColor.AQUA)
 
     ;
+
+    public static final OverviewType[] MAP_OVERVIEW_TYPES = {
+            NAME, BUILDER, SPAWN, GAME_SPAWN, AREA, SHUFFLE_INTERVAL
+    };
 
     private final String name;
     private final Material material;

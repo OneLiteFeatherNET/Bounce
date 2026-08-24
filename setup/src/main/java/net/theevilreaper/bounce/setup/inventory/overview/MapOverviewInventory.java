@@ -46,7 +46,7 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
             dataLayout.blank(DATA_SLOT);
 
-            OverviewType[] overviewTypes = OverviewType.getValues();
+            OverviewType[] overviewTypes = OverviewType.MAP_OVERVIEW_TYPES;
 
             for (int i = 0; i < overviewTypes.length && i < DATA_SLOT.length; i++) {
                 OverviewType currentType = overviewTypes[i];
@@ -71,6 +71,7 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
             case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
             case AREA -> new AreaOverviewSlot(type, builder.getArea());
             case SHUFFLE_INTERVAL -> new ShuffleIntervalOverviewSlot(type, builder.getShuffleIntervalTicks());
+            default -> throw new IllegalArgumentException("Unsupported overview type: " + type);
         };
     }
 }
