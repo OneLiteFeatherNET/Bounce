@@ -9,7 +9,6 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Instance;
 import net.onelitefeather.guira.SetupDataService;
 import net.onelitefeather.guira.event.SetupFinishEvent;
-import net.theevilreaper.aves.map.provider.MapProvider;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
@@ -50,7 +49,7 @@ import static net.theevilreaper.bounce.setup.event.AbstractStateNotifyEvent.*;
 
 public final class BounceSetup implements ListenerHandling {
 
-    private final MapProvider mapProvider;
+    private final SetupMapProvider mapProvider;
     private final SetupDataService setupDataService;
     private final InventoryService inventoryService;
     private final DialogRegistry dialogRegistry;
@@ -75,6 +74,7 @@ public final class BounceSetup implements ListenerHandling {
 
     private void onShutdown() {
         this.inventoryService.cleanup();
+        this.mapProvider.cleanUp();
     }
 
     private void registerListener(@NotNull EventNode<Event> node) {
