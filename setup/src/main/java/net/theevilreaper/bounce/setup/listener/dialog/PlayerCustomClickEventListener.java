@@ -60,10 +60,43 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
                 case AuthorInputDialog ignored -> handleAuthorSet(data, dialogData);
                 case DeleteDialog ignored -> this.handleDataDelete(data, dialogData);
                 case ValueInputDialog ignored -> this.handleValueUpdate(player, data, dialogData);
+                case WeightInputDialog ignored -> this.handleWeightUpdate(player, data, dialogData);
+                case ShuffleIntervalInputDialog ignored -> this.handleShuffleIntervalSet(data, dialogData);
                 default ->
                         throw new IllegalStateException("Unexpected dialog type: " + dialogTemplate.getClass().getCanonicalName());
             }
         });
+    }
+
+    /**
+     * Handles setting the reshuffle interval based on the dialog data provided.
+     * @param data the BounceData instance containing the map builder
+     * @param dialogData the dialog data containing the interval ticks to set
+     */
+    private void handleShuffleIntervalSet(@NotNull BounceData data, @NotNull CompoundBinaryTag dialogData) {
+        int ticks = (int) dialogData.getFloat("interval_ticks", 100f);
+        if (ticks < 20) ticks = 20;
+        data.getMapBuilder().shuffleIntervalTicks(ticks);
+        data.triggerUpdate();
+    }
+
+    /**
+     * Handles the update of a weight/chance based on the dialog data provided.
+     * @param player the player who triggered the dialog
+     * @param data the BounceData instance containing the map builder
+     * @param dialogData the dialog data containing the weight percentage to update
+     */
+    private void handleWeightUpdate(@NotNull Player player, @NotNull BounceData data, @NotNull CompoundBinaryTag dialogData) {
+        float percentage = dialogData.getFloat("weight_percentage", 5.0f);
+        double weight = Math.max(0.0, Math.min(1.0, Math.round((percentage / 100.0) * 1000.0) / 1000.0));
+        int valueIndex = player.hasTag(SetupTags.PUSH_SLOT_INDEX) ? player.getTag(SetupTags.PUSH_SLOT_INDEX) : 0;
+        player.removeTag(SetupTags.PUSH_SLOT_INDEX);
+        data.getMapBuilder().getPushDataBuilder().getPushValues().get(valueIndex).setWeight(weight);
+        if (valueIndex == 0) {
+            data.triggerGroundViewUpdate();
+        } else {
+            data.triggerPushValueUpdate(valueIndex);
+        }
     }
 
     /**

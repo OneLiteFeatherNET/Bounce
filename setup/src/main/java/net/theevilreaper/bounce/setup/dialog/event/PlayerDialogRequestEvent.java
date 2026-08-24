@@ -58,7 +58,15 @@ public class PlayerDialogRequestEvent implements PlayerEvent {
         /**
          * The target for the dialog request is to set up the block bounce.
          */
-        SETUP_BLOCK_BOUNCE
+        SETUP_BLOCK_BOUNCE,
+        /**
+         * The target for the dialog request is to set up the block weight/chance.
+         */
+        SETUP_BLOCK_WEIGHT,
+        /**
+         * The target for the dialog request is to set up the reshuffle interval.
+         */
+        SETUP_SHUFFLE_INTERVAL
 
         ;
     }
