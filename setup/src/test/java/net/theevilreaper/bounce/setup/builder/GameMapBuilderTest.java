@@ -1,7 +1,10 @@
 package net.theevilreaper.bounce.setup.builder;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.theevilreaper.bounce.common.ground.Area;
+import net.theevilreaper.bounce.common.ground.GroundArea;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.common.push.PushEntry;
@@ -71,5 +74,36 @@ class GameMapBuilderTest {
         // TODO: Fix me later
         //assertTrue(anotherBuilder.getAuthors().contains("Test"), "Authors should contain 'Test'");
         assertEquals(4, anotherBuilder.getPushDataBuilder().getPushValues().size(), "Push data should contain four entries");
+    }
+
+    @Test
+    void testNewBuilderHasNoAreaAndDefaultInterval() {
+        GameMapBuilder builder = new GameMapBuilder();
+        assertNull(builder.getArea());
+        assertTrue(builder.getShuffleIntervalTicks() > 0, "A newly created map should have a sane default interval");
+    }
+
+    @Test
+    void testAreaAndShuffleIntervalRoundTripThroughBuild() {
+        GameMapBuilder builder = new GameMapBuilder();
+        Area area = new GroundArea(Vec.ZERO, new Vec(5, 0, 5), Block.GLASS, PushData.builder().build());
+
+        builder.area(area).shuffleIntervalTicks(60);
+
+        assertEquals(area, builder.getArea());
+        assertEquals(60, builder.getShuffleIntervalTicks());
+
+        GameMap built = builder.build();
+        assertEquals(area, built.getArea());
+        assertEquals(60, built.getShuffleIntervalTicks());
+    }
+
+    @Test
+    void testReloadingExistingMapWithoutAreaKeepsDefaultInterval() {
+        GameMap gameMap = new GameMapBuilder().build();
+        GameMapBuilder reloaded = new GameMapBuilder(gameMap);
+
+        assertNull(reloaded.getArea());
+        assertTrue(reloaded.getShuffleIntervalTicks() > 0);
     }
 }

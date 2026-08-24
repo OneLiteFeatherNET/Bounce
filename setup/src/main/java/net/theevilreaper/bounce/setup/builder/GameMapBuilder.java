@@ -3,37 +3,48 @@ package net.theevilreaper.bounce.setup.builder;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.aves.map.BaseMapBuilder;
+import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class GameMapBuilder extends BaseMapBuilder {
 
+    private static final int DEFAULT_SHUFFLE_INTERVAL_TICKS = 100;
+
     private final PushData.Builder pushDataBuilder;
     private Pos gameSpawn;
+    private @Nullable Area area;
+    private int shuffleIntervalTicks;
 
     public GameMapBuilder() {
         super();
+        this.shuffleIntervalTicks = DEFAULT_SHUFFLE_INTERVAL_TICKS;
         this.pushDataBuilder = PushData.builder();
         this.pushDataBuilder
-                .add(PushEntry.groundEntry(Block.GLASS, 1))
-                .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1))
-                .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1))
-                .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1));
+                .add(PushEntry.groundEntry(Block.GLASS, 1, 1.0))
+                .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1, 0.05))
+                .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1, 0.03))
+                .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1, 0.02));
     }
 
     public GameMapBuilder(@NotNull GameMap gameMap) {
         super(gameMap);
         this.gameSpawn = gameMap.getGameSpawn();
+        this.area = gameMap.getArea();
+        this.shuffleIntervalTicks = gameMap.getShuffleIntervalTicks() > 0
+                ? gameMap.getShuffleIntervalTicks()
+                : DEFAULT_SHUFFLE_INTERVAL_TICKS;
 
         if (gameMap.getPushData() == null) {
             this.pushDataBuilder = PushData.builder();
             this.pushDataBuilder
-                    .add(PushEntry.groundEntry(Block.GLASS, 1))
-                    .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1))
-                    .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1))
-                    .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1));
+                    .add(PushEntry.groundEntry(Block.GLASS, 1, 1.0))
+                    .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1, 0.05))
+                    .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1, 0.03))
+                    .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1, 0.02));
         } else{
             this.pushDataBuilder = PushData.builder(gameMap.getPushData());
         }
@@ -63,13 +74,35 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
+     * Sets the ground area which gets dynamically filled.
+     *
+     * @param area the area, or {@code null} to disable dynamic filling
+     * @return this builder instance for chaining
+     */
+    public @NotNull GameMapBuilder area(@Nullable Area area) {
+        this.area = area;
+        return this;
+    }
+
+    /**
+     * Sets the amount of ticks between two runtime reshuffles of the area.
+     *
+     * @param shuffleIntervalTicks the interval in ticks
+     * @return this builder instance for chaining
+     */
+    public @NotNull GameMapBuilder shuffleIntervalTicks(int shuffleIntervalTicks) {
+        this.shuffleIntervalTicks = shuffleIntervalTicks;
+        return this;
+    }
+
+    /**
      * Builds a new {@link GameMap} instance with the current properties.
      *
      * @return a new GameMap instance
      */
     @Override
     public @NotNull GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders);
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks);
     }
 
     /**
@@ -79,6 +112,24 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     public Pos getGameSpawn() {
         return gameSpawn;
+    }
+
+    /**
+     * Returns the ground area which gets dynamically filled.
+     *
+     * @return the area, or {@code null}
+     */
+    public @Nullable Area getArea() {
+        return area;
+    }
+
+    /**
+     * Returns the amount of ticks between two runtime reshuffles of the area.
+     *
+     * @return the interval in ticks
+     */
+    public int getShuffleIntervalTicks() {
+        return shuffleIntervalTicks;
     }
 
     /**
