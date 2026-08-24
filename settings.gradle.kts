@@ -29,8 +29,12 @@ dependencyResolutionManagement {
             version("pvp", "2026.05.30-26.1.1")
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.18")
+            version("falco", "2.1.0")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
+
+            library("falco.bom", "net.onelitefeather", "falco-bom").versionRef("falco")
+            library("falco.anvil", "net.onelitefeather", "falco-anvil").withoutVersion()
 
             library("slf4j.api", "org.slf4j", "slf4j-api").versionRef("slf4j")
             library("pvp", "io.github.togar2", "MinestomPvP").versionRef("pvp")
