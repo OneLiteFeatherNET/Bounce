@@ -20,7 +20,7 @@ import net.theevilreaper.bounce.setup.inventory.slot.MaterialSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -36,10 +36,10 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
             Component.empty()
     );
 
-    private GroundValueInventory groundValueInventory;
+    private @Nullable GroundValueInventory groundValueInventory;
     private final GameMapBuilder gameMapBuilder;
 
-    public GroundViewInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder) {
+    public GroundViewInventory(Player player, GameMapBuilder gameMapBuilder) {
         super(Component.text("Setup playing area"), InventoryType.CHEST_3_ROW, player);
         this.gameMapBuilder = gameMapBuilder;
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -81,7 +81,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
      * @param stack     the item stack that was clicked
      * @param result    the consumer to handle the click result
      */
-    private void handlePushButton(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    private void handlePushButton(Player player, int slot, Click clickType, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         if (!stack.hasTag(PUSH_SLOT_INDEX)) return;
 
@@ -100,7 +100,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
      * @param stack     the item stack that was clicked
      * @param result    the consumer to handle the click result
      */
-    private void handleGroundButton(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    private void handleGroundButton(Player player, int slot, Click clickType, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         player.closeInventory();
 
@@ -111,7 +111,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         groundValueInventory.open();
     }
 
-    private @NotNull ItemStack getSlotItem(@NotNull Material material, int slotId) {
+    private ItemStack getSlotItem(Material material, int slotId) {
         return ItemStack.builder(material)
                 .customName(Component.translatable(material.translationKey(), NamedTextColor.AQUA))
                 .lore(PUSH_LORE)
