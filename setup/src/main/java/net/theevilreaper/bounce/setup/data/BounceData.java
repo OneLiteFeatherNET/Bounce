@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.world.DimensionType;
 import net.onelitefeather.falco.anvil.FalcoAnvilLoader;
 import net.onelitefeather.guira.data.SetupData;
@@ -14,11 +13,11 @@ import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.inventory.ground.AreaViewInventory;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushValueInventory;
 import net.theevilreaper.bounce.setup.util.SetupTags;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,6 +37,7 @@ public final class BounceData implements SetupData {
     private MapOverviewInventory overviewInventory;
     private GroundViewInventory groundViewInventory;
     private PushValueInventory pushValueInventory;
+    private AreaViewInventory areaViewInventory;
 
     public BounceData(UUID owner, MapEntry mapEntry) {
         this.owner = owner;
@@ -107,6 +107,9 @@ public final class BounceData implements SetupData {
         this.pushValueInventory = new PushValueInventory(this.player, this.gameMapBuilder);
         this.pushValueInventory.register();
 
+        this.areaViewInventory = new AreaViewInventory(this.player, this.gameMapBuilder);
+        this.areaViewInventory.register();
+
         this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
         this.loader = new FalcoAnvilLoader(this.mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.instance.setChunkLoader(this.loader);
@@ -167,6 +170,13 @@ public final class BounceData implements SetupData {
 
     public void openGroundBlockView() {
         this.groundViewInventory.openGroundBlockValueInventory();
+    }
+
+    /**
+     * Opens the {@link AreaViewInventory} for the player which owns the data.
+     */
+    public void openAreaView() {
+        this.areaViewInventory.open();
     }
 
     /**
