@@ -54,7 +54,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
             dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
             PushEntry pushEntry = this.gameMapBuilder.getPushDataBuilder().getPushValues().get(index);
 
-            ItemStack stack = ItemStack.builder(pushEntry.getBlock().registry().material())
+            ItemStack stack = ItemStack.builder(pushEntry.getBlock().material())
                     .build();
 
             dataLayout.setItem(BLOCK_SLOT, stack, this::handleBlockClick);

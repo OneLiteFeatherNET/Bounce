@@ -45,7 +45,7 @@ public final class PushBlockInventory extends GlobalInventoryBuilder {
         for (int i = 0; i < itemSlots.length && i < allowedPushBlocks.size(); i++) {
             Material currentMaterial = allowedPushBlocks.get(i);
             ItemStack stack = ItemStack.builder(currentMaterial)
-                    .customName(Component.translatable(currentMaterial.registry().translationKey(), NamedTextColor.AQUA))
+                    .customName(Component.translatable(currentMaterial.translationKey(), NamedTextColor.AQUA))
                     .build();
             layout.setItem(itemSlots[i], stack, this::handleClick);
         }

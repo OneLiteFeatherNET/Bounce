@@ -57,13 +57,13 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
             dataLayout.blank(PUSH_SLOTS);
 
-            dataLayout.setItem(10, new MaterialSlot(gameMapBuilder.getGroundBlockEntry().getBlock().registry().material()), this::handleGroundButton);
+            dataLayout.setItem(10, new MaterialSlot(gameMapBuilder.getGroundBlockEntry().getBlock().material()), this::handleGroundButton);
             List<PushEntry> pushEntries = gameMapBuilder.getPushDataBuilder().getPushValues();
 
             for (int i = 1; i < pushEntries.size(); i++) {
                 int inventorySlot = PUSH_SLOTS[i - 1];
                 PushEntry pushEntry = pushEntries.get(i);
-                Material material = pushEntry.getBlock().registry().material();
+                Material material = pushEntry.getBlock().material();
                 ItemStack itemStack = getSlotItem(material, i);
                 dataLayout.setItem(inventorySlot, new MaterialSlot(itemStack), this::handlePushButton);
             }
@@ -113,7 +113,7 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
 
     private @NotNull ItemStack getSlotItem(@NotNull Material material, int slotId) {
         return ItemStack.builder(material)
-                .customName(Component.translatable(material.registry().translationKey(), NamedTextColor.AQUA))
+                .customName(Component.translatable(material.translationKey(), NamedTextColor.AQUA))
                 .lore(PUSH_LORE)
                 .set(PUSH_SLOT_INDEX, slotId)
                 .build();
