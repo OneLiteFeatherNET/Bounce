@@ -40,7 +40,7 @@ public class GroundBlockOverviewInventory extends GlobalInventoryBuilder {
         for (int i = 0; i < slots.length && iterator.hasNext(); i++) {
             Material currentMaterial = iterator.next();
             ItemStack stack = ItemStack.builder(currentMaterial)
-                    .customName(Component.translatable(currentMaterial.registry().translationKey(), NamedTextColor.AQUA))
+                    .customName(Component.translatable(currentMaterial.translationKey(), NamedTextColor.AQUA))
                     .build();
             layout.setItem(slots[i], stack, this::handleClick);
         }

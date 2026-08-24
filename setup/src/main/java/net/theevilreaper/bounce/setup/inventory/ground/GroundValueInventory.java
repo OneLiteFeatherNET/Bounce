@@ -45,7 +45,7 @@ public class GroundValueInventory extends PersonalInventoryBuilder {
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
             dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
-            Material material = pushEntry.getBlock().registry().material();
+            Material material = pushEntry.getBlock().material();
             dataLayout.setItem(BLOCK_SLOT, ItemStack.builder(material).build(), this::handleBlockClick);
             dataLayout.setItem(VALUE_SLOT, LoreHelper.getPushValue(pushEntry), this::handlePushButtonClick);
             return dataLayout;
