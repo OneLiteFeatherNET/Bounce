@@ -6,7 +6,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.push.PushEntry;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +35,7 @@ public final class AreaFiller {
      * @param instance the instance to place blocks in
      * @param area     the area to fill
      */
-    public static void fill(@NotNull Instance instance, @NotNull Area area) {
+    public static void fill(Instance instance, Area area) {
         area.calculatePositions(instance);
 
         List<PushEntry> entries = area.data().push();
@@ -54,7 +53,7 @@ public final class AreaFiller {
      * @param percentage the fraction (0.0-1.0) of positions to re-roll
      * @param players    players whose current standing position must not be touched
      */
-    public static void reshuffle(@NotNull Instance instance, @NotNull Area area, double percentage, @NotNull Collection<Player> players) {
+    public static void reshuffle(Instance instance, Area area, double percentage, Collection<Player> players) {
         List<Vec> positions = area.positions();
         if (positions.isEmpty()) return;
 
@@ -80,12 +79,12 @@ public final class AreaFiller {
         }
     }
 
-    private static @NotNull Block pickWeightedBlock(@NotNull List<PushEntry> entries, @NotNull Block fallback) {
+    private static Block pickWeightedBlock(List<PushEntry> entries, Block fallback) {
         double roll = ThreadLocalRandom.current().nextDouble(); // 0.0 to 1.0
         double cumulative = 0.0;
         for (PushEntry entry : entries) {
             if (entry.isGround()) continue;
-            double p = Math.max(0.0, Math.min(1.0, entry.getWeight()));
+            double p = Math.clamp(entry.getWeight(), 0.0, 1.0);
             cumulative += p;
             if (roll < cumulative) {
                 return entry.getBlock();

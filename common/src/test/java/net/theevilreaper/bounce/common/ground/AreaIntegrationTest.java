@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.common.ground;
 
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
@@ -21,7 +20,6 @@ class AreaIntegrationTest {
     @Test
     void testCalculatePositionsOnlyIncludesMatchingGroundBlock(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
 
         instance.setBlock(0, 0, 0, Block.AMETHYST_BLOCK);
         instance.setBlock(1, 0, 0, Block.AMETHYST_BLOCK);
@@ -45,7 +43,6 @@ class AreaIntegrationTest {
     @Test
     void testCalculatePositionsIsIdempotent(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
         instance.setBlock(0, 0, 0, Block.GLASS);
 
         Area area = new GroundArea(new Vec(0, 0, 0), new Vec(0, 0, 0), Block.GLASS, new PushData(List.of()));
@@ -62,13 +59,13 @@ class AreaIntegrationTest {
     @Test
     void testPositionsIsUnmodifiable(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
         instance.setBlock(0, 0, 0, Block.GLASS);
 
         Area area = new GroundArea(new Vec(0, 0, 0), new Vec(0, 0, 0), Block.GLASS, new PushData(List.of()));
         area.calculatePositions(instance);
 
-        assertThrows(UnsupportedOperationException.class, () -> area.positions().add(new Vec(9, 9, 9)));
+        Vec vec = new Vec(9, 9, 9);
+        assertThrows(UnsupportedOperationException.class, () -> area.positions().add(vec));
 
         env.destroyInstance(instance, true);
     }
@@ -76,7 +73,6 @@ class AreaIntegrationTest {
     @Test
     void testCalculatePositionsLoadsChunksInArea(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
 
         // Coordinates spanning multiple chunks (e.g. chunk -2, 3 to chunk -1, 4)
         Vec min = new Vec(-25, 60, -25);
@@ -91,7 +87,6 @@ class AreaIntegrationTest {
     @Test
     void testCalculatePositionsIncludesConfiguredPushBlocks(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
 
         instance.setBlock(0, 0, 0, Block.AMETHYST_BLOCK); // ground block
         instance.setBlock(1, 0, 0, Block.GOLD_BLOCK);      // existing push block
@@ -116,7 +111,6 @@ class AreaIntegrationTest {
     @Test
     void testCalculatePositionsScansLayerBelowWhenStandingOnPlatform(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
 
         // Platform block is placed at Y=63, air at Y=64
         instance.setBlock(0, 63, 0, Block.GLASS);

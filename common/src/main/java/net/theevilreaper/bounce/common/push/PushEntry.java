@@ -154,7 +154,7 @@ public final class PushEntry {
     }
 
     private static double clampWeight(double w) {
-        return Math.max(0.0, Math.min(1.0, Math.round(w * 100.0) / 100.0));
+        return Math.clamp(Math.round(w * 100.0) / 100.0, 0.0, 1.0);
     }
 
     /**

@@ -22,7 +22,6 @@ class AreaFillerIntegrationTest {
     @Test
     void testFillFallsBackToGroundBlockWhenPushDataEmpty(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
         for (int x = 0; x < 5; x++) {
             instance.setBlock(x, 0, 0, Block.GLASS);
         }
@@ -41,7 +40,6 @@ class AreaFillerIntegrationTest {
     @Test
     void testFillNeverPicksAZeroWeightEntry(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
         for (int x = 0; x < 30; x++) {
             instance.setBlock(x, 0, 0, Block.GLASS);
         }
@@ -64,7 +62,6 @@ class AreaFillerIntegrationTest {
     @Test
     void testFillDistributionRoughlyFollowsWeights(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
-        Player player = env.createPlayer(instance);
         for (int x = 0; x < 100; x++) {
             instance.setBlock(x, 0, 0, Block.GLASS);
         }

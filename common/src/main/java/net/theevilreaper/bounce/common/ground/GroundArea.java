@@ -5,7 +5,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.bounce.common.push.PushData;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ public final class GroundArea implements Area {
      * {@inheritDoc}
      */
     @Override
-    public void calculatePositions(@NotNull Instance instance) {
+    public void calculatePositions(Instance instance) {
         // Avoid double calculations
         if (!this.positions.isEmpty()) return;
 
@@ -84,7 +83,7 @@ public final class GroundArea implements Area {
         LOGGER.info("Calculated positions for area: {} to {} with {} positions", min, max, positions.size());
     }
 
-    private boolean isAreaBlock(@NotNull Block block) {
+    private boolean isAreaBlock(Block block) {
         if (block.compare(groundBlock) || block.compare(Block.REDSTONE_BLOCK)) {
             return true;
         }
