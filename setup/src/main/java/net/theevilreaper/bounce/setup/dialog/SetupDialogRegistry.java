@@ -41,6 +41,7 @@ public class SetupDialogRegistry implements DialogRegistry {
         this.registerDialog(new ValueInputDialog());
         this.registerDialog(new WeightInputDialog());
         this.registerDialog(new ShuffleIntervalInputDialog());
+        this.registerDialog(new ReshufflePercentageInputDialog());
     }
 
     private void registerDialog(@NotNull DialogTemplate<?> dialog) {

@@ -35,6 +35,7 @@ public final class PlayerDialogRequestListener implements Consumer<PlayerDialogR
             case Target.SETUP_BLOCK_BOUNCE -> dialogTemplate = dialogRegistry.get(ValueInputDialog.DIALOG_KEY);
             case Target.SETUP_BLOCK_WEIGHT -> dialogTemplate = dialogRegistry.get(net.theevilreaper.bounce.setup.dialog.type.WeightInputDialog.DIALOG_KEY);
             case Target.SETUP_SHUFFLE_INTERVAL -> dialogTemplate = dialogRegistry.get(net.theevilreaper.bounce.setup.dialog.type.ShuffleIntervalInputDialog.DIALOG_KEY);
+            case Target.SETUP_RESHUFFLE_PERCENTAGE -> dialogTemplate = dialogRegistry.get(net.theevilreaper.bounce.setup.dialog.type.ReshufflePercentageInputDialog.DIALOG_KEY);
             default -> throw new IllegalArgumentException("Unknown target: " + target);
         }
 

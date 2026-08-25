@@ -62,6 +62,7 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
                 case ValueInputDialog ignored -> this.handleValueUpdate(player, data, dialogData);
                 case WeightInputDialog ignored -> this.handleWeightUpdate(player, data, dialogData);
                 case ShuffleIntervalInputDialog ignored -> this.handleShuffleIntervalSet(data, dialogData);
+                case ReshufflePercentageInputDialog ignored -> this.handleReshufflePercentageSet(data, dialogData);
                 default ->
                         throw new IllegalStateException("Unexpected dialog type: " + dialogTemplate.getClass().getCanonicalName());
             }
@@ -77,7 +78,19 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
         int ticks = (int) dialogData.getFloat("interval_ticks", 100f);
         if (ticks < 20) ticks = 20;
         data.getMapBuilder().shuffleIntervalTicks(ticks);
-        data.triggerUpdate();
+        data.triggerAreaViewUpdate();
+    }
+
+    /**
+     * Handles setting the reshuffle percentage based on the dialog data provided.
+     * @param data the BounceData instance containing the map builder
+     * @param dialogData the dialog data containing the reshuffle percentage to set
+     */
+    private void handleReshufflePercentageSet(@NotNull BounceData data, @NotNull CompoundBinaryTag dialogData) {
+        float percentage = dialogData.getFloat("reshuffle_percentage", 10.0f);
+        double reshufflePercentage = Math.max(0.0, Math.min(1.0, percentage / 100.0));
+        data.getMapBuilder().reshufflePercentage(reshufflePercentage);
+        data.triggerAreaViewUpdate();
     }
 
     /**

@@ -66,7 +66,11 @@ public class PlayerDialogRequestEvent implements PlayerEvent {
         /**
          * The target for the dialog request is to set up the reshuffle interval.
          */
-        SETUP_SHUFFLE_INTERVAL
+        SETUP_SHUFFLE_INTERVAL,
+        /**
+         * The target for the dialog request is to set up the reshuffle percentage.
+         */
+        SETUP_RESHUFFLE_PERCENTAGE
 
         ;
     }
