@@ -9,12 +9,14 @@ import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.inventory.area.AreaViewType;
+import net.theevilreaper.bounce.setup.inventory.slot.AbstractDataSlot;
+import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.function.Consumer;
 
-public final class ReshufflePercentageSlot extends AbstractAreaSlot {
+public final class ReshufflePercentageSlot extends AbstractDataSlot<AreaViewType> {
 
     private final double reshufflePercentage;
 
@@ -34,7 +36,7 @@ public final class ReshufflePercentageSlot extends AbstractAreaSlot {
                 Component.empty(),
                 Component.text(String.format(Locale.ROOT, "%.1f%%", percentage), NamedTextColor.YELLOW),
                 Component.empty(),
-                CLICK_TO_EDIT,
+                SetupMessages.CLICK_TO_EDIT,
                 Component.empty()
         ).build();
     }

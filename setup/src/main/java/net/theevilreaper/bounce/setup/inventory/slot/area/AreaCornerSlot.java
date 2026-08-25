@@ -8,6 +8,7 @@ import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.bounce.setup.inventory.area.AreaViewType;
+import net.theevilreaper.bounce.setup.inventory.slot.AbstractDataSlot;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
  * Displays one corner of the ground area (see {@link AreaViewType#LEFT_AREA_CORNER}/{@link AreaViewType#RIGHT_AREA_CORNER})
  * and captures the player's current position for it on left-click.
  */
-public final class AreaCornerSlot extends AbstractAreaSlot {
+public final class AreaCornerSlot extends AbstractDataSlot<AreaViewType> {
 
     private final @Nullable Vec position;
     private final Consumer<Player> onSet;

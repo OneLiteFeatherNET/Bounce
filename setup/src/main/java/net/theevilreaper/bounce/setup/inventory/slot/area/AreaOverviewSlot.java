@@ -12,12 +12,13 @@ import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import net.theevilreaper.bounce.setup.inventory.slot.AbstractDataSlot;
+import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public final class AreaOverviewSlot extends AbstractDataSlot {
+public final class AreaOverviewSlot extends AbstractDataSlot<OverviewType> {
 
     private final @Nullable Area area;
 
@@ -42,7 +43,7 @@ public final class AreaOverviewSlot extends AbstractDataSlot {
                 Component.empty(),
                 Component.text("Configured", type.getColor()),
                 Component.empty(),
-                Component.text("Click to edit", NamedTextColor.GRAY),
+                SetupMessages.CLICK_TO_EDIT,
                 Component.empty()
         ).build();
     }
