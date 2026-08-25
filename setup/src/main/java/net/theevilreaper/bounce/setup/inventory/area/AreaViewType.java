@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.theevilreaper.bounce.setup.inventory.DataType;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * The {@link AreaViewType} enum represents different types of items that can be displayed in the
  * {@link AreaViewInventory}.
  */
-public enum AreaViewType {
+public enum AreaViewType implements DataType {
 
     LEFT_AREA_CORNER("Left Corner", Material.GREEN_WOOL, NamedTextColor.AQUA),
     RIGHT_AREA_CORNER("Right Corner", Material.RED_WOOL, NamedTextColor.AQUA),
@@ -47,6 +48,7 @@ public enum AreaViewType {
      *
      * @return the name of
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -56,6 +58,7 @@ public enum AreaViewType {
      *
      * @return the material
      */
+    @Override
     public Material getMaterial() {
         return material;
     }
@@ -65,6 +68,7 @@ public enum AreaViewType {
      *
      * @return the text color
      */
+    @Override
     public TextColor getColor() {
         return color;
     }
@@ -74,25 +78,10 @@ public enum AreaViewType {
      *
      * @return the ItemStack for this area view type
      */
+    @Override
     public ItemStack getItem() {
         return itemCache.computeIfAbsent(this, type -> ItemStack.builder(type.getMaterial())
                 .customName(Component.text(type.getName(), type.getColor()))
                 .build());
-    }
-
-    /**
-     * Gets all available area view types.
-     *
-     * @return an array of all AreaViewType values
-     */
-    public static AreaViewType[] getValues() {
-        return VALUES;
-    }
-
-    public static AreaViewType fromOrdinal(int ordinal) {
-        if (ordinal < 0 || ordinal >= VALUES.length) {
-            throw new IndexOutOfBoundsException("Invalid ordinal for AreaViewType: " + ordinal);
-        }
-        return VALUES[ordinal];
     }
 }

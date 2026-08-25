@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.theevilreaper.bounce.setup.inventory.DataType;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @version 1.0.0
  * @since 0.1.0
  */
-public enum OverviewType {
+public enum OverviewType implements DataType {
 
     NAME("Map Name", Material.OAK_SIGN, NamedTextColor.YELLOW),
     BUILDER("Builder", Material.OAK_HANGING_SIGN, NamedTextColor.AQUA),
@@ -52,6 +53,7 @@ public enum OverviewType {
      *
      * @return the name of
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -61,6 +63,7 @@ public enum OverviewType {
      *
      * @return the material
      */
+    @Override
     public Material getMaterial() {
         return material;
     }
@@ -70,6 +73,7 @@ public enum OverviewType {
      *
      * @return the text color
      */
+    @Override
     public TextColor getColor() {
         return color;
     }
@@ -79,6 +83,7 @@ public enum OverviewType {
      *
      * @return the ItemStack for this overview type
      */
+    @Override
     public ItemStack getItem() {
         return itemCache.computeIfAbsent(this, type -> ItemStack.builder(type.getMaterial())
                 .customName(Component.text(type.getName(), type.getColor()))

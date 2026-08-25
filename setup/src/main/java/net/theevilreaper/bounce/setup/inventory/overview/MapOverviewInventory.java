@@ -64,8 +64,8 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
      */
     private ISlot getOverViewItem(OverviewType type) {
         return switch (type) {
-            case SPAWN -> new PositionSlot(type, this.builder.getSpawn());
-            case GAME_SPAWN -> new PositionSlot(type, this.builder.getGameSpawn());
+            case SPAWN -> new PositionSlot<>(type, this.builder.getSpawn());
+            case GAME_SPAWN -> new PositionSlot<>(type, this.builder.getGameSpawn());
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
             case AREA -> new AreaOverviewSlot(type, builder.getArea());
