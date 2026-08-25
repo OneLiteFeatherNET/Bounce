@@ -10,6 +10,8 @@ import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameMapBuilderTest {
@@ -150,5 +152,36 @@ class GameMapBuilderTest {
 
         assertNull(reloaded.getPos1());
         assertNull(reloaded.getPos2());
+    }
+
+    @Test
+    void testNewBuilderIsNotReadyToSave() {
+        GameMapBuilder builder = new GameMapBuilder();
+
+        assertFalse(builder.isReadyToSave());
+        assertEquals(List.of("Name", "Spawn", "Game Spawn", "Area"), builder.getMissingFieldNames());
+    }
+
+    @Test
+    void testBuilderIsReadyToSaveOnceAllRequiredFieldsAreSet() {
+        GameMapBuilder builder = new GameMapBuilder();
+        Area area = new GroundArea(Vec.ZERO, new Vec(5, 0, 5), Block.GLASS, PushData.builder().build());
+
+        builder.name("Test Map");
+        builder.spawn(new Pos(1, 2, 3));
+        builder.gameSpawn(new Pos(4, 5, 6));
+        builder.area(area);
+
+        assertTrue(builder.getMissingFieldNames().isEmpty());
+        assertTrue(builder.isReadyToSave());
+    }
+
+    @Test
+    void testBuilderIsNotReadyToSaveWhenOnlySomeFieldsAreSet() {
+        GameMapBuilder builder = new GameMapBuilder();
+        builder.name("Test Map").spawn(new Pos(1, 2, 3));
+
+        assertEquals(List.of("Game Spawn", "Area"), builder.getMissingFieldNames());
+        assertFalse(builder.isReadyToSave());
     }
 }

@@ -8,8 +8,10 @@ import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.common.push.PushEntry;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class GameMapBuilder extends BaseMapBuilder {
 
@@ -17,7 +19,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
     private static final double DEFAULT_RESHUFFLE_PERCENTAGE = 0.1;
 
     private final PushData.Builder pushDataBuilder;
-    private Pos gameSpawn;
+    private @Nullable Pos gameSpawn;
     private @Nullable Area area;
     private int shuffleIntervalTicks;
     private double reshufflePercentage;
@@ -36,7 +38,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
                 .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1, 0.02));
     }
 
-    public GameMapBuilder(@NotNull GameMap gameMap) {
+    public GameMapBuilder(GameMap gameMap) {
         super(gameMap);
         this.gameSpawn = gameMap.getGameSpawn();
         this.area = gameMap.getArea();
@@ -59,7 +61,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
                     .add(PushEntry.pushEntry(Block.GOLD_BLOCK, 1, 0.05))
                     .add(PushEntry.pushEntry(Block.DIAMOND_BLOCK, 1, 0.03))
                     .add(PushEntry.pushEntry(Block.EMERALD_BLOCK, 1, 0.02));
-        } else{
+        } else {
             this.pushDataBuilder = PushData.builder(gameMap.getPushData());
         }
     }
@@ -70,7 +72,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param groundBlock the block to set as the ground block
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder groundBlock(Block groundBlock) {
+    public GameMapBuilder groundBlock(Block groundBlock) {
         PushEntry pushEntry = this.pushDataBuilder.getPushValues().getFirst();
         pushEntry.setBlock(groundBlock);
         return this;
@@ -82,7 +84,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param gameSpawn the spawn position
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder gameSpawn(Pos gameSpawn) {
+    public GameMapBuilder gameSpawn(Pos gameSpawn) {
         this.gameSpawn = gameSpawn;
         return this;
     }
@@ -93,7 +95,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param area the area, or {@code null} to disable dynamic filling
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder area(@Nullable Area area) {
+    public GameMapBuilder area(@Nullable Area area) {
         this.area = area;
         return this;
     }
@@ -104,7 +106,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param shuffleIntervalTicks the interval in ticks
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder shuffleIntervalTicks(int shuffleIntervalTicks) {
+    public GameMapBuilder shuffleIntervalTicks(int shuffleIntervalTicks) {
         this.shuffleIntervalTicks = shuffleIntervalTicks;
         return this;
     }
@@ -115,7 +117,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param reshufflePercentage the percentage as a fraction between 0.0 and 1.0
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder reshufflePercentage(double reshufflePercentage) {
+    public GameMapBuilder reshufflePercentage(double reshufflePercentage) {
         this.reshufflePercentage = reshufflePercentage;
         return this;
     }
@@ -126,7 +128,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param pos1 the corner position, or {@code null} to clear it
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder pos1(@Nullable Vec pos1) {
+    public GameMapBuilder pos1(@Nullable Vec pos1) {
         this.pos1 = pos1;
         return this;
     }
@@ -137,7 +139,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @param pos2 the corner position, or {@code null} to clear it
      * @return this builder instance for chaining
      */
-    public @NotNull GameMapBuilder pos2(@Nullable Vec pos2) {
+    public GameMapBuilder pos2(@Nullable Vec pos2) {
         this.pos2 = pos2;
         return this;
     }
@@ -148,7 +150,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      * @return a new GameMap instance
      */
     @Override
-    public @NotNull GameMap build() {
+    public GameMap build() {
         return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks, this.reshufflePercentage);
     }
 
@@ -157,7 +159,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      *
      * @return the game spawn position
      */
-    public Pos getGameSpawn() {
+    public @Nullable Pos getGameSpawn() {
         return gameSpawn;
     }
 
@@ -220,11 +222,40 @@ public final class GameMapBuilder extends BaseMapBuilder {
      *
      * @return the ground block entry
      */
-    public @NotNull PushEntry getGroundBlockEntry() {
+    public PushEntry getGroundBlockEntry() {
         return this.pushDataBuilder.getPushValues().getFirst();
     }
 
-    public @NotNull Pos getSpawnOrDefault(@NotNull Pos defaultSpawn) {
+    /***
+     * Returns the spawn position of the map or a default.
+     *
+     * @param defaultSpawn as fallback
+     * @return the spawn position
+     */
+    public Pos getSpawnOrDefault(Pos defaultSpawn) {
         return this.spawn != null ? this.spawn : defaultSpawn;
+    }
+
+    /**
+     * Returns whether every field required to save this map is present.
+     *
+     * @return {@code true} if {@link #getMissingFieldNames()} is empty
+     */
+    public boolean isReadyToSave() {
+        return getMissingFieldNames().isEmpty();
+    }
+
+    /**
+     * Returns the human-readable names of the required fields which are not yet set.
+     *
+     * @return an empty list if the map is ready to save
+     */
+    public List<String> getMissingFieldNames() {
+        List<String> missing = new ArrayList<>();
+        if (isDefaultName()) missing.add("Name");
+        if (getSpawn() == null) missing.add("Spawn");
+        if (getGameSpawn() == null) missing.add("Game Spawn");
+        if (getArea() == null) missing.add("Area");
+        return missing;
     }
 }
