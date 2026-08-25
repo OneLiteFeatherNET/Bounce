@@ -6,7 +6,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.theevilreaper.aves.inventory.slot.Slot;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
-import org.jetbrains.annotations.NotNull;
 
 public class MaterialSlot extends Slot {
 
@@ -17,7 +16,7 @@ public class MaterialSlot extends Slot {
      *
      * @param material the {@link Material} to be used for this slot, typically representing a block or item.
      */
-    public MaterialSlot(@NotNull Material material) {
+    public MaterialSlot(Material material) {
         this.stack = ItemStack.builder(material)
                 .lore(Component.empty(), SetupMessages.NO_SPACE_SEPARATOR.append(Component.space()).append(Component.text("Ground block", NamedTextColor.GRAY)))
                 .build();
@@ -28,10 +27,13 @@ public class MaterialSlot extends Slot {
      *
      * @param stack the {@link ItemStack} to be used for this slot, typically representing a material.
      */
-    public MaterialSlot(@NotNull ItemStack stack) {
+    public MaterialSlot(ItemStack stack) {
         this.stack = stack;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ItemStack getItem() {
         return stack;

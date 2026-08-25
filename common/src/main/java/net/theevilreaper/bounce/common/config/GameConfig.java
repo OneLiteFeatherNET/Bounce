@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.common.config;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link GameConfig} interface represents the structure for a configuration which is used by the game.

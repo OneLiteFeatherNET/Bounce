@@ -16,6 +16,7 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 public final class LoreHelper {
 
     private static final Component DISPLAY_NAME = Component.text("Boost Value", NamedTextColor.GREEN);
+    private static final Component WEIGHT_DISPLAY_NAME = Component.text("Weight", NamedTextColor.LIGHT_PURPLE);
     private static final Component CURRENT_VALUE = Component.text("Current:", NamedTextColor.GRAY).append(Component.space());
     private static final Component LEFT_CLICK = miniMessage().deserialize("<yellow>Left-click</yellow><gray>: <green>Increase</green> the value");
 
@@ -28,6 +29,20 @@ public final class LoreHelper {
         lore.add(Component.empty());
         return ItemStack.builder(Material.FEATHER)
                 .customName(DISPLAY_NAME)
+                .lore(lore)
+                .build();
+    }
+
+    public static ItemStack getWeight(PushEntry pushEntry) {
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.empty());
+        String formatted = String.format(java.util.Locale.ROOT, "%.1f%% (%.3f)", pushEntry.getWeight() * 100.0, pushEntry.getWeight());
+        lore.add(CURRENT_VALUE.append(Component.text(formatted, NamedTextColor.YELLOW)));
+        lore.add(Component.empty());
+        lore.add(miniMessage().deserialize("<yellow>Click</yellow><gray>: <green>Open dialog</green> to edit chance"));
+        lore.add(Component.empty());
+        return ItemStack.builder(Material.NETHER_STAR)
+                .customName(WEIGHT_DISPLAY_NAME)
                 .lore(lore)
                 .build();
     }

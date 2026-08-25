@@ -6,26 +6,34 @@ import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.inventory.slot.Slot;
-import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
-import org.jetbrains.annotations.NotNull;
+import net.theevilreaper.bounce.setup.inventory.DataType;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractDataSlot extends Slot {
+public abstract class AbstractDataSlot<T extends DataType> extends Slot {
 
-    protected final OverviewType type;
+    protected final T type;
 
-    protected AbstractDataSlot(@NotNull OverviewType type) {
+    protected AbstractDataSlot(T type) {
         this.type = type;
         this.setClick(this::click);
     }
 
+    /**
+     * Handles what happen when a player clicks
+     *
+     * @param player    who clicked
+     * @param slot      was clicked
+     * @param clickType was involved
+     * @param stack     was involved
+     * @param result    of the click
+     */
     protected abstract void click(
-            @NotNull Player player,
+            Player player,
             int slot,
-            @NotNull Click clickType,
-            @NotNull ItemStack stack,
-            @NotNull Consumer<ClickHolder> result
+            Click clickType,
+            ItemStack stack,
+            Consumer<ClickHolder> result
     );
 
     /**
@@ -35,7 +43,7 @@ public abstract class AbstractDataSlot extends Slot {
      * @param stack the ItemStack to convert
      * @return a new ItemStack.Builder with the same material and custom name
      */
-    protected @NotNull ItemStack.Builder asBuilder(@NotNull ItemStack stack) {
+    protected ItemStack.Builder asBuilder(ItemStack stack) {
         ItemStack.Builder builder = ItemStack.builder(stack.material());
         if (stack.has(DataComponents.CUSTOM_NAME)) {
             builder.customName(stack.get(DataComponents.CUSTOM_NAME));

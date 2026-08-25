@@ -10,8 +10,8 @@ import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.aves.util.Components;
 import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
+import net.theevilreaper.bounce.setup.inventory.DataType;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.DELETE_CLICK;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.TELEPORT_CLICK;
 
-public class PositionSlot extends AbstractDataSlot {
+public class PositionSlot<T extends DataType> extends AbstractDataSlot<T> {
 
     private static final DecimalFormat DECIMAL_FORMAT;
 
@@ -35,10 +35,10 @@ public class PositionSlot extends AbstractDataSlot {
         DECIMAL_FORMAT.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ROOT));
     }
 
-    private final Pos position;
+    private final @Nullable Pos position;
 
-    public PositionSlot(@NotNull OverviewType overviewType, @Nullable Pos position) {
-        super(overviewType);
+    public PositionSlot(T type, @Nullable Pos position) {
+        super(type);
         this.position = position;
     }
 
@@ -46,9 +46,8 @@ public class PositionSlot extends AbstractDataSlot {
     public ItemStack getItem() {
         ItemStack overviewItem = this.type.getItem();
 
-        if (position == null) {
-            return overviewItem;
-        }
+        if (position == null) return overviewItem;
+
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
         lore.addAll(Components.pointToLore(MiniMessage.miniMessage(), position, DECIMAL_FORMAT));
@@ -61,7 +60,7 @@ public class PositionSlot extends AbstractDataSlot {
     }
 
     @Override
-    protected void click(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    protected void click(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         if ((!(click instanceof Click.Left || click instanceof Click.Right)) || position == null) return;
         if (click instanceof Click.Left) {
@@ -70,6 +69,8 @@ public class PositionSlot extends AbstractDataSlot {
             return;
         }
 
-        EventDispatcher.call(new PlayerDeletePromptEvent(player, this.type));
+        if (this.type instanceof OverviewType overviewType) {
+            EventDispatcher.call(new PlayerDeletePromptEvent(player, overviewType));
+        }
     }
 }

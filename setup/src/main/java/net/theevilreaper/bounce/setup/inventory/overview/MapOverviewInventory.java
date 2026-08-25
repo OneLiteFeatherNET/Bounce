@@ -8,11 +8,11 @@ import net.theevilreaper.aves.inventory.layout.InventoryLayout;
 import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.inventory.slot.area.AreaOverviewSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MultiStringSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.PositionSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.StringSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * The {@link MapOverviewInventory} is a custom inventory implementation of the {@link PersonalInventoryBuilder} class.
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class MapOverviewInventory extends PersonalInventoryBuilder {
 
-    private static final int[] DATA_SLOT = LayoutCalculator.from(10, 12, 14, 16);
+    private static final int[] DATA_SLOT = LayoutCalculator.from(10, 11, 12, 13, 14);
 
     private final GameMapBuilder builder;
 
@@ -34,7 +34,7 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
      * @param player       the {@link Player} who is involved
      * @param builder      the {@link GameMapBuilder} which contains the map data
      */
-    public MapOverviewInventory(@NotNull Player player, @NotNull GameMapBuilder builder) {
+    public MapOverviewInventory(Player player, GameMapBuilder builder) {
         super(Component.text("Data view"), InventoryType.CHEST_3_ROW, player);
         this.builder = builder;
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -62,12 +62,13 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
      * @param type the {@link OverviewType} to map
      * @return the corresponding {@link ISlot} for the given type
      */
-    private @NotNull ISlot getOverViewItem(@NotNull OverviewType type) {
+    private ISlot getOverViewItem(OverviewType type) {
         return switch (type) {
-            case SPAWN -> new PositionSlot(type, this.builder.getSpawn());
-            case GAME_SPAWN -> new PositionSlot(type, this.builder.getGameSpawn());
+            case SPAWN -> new PositionSlot<>(type, this.builder.getSpawn());
+            case GAME_SPAWN -> new PositionSlot<>(type, this.builder.getGameSpawn());
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
+            case AREA -> new AreaOverviewSlot(type, builder.getArea());
         };
     }
 }

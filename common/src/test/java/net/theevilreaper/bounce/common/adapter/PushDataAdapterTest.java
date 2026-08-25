@@ -31,6 +31,20 @@ class PushDataAdapterTest {
             ]
             """;
 
+    private static final String TEST_JSON_WITH_WEIGHT = """
+            [
+                {
+                    "block": {
+                      "namespace": "minecraft",
+                      "value": "slime_block"
+                    },
+                    "ground": false,
+                    "value": 1,
+                    "weight": 0.15
+                }
+            ]
+            """;
+
     @Test
     void testPushDataWrite() {
         PushData pushData = PushData.builder()
@@ -52,5 +66,26 @@ class PushDataAdapterTest {
 
         assertEquals(1, pushData.getPush(Block.SLIME_BLOCK));
         assertEquals(2, pushData.getPush(Block.AMETHYST_BLOCK));
+    }
+
+    @Test
+    void testPushDataReadDefaultsMissingWeightToOne() {
+        PushData pushData = GsonUtil.GSON.fromJson(TEST_JSON, PushData.class);
+        assertEquals(1.0, pushData.push().getFirst().getWeight(), "Old maps without a weight field must default to 1.0 for ground");
+    }
+
+    @Test
+    void testPushDataReadKeepsExplicitWeight() {
+        PushData pushData = GsonUtil.GSON.fromJson(TEST_JSON_WITH_WEIGHT, PushData.class);
+        assertEquals(0.15, pushData.push().getFirst().getWeight());
+    }
+
+    @Test
+    void testPushDataWriteIncludesWeight() {
+        PushData pushData = PushData.builder()
+                .add(PushEntry.pushEntry(Block.SLIME_BLOCK, 1, 0.25))
+                .build();
+        String json = GsonUtil.GSON.toJson(pushData);
+        assertTrue(json.contains("\"weight\": 0.25"));
     }
 }

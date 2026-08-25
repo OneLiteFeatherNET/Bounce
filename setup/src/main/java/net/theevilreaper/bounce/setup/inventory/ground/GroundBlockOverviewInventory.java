@@ -15,7 +15,6 @@ import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
 import net.theevilreaper.bounce.setup.inventory.SetupBlocks;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -56,7 +55,7 @@ public class GroundBlockOverviewInventory extends GlobalInventoryBuilder {
      * @param stack the item stack that was clicked
      * @param result the consumer to handle the click result
      */
-    private void handleClick(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    private void handleClick(Player player, int slot, Click clickType, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         EventDispatcher.call(new PlayerGroundBlockSelectEvent(player, stack.material()));
     }

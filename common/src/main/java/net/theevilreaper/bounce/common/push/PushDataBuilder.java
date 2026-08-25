@@ -34,9 +34,9 @@ public final class PushDataBuilder implements PushData.Builder {
         for (int i = 0; i < pushData.push().size(); i++) {
             PushEntry entry = pushData.push().get(i);
             if (entry.isGround()) {
-                this.blocks.add(PushEntry.groundEntry(entry.getBlock(), entry.getValue()));
+                this.blocks.add(PushEntry.groundEntry(entry.getBlock(), entry.getValue(), entry.getWeight()));
             } else {
-                this.blocks.add(PushEntry.pushEntry(entry.getBlock(), entry.getValue()));
+                this.blocks.add(PushEntry.pushEntry(entry.getBlock(), entry.getValue(), entry.getWeight()));
             }
         }
     }

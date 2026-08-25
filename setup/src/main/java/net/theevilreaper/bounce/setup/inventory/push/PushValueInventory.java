@@ -29,6 +29,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
     private static final Component TITLE = Component.text("Push Value");
 
     private static final int BLOCK_SLOT = 11;
+    private static final int WEIGHT_SLOT = 13;
     private static final int VALUE_SLOT = 15;
 
     private final GameMapBuilder gameMapBuilder;
@@ -51,13 +52,14 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
 
-            dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, VALUE_SLOT));
+            dataLayout.blank(LayoutCalculator.from(BLOCK_SLOT, WEIGHT_SLOT, VALUE_SLOT));
             PushEntry pushEntry = this.gameMapBuilder.getPushDataBuilder().getPushValues().get(index);
 
             ItemStack stack = ItemStack.builder(pushEntry.getBlock().material())
                     .build();
 
             dataLayout.setItem(BLOCK_SLOT, stack, this::handleBlockClick);
+            dataLayout.setItem(WEIGHT_SLOT, LoreHelper.getWeight(pushEntry), this::handleWeightButtonClick);
             dataLayout.setItem(VALUE_SLOT, LoreHelper.getPushValue(pushEntry), this::handlePushButtonClick);
 
             return dataLayout;
@@ -80,5 +82,14 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         int index = player.getTag(PUSH_SLOT_INDEX);
         player.setTag(PUSH_SLOT_INDEX, index);
         EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_BOUNCE));
+    }
+
+    private void handleWeightButtonClick(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+        result.accept(ClickHolder.cancelClick());
+        if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
+
+        int index = player.getTag(PUSH_SLOT_INDEX);
+        player.setTag(PUSH_SLOT_INDEX, index);
+        EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_WEIGHT));
     }
 }

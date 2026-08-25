@@ -18,10 +18,13 @@ import java.lang.reflect.Type;
  * Serializer and Deserializer implementation for {@link PushData} object.
  *
  * @author theEvilReaper
- * @version 1.0.0
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializer<PushData> {
+
+    private static final double DEFAULT_GROUND_WEIGHT = 1.0;
+    private static final double DEFAULT_PUSH_WEIGHT = 0.05;
 
     @Override
     public PushData deserialize(JsonElement element, Type type, JsonDeserializationContext context) {
@@ -33,15 +36,19 @@ public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializ
         }
 
         for (JsonElement jsonElement : jsonArray.asList()) {
-            Key blockKey = context.deserialize(jsonElement.getAsJsonObject().get("block"), Key.class);
-            int value = jsonElement.getAsJsonObject().get("value").getAsInt();
-            boolean ground = jsonElement.getAsJsonObject().get("ground").getAsBoolean();
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            Key blockKey = context.deserialize(jsonObject.get("block"), Key.class);
+            int value = jsonObject.get("value").getAsInt();
+            boolean ground = jsonObject.get("ground").getAsBoolean();
+            double weight = jsonObject.has("weight")
+                    ? jsonObject.get("weight").getAsDouble()
+                    : (ground ? DEFAULT_GROUND_WEIGHT : DEFAULT_PUSH_WEIGHT);
             Block block = Block.fromKey(blockKey);
 
             if (ground) {
-                builder.add(0, PushEntry.groundEntry(block, value));
+                builder.add(0, PushEntry.groundEntry(block, value, weight));
             } else {
-                builder.add(PushEntry.pushEntry(block, value));
+                builder.add(PushEntry.pushEntry(block, value, weight));
             }
         }
 
@@ -58,6 +65,7 @@ public class PushDataAdapter implements JsonDeserializer<PushData>, JsonSerializ
             jsonObject.add("block", context.serialize(blockKey, Key.class));
             jsonObject.addProperty("value", pushEntry.getValue());
             jsonObject.addProperty("ground", pushEntry.isGround());
+            jsonObject.addProperty("weight", pushEntry.getWeight());
             jsonArray.add(jsonObject);
         });
 

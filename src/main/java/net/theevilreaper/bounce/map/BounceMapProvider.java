@@ -7,6 +7,8 @@ import net.onelitefeather.falco.anvil.FalcoAnvilLoader;
 import net.theevilreaper.aves.map.BaseMap;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.aves.map.provider.AbstractMapProvider;
+import net.theevilreaper.bounce.common.ground.Area;
+import net.theevilreaper.bounce.common.ground.AreaFiller;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.map.MapFilters;
 import net.theevilreaper.bounce.common.util.GsonUtil;
@@ -14,6 +16,7 @@ import net.theevilreaper.bounce.common.util.GsonUtil;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.UUID;
 
 public class BounceMapProvider extends AbstractMapProvider {
 
@@ -22,7 +25,6 @@ public class BounceMapProvider extends AbstractMapProvider {
     public BounceMapProvider(Path path) {
         super(GsonUtil.GSON_FILE_HANDLER, MapFilters::filterMapsForGame);
         this.loadMapEntries(path.resolve("maps"));
-        this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
         MapEntry mapEntry = this.getEntries().getFirst();
 
@@ -36,7 +38,9 @@ public class BounceMapProvider extends AbstractMapProvider {
             throw new  IllegalStateException("An error occurred while loading the map");
         }
 
-        this.activeMap = loadedDataMap.get();
+        GameMap gameMap = loadedDataMap.get();
+        this.activeMap = gameMap;
+        this.activeInstance = new BounceInstance(UUID.randomUUID(), DimensionType.OVERWORLD, gameMap.getArea(), gameMap.getShuffleIntervalTicks(), gameMap.getReshufflePercentage());
         this.falcoAnvilLoader = new FalcoAnvilLoader(mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.activeInstance.setChunkLoader(this.falcoAnvilLoader);
         this.activeInstance.enableAutoChunkLoad(true);
@@ -45,6 +49,11 @@ public class BounceMapProvider extends AbstractMapProvider {
             defaultClock.rate(0f);
         }
         MinecraftServer.getInstanceManager().registerInstance(this.activeInstance);
+
+        Area area = gameMap.getArea();
+        if (area != null) {
+            AreaFiller.fill(this.activeInstance, area);
+        }
     }
 
     @Override
