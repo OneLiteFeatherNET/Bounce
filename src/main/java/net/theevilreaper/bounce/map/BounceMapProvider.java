@@ -16,6 +16,7 @@ import net.theevilreaper.bounce.common.util.GsonUtil;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.UUID;
 
 public class BounceMapProvider extends AbstractMapProvider {
 
@@ -24,7 +25,6 @@ public class BounceMapProvider extends AbstractMapProvider {
     public BounceMapProvider(Path path) {
         super(GsonUtil.GSON_FILE_HANDLER, MapFilters::filterMapsForGame);
         this.loadMapEntries(path.resolve("maps"));
-        this.activeInstance = MinecraftServer.getInstanceManager().createInstanceContainer();
 
         MapEntry mapEntry = this.getEntries().getFirst();
 
@@ -39,7 +39,8 @@ public class BounceMapProvider extends AbstractMapProvider {
         }
 
         GameMap gameMap = loadedDataMap.get();
-        this.activeMap = loadedDataMap.get();
+        this.activeMap = gameMap;
+        this.activeInstance = new BounceInstance(UUID.randomUUID(), DimensionType.OVERWORLD, gameMap.getArea(), gameMap.getShuffleIntervalTicks(), gameMap.getReshufflePercentage());
         this.falcoAnvilLoader = new FalcoAnvilLoader(mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.activeInstance.setChunkLoader(this.falcoAnvilLoader);
         this.activeInstance.enableAutoChunkLoad(true);
