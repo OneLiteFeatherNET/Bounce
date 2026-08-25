@@ -11,7 +11,6 @@ import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
 import net.theevilreaper.bounce.setup.inventory.slot.AreaOverviewSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MultiStringSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.PositionSlot;
-import net.theevilreaper.bounce.setup.inventory.slot.ShuffleIntervalOverviewSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.StringSlot;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 
@@ -25,7 +24,7 @@ import net.theevilreaper.bounce.setup.util.SetupItems;
  */
 public final class MapOverviewInventory extends PersonalInventoryBuilder {
 
-    private static final int[] DATA_SLOT = LayoutCalculator.from(10, 11, 12, 13, 14, 15);
+    private static final int[] DATA_SLOT = LayoutCalculator.from(10, 11, 12, 13, 14);
 
     private final GameMapBuilder builder;
 
@@ -70,7 +69,6 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
             case AREA -> new AreaOverviewSlot(type, builder.getArea());
-            case SHUFFLE_INTERVAL -> new ShuffleIntervalOverviewSlot(type, builder.getShuffleIntervalTicks());
             default -> throw new IllegalArgumentException("Unsupported overview type: " + type);
         };
     }
