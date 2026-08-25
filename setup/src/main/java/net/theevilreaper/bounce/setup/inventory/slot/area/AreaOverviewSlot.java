@@ -1,4 +1,4 @@
-package net.theevilreaper.bounce.setup.inventory.slot;
+package net.theevilreaper.bounce.setup.inventory.slot.area;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -11,6 +11,7 @@ import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
+import net.theevilreaper.bounce.setup.inventory.slot.AbstractDataSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +21,7 @@ public final class AreaOverviewSlot extends AbstractDataSlot {
 
     private final @Nullable Area area;
 
-    public AreaOverviewSlot(@NotNull OverviewType overviewType, @Nullable Area area) {
+    public AreaOverviewSlot(OverviewType overviewType, @Nullable Area area) {
         super(overviewType);
         this.area = area;
     }
@@ -47,7 +48,7 @@ public final class AreaOverviewSlot extends AbstractDataSlot {
     }
 
     @Override
-    protected void click(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    protected void click(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.AREA_VIEW));
     }
