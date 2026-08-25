@@ -27,10 +27,6 @@ public enum OverviewType {
 
     ;
 
-    public static final OverviewType[] MAP_OVERVIEW_TYPES = {
-            NAME, BUILDER, SPAWN, GAME_SPAWN, AREA
-    };
-
     private final String name;
     private final Material material;
     private final TextColor color;
