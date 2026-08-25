@@ -7,6 +7,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.kyori.adventure.text.Component;
 import net.theevilreaper.aves.inventory.PersonalInventoryBuilder;
 import net.theevilreaper.aves.inventory.layout.InventoryLayout;
+import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.ground.GroundArea;
@@ -17,17 +18,14 @@ import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.area.AreaCornerSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.area.ReshufflePercentageSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.area.ShuffleIntervalSlot;
+import org.jetbrains.annotations.Contract;
 
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 
 public final class AreaViewInventory extends PersonalInventoryBuilder {
 
     private static final Component TITLE = Component.text("Setup area");
-
-    private static final int SHUFFLE_INTERVAL_SLOT = 10;
-    private static final int POS1_SLOT = 11;
-    private static final int POS2_SLOT = 13;
-    private static final int RESHUFFLE_PERCENTAGE_SLOT = 16;
+    private static final int[] SLOTS = new int[]{10, 12, 14, 16};
 
     private final GameMapBuilder gameMapBuilder;
 
@@ -42,16 +40,34 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
 
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
-            dataLayout.blank(LayoutCalculator.from(SHUFFLE_INTERVAL_SLOT, POS1_SLOT, POS2_SLOT, RESHUFFLE_PERCENTAGE_SLOT));
+            dataLayout.blank(SLOTS);
 
-            dataLayout.setItem(SHUFFLE_INTERVAL_SLOT, new ShuffleIntervalSlot(AreaViewType.SHUFFLE_INTERVAL, gameMapBuilder.getShuffleIntervalTicks()));
-            dataLayout.setItem(POS1_SLOT, new AreaCornerSlot(AreaViewType.LEFT_AREA_CORNER, gameMapBuilder.getPos1(), this::setPos1ToCurrentPosition));
-            dataLayout.setItem(POS2_SLOT, new AreaCornerSlot(AreaViewType.RIGHT_AREA_CORNER, gameMapBuilder.getPos2(), this::setPos2ToCurrentPosition));
-            dataLayout.setItem(RESHUFFLE_PERCENTAGE_SLOT, new ReshufflePercentageSlot(AreaViewType.RESHUFFLE_PERCENTAGE, gameMapBuilder.getReshufflePercentage()));
+            AreaViewType[] values = AreaViewType.values();
 
+            for (int i = 0; i < values.length && i < SLOTS.length; i++) {
+                AreaViewType type = values[i];
+                dataLayout.setItem(SLOTS[i], getAreaSlot(type));
+            }
             return dataLayout;
         });
     }
+
+    /**
+     * Maps a {@link AreaViewType} to a specific {@link ISlot}.
+     *
+     * @param type the {@link AreaViewType} to map
+     * @return the corresponding {@link ISlot} for the given type
+     */
+    @Contract(value = "_ -> new", pure = true)
+    private ISlot getAreaSlot(AreaViewType type) {
+        return switch (type) {
+            case LEFT_AREA_CORNER -> new AreaCornerSlot(AreaViewType.LEFT_AREA_CORNER, gameMapBuilder.getPos1(), this::setPos1ToCurrentPosition);
+            case RIGHT_AREA_CORNER -> new AreaCornerSlot(AreaViewType.RIGHT_AREA_CORNER, gameMapBuilder.getPos2(), this::setPos2ToCurrentPosition);
+            case SHUFFLE_INTERVAL -> new ShuffleIntervalSlot(AreaViewType.SHUFFLE_INTERVAL, gameMapBuilder.getShuffleIntervalTicks());
+            case RESHUFFLE_PERCENTAGE ->  new ReshufflePercentageSlot(AreaViewType.RESHUFFLE_PERCENTAGE, gameMapBuilder.getReshufflePercentage());
+        };
+    }
+
 
     /**
      * Sets Pos1 on the {@link GameMapBuilder} to the player's current position, rebuilds the area once both

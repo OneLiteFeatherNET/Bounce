@@ -84,4 +84,8 @@ public enum AreaViewType implements DataType {
                 .customName(Component.text(type.getName(), type.getColor()))
                 .build());
     }
+
+    public static AreaViewType[] getValues() {
+        return VALUES;
+    }
 }
