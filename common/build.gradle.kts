@@ -10,8 +10,14 @@ dependencies {
     compileOnly(libs.minestom)
     compileOnly(libs.aves)
     compileOnly(libs.xerus)
+    compileOnly(libs.luckperms.api)
+    // Only to compile LuckPermsSupport.bootstrap(). The artifact is shipped by the game and setup
+    // modules as runtimeOnly - common must not put it on any runtime class path, because its
+    // absence is exactly what LuckPermsSupport detects.
+    compileOnly(libs.luckperms.minestom.loader)
 
     testImplementation(libs.minestom)
+    testImplementation(libs.luckperms.api)
     testImplementation(libs.aves)
     testImplementation(libs.cyano)
     testImplementation(libs.junit.api)
