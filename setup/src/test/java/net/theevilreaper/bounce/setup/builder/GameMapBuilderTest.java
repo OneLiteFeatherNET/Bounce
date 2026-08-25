@@ -110,4 +110,45 @@ class GameMapBuilderTest {
         assertTrue(reloaded.getShuffleIntervalTicks() > 0);
         assertTrue(reloaded.getReshufflePercentage() > 0);
     }
+
+    @Test
+    void testNewBuilderHasNoAreaCorners() {
+        GameMapBuilder builder = new GameMapBuilder();
+        assertNull(builder.getPos1());
+        assertNull(builder.getPos2());
+    }
+
+    @Test
+    void testAreaCornersRoundTripThroughSetters() {
+        GameMapBuilder builder = new GameMapBuilder();
+        Vec pos1 = new Vec(1, 2, 3);
+        Vec pos2 = new Vec(4, 5, 6);
+
+        builder.pos1(pos1).pos2(pos2);
+
+        assertEquals(pos1, builder.getPos1());
+        assertEquals(pos2, builder.getPos2());
+    }
+
+    @Test
+    void testReloadingExistingMapWithAreaRestoresCorners() {
+        GameMapBuilder builder = new GameMapBuilder();
+        Area area = new GroundArea(new Vec(1, 2, 3), new Vec(4, 5, 6), Block.GLASS, PushData.builder().build());
+        builder.area(area);
+
+        GameMap gameMap = builder.build();
+        GameMapBuilder reloaded = new GameMapBuilder(gameMap);
+
+        assertEquals(area.min(), reloaded.getPos1());
+        assertEquals(area.max(), reloaded.getPos2());
+    }
+
+    @Test
+    void testReloadingExistingMapWithoutAreaHasNoCorners() {
+        GameMap gameMap = new GameMapBuilder().build();
+        GameMapBuilder reloaded = new GameMapBuilder(gameMap);
+
+        assertNull(reloaded.getPos1());
+        assertNull(reloaded.getPos2());
+    }
 }

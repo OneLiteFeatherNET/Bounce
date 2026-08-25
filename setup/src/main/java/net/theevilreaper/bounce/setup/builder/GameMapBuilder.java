@@ -1,6 +1,7 @@
 package net.theevilreaper.bounce.setup.builder;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.theevilreaper.aves.map.BaseMapBuilder;
 import net.theevilreaper.bounce.common.ground.Area;
@@ -20,6 +21,8 @@ public final class GameMapBuilder extends BaseMapBuilder {
     private @Nullable Area area;
     private int shuffleIntervalTicks;
     private double reshufflePercentage;
+    private @Nullable Vec pos1;
+    private @Nullable Vec pos2;
 
     public GameMapBuilder() {
         super();
@@ -43,6 +46,11 @@ public final class GameMapBuilder extends BaseMapBuilder {
         this.reshufflePercentage = gameMap.getReshufflePercentage() > 0
                 ? gameMap.getReshufflePercentage()
                 : DEFAULT_RESHUFFLE_PERCENTAGE;
+
+        if (this.area != null) {
+            this.pos1 = this.area.min();
+            this.pos2 = this.area.max();
+        }
 
         if (gameMap.getPushData() == null) {
             this.pushDataBuilder = PushData.builder();
@@ -113,6 +121,28 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
+     * Sets the first captured corner of the ground area.
+     *
+     * @param pos1 the corner position, or {@code null} to clear it
+     * @return this builder instance for chaining
+     */
+    public @NotNull GameMapBuilder pos1(@Nullable Vec pos1) {
+        this.pos1 = pos1;
+        return this;
+    }
+
+    /**
+     * Sets the second captured corner of the ground area.
+     *
+     * @param pos2 the corner position, or {@code null} to clear it
+     * @return this builder instance for chaining
+     */
+    public @NotNull GameMapBuilder pos2(@Nullable Vec pos2) {
+        this.pos2 = pos2;
+        return this;
+    }
+
+    /**
      * Builds a new {@link GameMap} instance with the current properties.
      *
      * @return a new GameMap instance
@@ -156,6 +186,24 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     public double getReshufflePercentage() {
         return reshufflePercentage;
+    }
+
+    /**
+     * Returns the first captured corner of the ground area.
+     *
+     * @return the corner position, or {@code null} if not set
+     */
+    public @Nullable Vec getPos1() {
+        return pos1;
+    }
+
+    /**
+     * Returns the second captured corner of the ground area.
+     *
+     * @return the corner position, or {@code null} if not set
+     */
+    public @Nullable Vec getPos2() {
+        return pos2;
     }
 
     /**
