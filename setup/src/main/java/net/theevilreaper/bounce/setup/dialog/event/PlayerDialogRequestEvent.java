@@ -52,10 +52,6 @@ public class PlayerDialogRequestEvent implements PlayerEvent {
          */
         SETUP_REQUEST_AUTHOR,
         /**
-         * The target for the dialog request is to define the author of the setup.
-         */
-        SETUP_AUTHOR,
-        /**
          * The target for the dialog request is to set up the block bounce.
          */
         SETUP_BLOCK_BOUNCE,

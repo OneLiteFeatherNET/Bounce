@@ -1,48 +1,27 @@
 package net.theevilreaper.bounce.setup.listener.dialog;
 
 import net.minestom.server.entity.Player;
-import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
-import net.theevilreaper.bounce.setup.dialog.DialogTemplate;
+import net.theevilreaper.bounce.setup.dialog.AuthorDialogs;
+import net.theevilreaper.bounce.setup.dialog.MapDialogs;
+import net.theevilreaper.bounce.setup.dialog.ValueDialogs;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
-import net.theevilreaper.bounce.setup.dialog.type.AuthorInputDialog;
-import net.theevilreaper.bounce.setup.dialog.type.AuthorRequestDialog;
-import net.theevilreaper.bounce.setup.dialog.type.NameInputDialog;
-import net.theevilreaper.bounce.setup.dialog.type.ValueInputDialog;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-import static net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent.*;
-
 public final class PlayerDialogRequestListener implements Consumer<PlayerDialogRequestEvent> {
-
-    private final DialogRegistry dialogRegistry;
-
-    public PlayerDialogRequestListener(@NotNull DialogRegistry dialogRegistry) {
-        this.dialogRegistry = dialogRegistry;
-    }
 
     @Override
     public void accept(@NotNull PlayerDialogRequestEvent event) {
         Player player = event.getPlayer();
-        Target target = event.getTarget();
-        DialogTemplate<?> dialogTemplate;
 
-        switch (target) {
-            case Target.SETUP_NAME -> dialogTemplate = dialogRegistry.get(NameInputDialog.DIALOG_KEY);
-            case Target.SETUP_AUTHOR -> dialogTemplate = dialogRegistry.get(AuthorInputDialog.DIALOG_KEY);
-            case Target.SETUP_REQUEST_AUTHOR -> dialogTemplate = dialogRegistry.get(AuthorRequestDialog.DIALOG_KEY);
-            case Target.SETUP_BLOCK_BOUNCE -> dialogTemplate = dialogRegistry.get(ValueInputDialog.DIALOG_KEY);
-            case Target.SETUP_BLOCK_WEIGHT -> dialogTemplate = dialogRegistry.get(net.theevilreaper.bounce.setup.dialog.type.WeightInputDialog.DIALOG_KEY);
-            case Target.SETUP_SHUFFLE_INTERVAL -> dialogTemplate = dialogRegistry.get(net.theevilreaper.bounce.setup.dialog.type.ShuffleIntervalInputDialog.DIALOG_KEY);
-            case Target.SETUP_RESHUFFLE_PERCENTAGE -> dialogTemplate = dialogRegistry.get(net.theevilreaper.bounce.setup.dialog.type.ReshufflePercentageInputDialog.DIALOG_KEY);
-            default -> throw new IllegalArgumentException("Unknown target: " + target);
+        switch (event.getTarget()) {
+            case SETUP_NAME -> MapDialogs.openNameDialog(player);
+            case SETUP_REQUEST_AUTHOR -> AuthorDialogs.openAuthorAmountDialog(player);
+            case SETUP_BLOCK_BOUNCE -> ValueDialogs.openBounceValue(player);
+            case SETUP_BLOCK_WEIGHT -> ValueDialogs.openWeight(player);
+            case SETUP_SHUFFLE_INTERVAL -> ValueDialogs.openShuffleInterval(player);
+            case SETUP_RESHUFFLE_PERCENTAGE -> ValueDialogs.openReshufflePercentage(player);
         }
-
-        if (dialogTemplate == null) {
-            throw new IllegalStateException("Dialog with key " + dialogTemplate.key() + " not found in registry.");
-        }
-
-        dialogTemplate.open(player);
     }
 }

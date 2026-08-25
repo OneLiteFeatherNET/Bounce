@@ -6,6 +6,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.aves.inventory.click.ClickHolder;
+import net.theevilreaper.aves.map.BaseMapBuilder;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
@@ -32,7 +33,7 @@ public class StringSlot extends AbstractDataSlot<OverviewType> {
     public ItemStack getItem() {
         ItemStack overviewItem = this.type.getItem();
 
-        if (data == null) {
+        if (data == null || data.equals(BaseMapBuilder.DEFAULT_NAME)) {
             return overviewItem;
         }
         return asBuilder(overviewItem).lore(
@@ -52,7 +53,7 @@ public class StringSlot extends AbstractDataSlot<OverviewType> {
     protected void click(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
 
-        if (data == null || data.isEmpty()) {
+        if (data == null || data.isEmpty() || data.equals(BaseMapBuilder.DEFAULT_NAME)) {
             EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_NAME));
             return;
         }
