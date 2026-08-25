@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MicrotusExtension.class)
 class AreaViewInventoryIntegrationTest {
 
-    private static final int SHUFFLE_INTERVAL_SLOT = 10;
-    private static final int POS1_SLOT = 11;
-    private static final int POS2_SLOT = 13;
+    private static final int SHUFFLE_INTERVAL_SLOT = 14;
+    private static final int POS1_SLOT = 10;
+    private static final int POS2_SLOT = 12;
     private static final int RESHUFFLE_PERCENTAGE_SLOT = 16;
 
     @Test
