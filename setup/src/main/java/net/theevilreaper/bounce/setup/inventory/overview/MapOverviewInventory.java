@@ -8,7 +8,7 @@ import net.theevilreaper.aves.inventory.layout.InventoryLayout;
 import net.theevilreaper.aves.inventory.slot.ISlot;
 import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
-import net.theevilreaper.bounce.setup.inventory.slot.AreaOverviewSlot;
+import net.theevilreaper.bounce.setup.inventory.slot.area.AreaOverviewSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.MultiStringSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.PositionSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.StringSlot;
@@ -69,7 +69,6 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
             case AREA -> new AreaOverviewSlot(type, builder.getArea());
-            default -> throw new IllegalArgumentException("Unsupported overview type: " + type);
         };
     }
 }
