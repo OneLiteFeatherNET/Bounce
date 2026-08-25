@@ -15,7 +15,6 @@ import net.minestom.server.event.player.PlayerChatEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.block.BlockManager;
-import net.theevilreaper.aves.map.provider.MapProvider;
 import net.theevilreaper.bounce.block.BlockLoader;
 import net.theevilreaper.bounce.block.type.lantern.LanternBlockFactory;
 import net.theevilreaper.bounce.commands.StartCommand;

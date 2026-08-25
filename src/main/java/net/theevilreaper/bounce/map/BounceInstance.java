@@ -5,7 +5,6 @@ import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.DimensionType;
 import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.ground.AreaFiller;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
