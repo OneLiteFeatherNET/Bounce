@@ -45,7 +45,7 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
             dataLayout.blank(DATA_SLOT);
 
-            OverviewType[] overviewTypes = OverviewType.MAP_OVERVIEW_TYPES;
+            OverviewType[] overviewTypes = OverviewType.getValues();
 
             for (int i = 0; i < overviewTypes.length && i < DATA_SLOT.length; i++) {
                 OverviewType currentType = overviewTypes[i];
