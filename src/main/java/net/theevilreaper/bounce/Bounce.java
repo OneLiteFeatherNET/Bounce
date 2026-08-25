@@ -19,6 +19,7 @@ import net.theevilreaper.bounce.block.BlockLoader;
 import net.theevilreaper.bounce.block.type.lantern.LanternBlockFactory;
 import net.theevilreaper.bounce.commands.StartCommand;
 import net.theevilreaper.bounce.common.ListenerHandling;
+import net.theevilreaper.bounce.common.bootstrap.ServiceBootstrap;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.config.GameConfigReader;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
@@ -37,6 +38,7 @@ import net.theevilreaper.bounce.listener.game.GamePrepareListener;
 import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
+import net.theevilreaper.bounce.player.BouncePlayer;
 import net.theevilreaper.bounce.profile.BounceProfile;
 import net.theevilreaper.bounce.profile.ProfileService;
 import net.theevilreaper.bounce.timer.PlayingPhase;
@@ -49,7 +51,6 @@ import net.theevilreaper.xerus.api.phase.LinearPhaseSeries;
 import net.theevilreaper.xerus.api.phase.Phase;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Bounce implements ListenerHandling {
 
@@ -61,7 +62,7 @@ public class Bounce implements ListenerHandling {
     private final PlayerUtil playerUtil;
 
     public Bounce() {
-        Path path = Paths.get("");
+        Path path = ServiceBootstrap.resolveWorkingDirectory();
         this.gameConfig = new GameConfigReader(path.resolve("config")).getConfig();
         this.mapProvider = new BounceMapProvider(path);
         this.phaseSeries = new LinearPhaseSeries<>("Game");
@@ -71,6 +72,7 @@ public class Bounce implements ListenerHandling {
         this.registerPhases();
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::unload);
+        MinecraftServer.getConnectionManager().setPlayerProvider(BouncePlayer::new);
     }
 
     public void load() {

@@ -11,6 +11,7 @@ import net.onelitefeather.guira.SetupDataService;
 import net.onelitefeather.guira.event.SetupFinishEvent;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
+import net.theevilreaper.bounce.common.bootstrap.ServiceBootstrap;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
@@ -43,6 +44,7 @@ import net.theevilreaper.bounce.setup.listener.push.PlayerPushBlockSelectListene
 import net.theevilreaper.bounce.setup.listener.push.PlayerPushIndexChangeListener;
 import net.theevilreaper.bounce.setup.listener.state.GameMapBuilderStateNotifyListener;
 import net.theevilreaper.bounce.setup.map.SetupMapProvider;
+import net.theevilreaper.bounce.setup.player.SetupPlayer;
 import net.theevilreaper.bounce.setup.util.SetupItems;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,12 +61,13 @@ public final class BounceSetup implements ListenerHandling {
     private final DialogRegistry dialogRegistry;
 
     public BounceSetup() {
-        Path path = Path.of("");
+        Path path = ServiceBootstrap.resolveWorkingDirectory();
         this.mapProvider = new SetupMapProvider(path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
         this.dialogRegistry = new SetupDialogRegistry();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
+        MinecraftServer.getConnectionManager().setPlayerProvider(SetupPlayer::new);
     }
 
     public void initialize() {

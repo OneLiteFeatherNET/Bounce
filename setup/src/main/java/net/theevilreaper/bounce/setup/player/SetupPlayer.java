@@ -1,12 +1,12 @@
 package net.theevilreaper.bounce.setup.player;
 
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.entity.Player;
+import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.Nullable;
 
-public class SetupPlayer extends Player {
+public class SetupPlayer extends PermissionAwarePlayer {
 
     private @Nullable BlockVec leftCorner;
     private @Nullable BlockVec rightCorner;
