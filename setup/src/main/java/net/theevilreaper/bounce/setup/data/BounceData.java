@@ -13,7 +13,7 @@ import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
-import net.theevilreaper.bounce.setup.inventory.ground.AreaViewInventory;
+import net.theevilreaper.bounce.setup.inventory.area.AreaViewInventory;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundViewInventory;
 import net.theevilreaper.bounce.setup.inventory.overview.MapOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushValueInventory;
@@ -142,6 +142,10 @@ public final class BounceData implements SetupData {
 
     public void triggerUpdate() {
         this.overviewInventory.invalidateDataLayout();
+    }
+
+    public void triggerAreaViewUpdate() {
+        this.areaViewInventory.invalidateDataLayout();
     }
 
     public void triggerGroundViewUpdate() {
