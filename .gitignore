@@ -3,6 +3,12 @@
 build/
 .kotlin/
 
+# CloudNet extension jars dropped in for local testing (see bridge/README.md)
+extensions/
+
+# LuckPerms standalone runtime data (generated on boot when running locally)
+data/
+
 # IntelliJ IDEA
 .idea/
 *.iws
