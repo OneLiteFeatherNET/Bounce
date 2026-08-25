@@ -6,6 +6,10 @@ dependencyResolutionManagement {
         maven("https://central.sonatype.com/repository/maven-snapshots/")
         maven("https://repository.derklaro.dev/snapshots/")
         maven {
+            name = "OneLiteFeatherReleases"
+            url = uri("https://repo.onelitefeather.dev/releases")
+        }
+        maven {
             name = "OneLiteFeatherRepository"
             url = uri("https://repo.onelitefeather.dev/onelitefeather")
             if (System.getenv("CI") != null) {
@@ -30,6 +34,10 @@ dependencyResolutionManagement {
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.18")
             version("falco", "2.1.0")
+            version("luckperms", "5.5")
+            version("luckperms-minestom-loader", "5.6-SNAPSHOT")
+            version("minestom-extensions", "2.1.1")
+            version("guava", "33.7.1-jre")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
@@ -37,6 +45,7 @@ dependencyResolutionManagement {
             library("falco.anvil", "net.onelitefeather", "falco-anvil").withoutVersion()
 
             library("slf4j.api", "org.slf4j", "slf4j-api").versionRef("slf4j")
+            library("slf4j.simple", "org.slf4j", "slf4j-simple").versionRef("slf4j")
             library("pvp", "io.github.togar2", "MinestomPvP").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
             library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
@@ -48,8 +57,16 @@ dependencyResolutionManagement {
             library("junit.params", "org.junit.jupiter", "junit-jupiter-params").withoutVersion()
             library("aves", "net.theevilreaper", "aves").withoutVersion()
             library("xerus", "net.theevilreaper", "xerus").withoutVersion()
+            library("luckperms.api", "net.luckperms", "api").versionRef("luckperms")
+            library("luckperms.minestom.loader", "net.luckperms", "minestom-loader").versionRef("luckperms-minestom-loader")
+            library("guava", "com.google.guava", "guava").versionRef("guava")
+
+            library("minestom-extensions-bom", "net.onelitefeather", "minestom-extensions-bom").versionRef("minestom-extensions")
+            library("minestom-extensions", "net.onelitefeather", "minestom-extensions").withoutVersion()
+            library("minestom-extensions-processor", "net.onelitefeather", "minestom-extensions-processor").withoutVersion()
 
             library("cloudnet-bom", "eu.cloudnetservice.cloudnet", "bom").versionRef("cloudnet")
+            library("cloudnet-driver-api", "eu.cloudnetservice.cloudnet", "driver-api").withoutVersion()
             library("cloudnet-bridge", "eu.cloudnetservice.cloudnet", "bridge-api").withoutVersion()
             library("cloudnet-bridge-impl", "eu.cloudnetservice.cloudnet", "bridge-impl").withoutVersion()
             library("cloudnet-driver-impl", "eu.cloudnetservice.cloudnet", "driver-impl").withoutVersion()
@@ -57,17 +74,6 @@ dependencyResolutionManagement {
             library("cloudnet-jvm-wrapper", "eu.cloudnetservice.cloudnet", "wrapper-jvm-api").withoutVersion()
 
             plugin("shadow", "com.gradleup.shadow").versionRef("shadow")
-
-            bundle(
-                "cloudnet",
-                listOf(
-                    "cloudnet-bridge",
-                    "cloudnet-bridge-impl",
-                    "cloudnet-driver-impl",
-                    "cloudnet-platform-inject",
-                    "cloudnet-jvm-wrapper"
-                )
-            )
         }
     }
 }
@@ -75,3 +81,4 @@ dependencyResolutionManagement {
 include("common")
 include("setup")
 include("block")
+include("bridge")
