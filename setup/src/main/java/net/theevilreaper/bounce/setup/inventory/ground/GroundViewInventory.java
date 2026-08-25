@@ -126,6 +126,15 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
     }
 
     /**
+     * Unregisters the lazily-created ground value inventory, if one was ever opened for this setup session.
+     */
+    public void unregisterGroundValueInventory() {
+        if (groundValueInventory != null) {
+            groundValueInventory.unregister();
+        }
+    }
+
+    /**
      * Opens the ground value inventory for the player.
      * This method checks if the ground value inventory is initialized before attempting to open it.
      */

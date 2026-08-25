@@ -256,6 +256,22 @@ public final class GameMapBuilder extends BaseMapBuilder {
         if (getSpawn() == null) missing.add("Spawn");
         if (getGameSpawn() == null) missing.add("Game Spawn");
         if (getArea() == null) missing.add("Area");
+        if (!hasValidPushData()) missing.add("Push Data");
         return missing;
+    }
+
+    /**
+     * Checks whether the push data is usable: every entry needs a positive value, and at least one non-ground
+     * entry needs a positive weight so something can actually be placed besides the ground block.
+     *
+     * @return {@code true} if the push data satisfies both conditions
+     */
+    private boolean hasValidPushData() {
+        boolean hasWeightedPushEntry = false;
+        for (PushEntry entry : pushDataBuilder.getPushValues()) {
+            if (entry.getValue() <= 0) return false;
+            if (!entry.isGround() && entry.getWeight() > 0) hasWeightedPushEntry = true;
+        }
+        return hasWeightedPushEntry;
     }
 }

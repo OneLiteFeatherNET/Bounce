@@ -184,4 +184,34 @@ class GameMapBuilderTest {
         assertEquals(List.of("Game Spawn", "Area"), builder.getMissingFieldNames());
         assertFalse(builder.isReadyToSave());
     }
+
+    private GameMapBuilder readyBuilderExceptPushData() {
+        GameMapBuilder builder = new GameMapBuilder();
+        Area area = new GroundArea(Vec.ZERO, new Vec(5, 0, 5), Block.GLASS, PushData.builder().build());
+        builder.name("Test Map");
+        builder.spawn(new Pos(1, 2, 3));
+        builder.gameSpawn(new Pos(4, 5, 6));
+        builder.area(area);
+        return builder;
+    }
+
+    @Test
+    void testBuilderIsNotReadyToSaveWhenNoPushEntryHasWeight() {
+        GameMapBuilder builder = readyBuilderExceptPushData();
+        for (PushEntry entry : builder.getPushDataBuilder().getPushValues()) {
+            if (!entry.isGround()) entry.setWeight(0.0);
+        }
+
+        assertEquals(List.of("Push Data"), builder.getMissingFieldNames());
+        assertFalse(builder.isReadyToSave());
+    }
+
+    @Test
+    void testBuilderIsNotReadyToSaveWhenAnEntryHasNoValue() {
+        GameMapBuilder builder = readyBuilderExceptPushData();
+        builder.getPushDataBuilder().getPushValues().get(1).setValue(0);
+
+        assertEquals(List.of("Push Data"), builder.getMissingFieldNames());
+        assertFalse(builder.isReadyToSave());
+    }
 }

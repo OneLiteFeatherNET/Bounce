@@ -72,6 +72,7 @@ public final class BounceData implements SetupData {
         player.removeTag(SetupTags.SETUP_TAG);
         player.removeTag(SetupTags.PUSH_SLOT_INDEX);
         this.overviewInventory.unregister();
+        this.groundViewInventory.unregisterGroundValueInventory();
         this.groundViewInventory.unregister();
         this.pushValueInventory.unregister();
         this.areaViewInventory.unregister();
