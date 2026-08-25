@@ -22,6 +22,7 @@ public final class GameMap extends BaseMap {
     private final PushData pushData;
     private final @Nullable Area area;
     private final int shuffleIntervalTicks;
+    private final double reshufflePercentage;
 
     /**
      * Creates a new reference from the map class.
@@ -33,13 +34,15 @@ public final class GameMap extends BaseMap {
      * @param builders             the list of builders who worked on the map
      * @param area                 the ground area which gets dynamically filled, or {@code null} for a fully manual map
      * @param shuffleIntervalTicks the amount of ticks between two runtime reshuffles of the area
+     * @param reshufflePercentage  the fraction (0.0-1.0) of the area's positions to re-roll on each reshuffle
      */
-    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders, @Nullable Area area, int shuffleIntervalTicks) {
+    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders, @Nullable Area area, int shuffleIntervalTicks, double reshufflePercentage) {
         super(name, spawn, builders);
         this.gameSpawn = gameSpawn;
         this.pushData = pushData;
         this.area = area;
         this.shuffleIntervalTicks = shuffleIntervalTicks;
+        this.reshufflePercentage = reshufflePercentage;
     }
 
     /**
@@ -76,5 +79,14 @@ public final class GameMap extends BaseMap {
      */
     public int getShuffleIntervalTicks() {
         return shuffleIntervalTicks;
+    }
+
+    /**
+     * Returns the fraction of the area's positions which get re-rolled on each runtime reshuffle.
+     *
+     * @return the percentage as a fraction between 0.0 and 1.0
+     */
+    public double getReshufflePercentage() {
+        return reshufflePercentage;
     }
 }

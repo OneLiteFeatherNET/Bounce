@@ -13,15 +13,18 @@ import org.jetbrains.annotations.Nullable;
 public final class GameMapBuilder extends BaseMapBuilder {
 
     private static final int DEFAULT_SHUFFLE_INTERVAL_TICKS = 100;
+    private static final double DEFAULT_RESHUFFLE_PERCENTAGE = 0.1;
 
     private final PushData.Builder pushDataBuilder;
     private Pos gameSpawn;
     private @Nullable Area area;
     private int shuffleIntervalTicks;
+    private double reshufflePercentage;
 
     public GameMapBuilder() {
         super();
         this.shuffleIntervalTicks = DEFAULT_SHUFFLE_INTERVAL_TICKS;
+        this.reshufflePercentage = DEFAULT_RESHUFFLE_PERCENTAGE;
         this.pushDataBuilder = PushData.builder();
         this.pushDataBuilder
                 .add(PushEntry.groundEntry(Block.GLASS, 1, 1.0))
@@ -37,6 +40,9 @@ public final class GameMapBuilder extends BaseMapBuilder {
         this.shuffleIntervalTicks = gameMap.getShuffleIntervalTicks() > 0
                 ? gameMap.getShuffleIntervalTicks()
                 : DEFAULT_SHUFFLE_INTERVAL_TICKS;
+        this.reshufflePercentage = gameMap.getReshufflePercentage() > 0
+                ? gameMap.getReshufflePercentage()
+                : DEFAULT_RESHUFFLE_PERCENTAGE;
 
         if (gameMap.getPushData() == null) {
             this.pushDataBuilder = PushData.builder();
@@ -96,13 +102,24 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
+     * Sets the fraction of the area's positions to re-roll on each runtime reshuffle.
+     *
+     * @param reshufflePercentage the percentage as a fraction between 0.0 and 1.0
+     * @return this builder instance for chaining
+     */
+    public @NotNull GameMapBuilder reshufflePercentage(double reshufflePercentage) {
+        this.reshufflePercentage = reshufflePercentage;
+        return this;
+    }
+
+    /**
      * Builds a new {@link GameMap} instance with the current properties.
      *
      * @return a new GameMap instance
      */
     @Override
     public @NotNull GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks);
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks, this.reshufflePercentage);
     }
 
     /**
@@ -130,6 +147,15 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     public int getShuffleIntervalTicks() {
         return shuffleIntervalTicks;
+    }
+
+    /**
+     * Returns the fraction of the area's positions to re-roll on each runtime reshuffle.
+     *
+     * @return the percentage as a fraction between 0.0 and 1.0
+     */
+    public double getReshufflePercentage() {
+        return reshufflePercentage;
     }
 
     /**

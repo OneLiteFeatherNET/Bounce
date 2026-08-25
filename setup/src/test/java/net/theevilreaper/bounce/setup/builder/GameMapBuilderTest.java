@@ -81,6 +81,7 @@ class GameMapBuilderTest {
         GameMapBuilder builder = new GameMapBuilder();
         assertNull(builder.getArea());
         assertTrue(builder.getShuffleIntervalTicks() > 0, "A newly created map should have a sane default interval");
+        assertTrue(builder.getReshufflePercentage() > 0, "A newly created map should have a sane default reshuffle percentage");
     }
 
     @Test
@@ -88,14 +89,16 @@ class GameMapBuilderTest {
         GameMapBuilder builder = new GameMapBuilder();
         Area area = new GroundArea(Vec.ZERO, new Vec(5, 0, 5), Block.GLASS, PushData.builder().build());
 
-        builder.area(area).shuffleIntervalTicks(60);
+        builder.area(area).shuffleIntervalTicks(60).reshufflePercentage(0.4);
 
         assertEquals(area, builder.getArea());
         assertEquals(60, builder.getShuffleIntervalTicks());
+        assertEquals(0.4, builder.getReshufflePercentage());
 
         GameMap built = builder.build();
         assertEquals(area, built.getArea());
         assertEquals(60, built.getShuffleIntervalTicks());
+        assertEquals(0.4, built.getReshufflePercentage());
     }
 
     @Test
@@ -105,5 +108,6 @@ class GameMapBuilderTest {
 
         assertNull(reloaded.getArea());
         assertTrue(reloaded.getShuffleIntervalTicks() > 0);
+        assertTrue(reloaded.getReshufflePercentage() > 0);
     }
 }
