@@ -1,10 +1,11 @@
-package net.theevilreaper.bounce.setup.inventory.ground;
+package net.theevilreaper.bounce.setup.inventory.area;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
@@ -17,6 +18,7 @@ import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.ground.GroundArea;
 import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.builder.GameMapBuilder;
+import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import org.jetbrains.annotations.NotNull;
@@ -28,15 +30,17 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
 
     private static final Component TITLE = Component.text("Setup area");
 
+    private static final int SHUFFLE_INTERVAL_SLOT = 10;
     private static final int POS1_SLOT = 11;
     private static final int POS2_SLOT = 13;
     private static final int CONFIRM_SLOT = 15;
+    private static final int RESHUFFLE_PERCENTAGE_SLOT = 16;
 
     private final GameMapBuilder gameMapBuilder;
     private @Nullable Vec pos1;
     private @Nullable Vec pos2;
 
-    public AreaViewInventory(@NotNull Player player, @NotNull GameMapBuilder gameMapBuilder) {
+    public AreaViewInventory(Player player, GameMapBuilder gameMapBuilder) {
         super(TITLE, InventoryType.CHEST_3_ROW, player);
         this.gameMapBuilder = gameMapBuilder;
 
@@ -53,19 +57,27 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
 
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
-            dataLayout.blank(LayoutCalculator.from(POS1_SLOT, POS2_SLOT, CONFIRM_SLOT));
+            dataLayout.blank(LayoutCalculator.from(SHUFFLE_INTERVAL_SLOT, POS1_SLOT, POS2_SLOT, CONFIRM_SLOT, RESHUFFLE_PERCENTAGE_SLOT));
 
-            dataLayout.setItem(POS1_SLOT, getPosItem("Pos1", pos1), (p, slot, click, stack, result) -> {
+            dataLayout.setItem(SHUFFLE_INTERVAL_SLOT, getShuffleIntervalItem(), (p, slot, click, stack, result) -> {
+                result.accept(ClickHolder.cancelClick());
+                EventDispatcher.call(new PlayerDialogRequestEvent(p, PlayerDialogRequestEvent.Target.SETUP_SHUFFLE_INTERVAL));
+            });
+            dataLayout.setItem(POS1_SLOT, getPosItem(AreaViewType.LEFT_AREA_CORNER, pos1), (p, slot, click, stack, result) -> {
                 result.accept(ClickHolder.cancelClick());
                 if (click instanceof Click.Left) setPos1ToCurrentPosition(p);
             });
-            dataLayout.setItem(POS2_SLOT, getPosItem("Pos2", pos2), (p, slot, click, stack, result) -> {
+            dataLayout.setItem(POS2_SLOT, getPosItem(AreaViewType.RIGHT_AREA_CORNER, pos2), (p, slot, click, stack, result) -> {
                 result.accept(ClickHolder.cancelClick());
                 if (click instanceof Click.Left) setPos2ToCurrentPosition(p);
             });
             dataLayout.setItem(CONFIRM_SLOT, getConfirmItem(), (p, slot, click, stack, result) -> {
                 result.accept(ClickHolder.cancelClick());
                 if (click instanceof Click.Left) confirm(p);
+            });
+            dataLayout.setItem(RESHUFFLE_PERCENTAGE_SLOT, getReshufflePercentageItem(), (p, slot, click, stack, result) -> {
+                result.accept(ClickHolder.cancelClick());
+                EventDispatcher.call(new PlayerDialogRequestEvent(p, PlayerDialogRequestEvent.Target.SETUP_RESHUFFLE_PERCENTAGE));
             });
 
             return dataLayout;
@@ -77,7 +89,7 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
      *
      * @param player the player whose position is captured
      */
-    public void setPos1ToCurrentPosition(@NotNull Player player) {
+    public void setPos1ToCurrentPosition(Player player) {
         this.pos1 = toVec(player.getPosition());
         this.invalidateDataLayout();
     }
@@ -87,7 +99,7 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
      *
      * @param player the player whose position is captured
      */
-    public void setPos2ToCurrentPosition(@NotNull Player player) {
+    public void setPos2ToCurrentPosition(Player player) {
         this.pos2 = toVec(player.getPosition());
         this.invalidateDataLayout();
     }
@@ -98,7 +110,7 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
      *
      * @param player the player to notify
      */
-    public void confirm(@NotNull Player player) {
+    public void confirm(Player player) {
         if (pos1 == null || pos2 == null) return;
 
         PushEntry groundEntry = gameMapBuilder.getGroundBlockEntry();
@@ -107,13 +119,13 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
         player.sendMessage(Component.text("Area saved.", NamedTextColor.GREEN));
     }
 
-    private @NotNull Vec toVec(@NotNull Pos pos) {
+    private Vec toVec(Pos pos) {
         return new Vec(pos.x(), pos.y(), pos.z());
     }
 
-    private @NotNull ItemStack getPosItem(@NotNull String label, @Nullable Vec pos) {
-        ItemStack.Builder builder = ItemStack.builder(Material.STICK)
-                .customName(Component.text(label, NamedTextColor.AQUA));
+    private ItemStack getPosItem(AreaViewType type, @Nullable Vec pos) {
+        ItemStack.Builder builder = ItemStack.builder(type.getMaterial())
+                .customName(Component.text(type.getName(), type.getColor()));
         if (pos == null) {
             return builder.lore(
                     Component.empty(),
@@ -130,10 +142,37 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
         ).build();
     }
 
-    private @NotNull ItemStack getConfirmItem() {
+    private ItemStack getConfirmItem() {
         boolean ready = pos1 != null && pos2 != null;
         return ItemStack.builder(ready ? Material.LIME_DYE : Material.GRAY_DYE)
                 .customName(Component.text(ready ? "Confirm area" : "Set both positions first", ready ? NamedTextColor.GREEN : NamedTextColor.RED))
                 .build();
+    }
+
+    private ItemStack getShuffleIntervalItem() {
+        int ticks = gameMapBuilder.getShuffleIntervalTicks();
+        double seconds = ticks / 20.0;
+        return ItemStack.builder(Material.CLOCK)
+                .customName(Component.text("Reshuffle Interval", NamedTextColor.LIGHT_PURPLE))
+                .lore(
+                        Component.empty(),
+                        Component.text(String.format(java.util.Locale.ROOT, "%d ticks (%.1fs)", ticks, seconds), NamedTextColor.YELLOW),
+                        Component.empty(),
+                        Component.text("Click to edit", NamedTextColor.GRAY),
+                        Component.empty()
+                ).build();
+    }
+
+    private ItemStack getReshufflePercentageItem() {
+        double percentage = gameMapBuilder.getReshufflePercentage() * 100.0;
+        return ItemStack.builder(Material.TARGET)
+                .customName(Component.text("Reshuffle Percentage", NamedTextColor.LIGHT_PURPLE))
+                .lore(
+                        Component.empty(),
+                        Component.text(String.format(java.util.Locale.ROOT, "%.1f%%", percentage), NamedTextColor.YELLOW),
+                        Component.empty(),
+                        Component.text("Click to edit", NamedTextColor.GRAY),
+                        Component.empty()
+                ).build();
     }
 }
