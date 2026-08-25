@@ -74,6 +74,7 @@ public final class BounceData implements SetupData {
         this.overviewInventory.unregister();
         this.groundViewInventory.unregister();
         this.pushValueInventory.unregister();
+        this.areaViewInventory.unregister();
 
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
            MinecraftServer.getInstanceManager().unregisterInstance(this.instance);

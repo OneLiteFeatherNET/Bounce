@@ -96,8 +96,8 @@ public final class BounceSetup implements ListenerHandling {
             SetupItems.setOverViewItem(player);
         };
 
-        node.addListener(SetupFinishEvent.class, new SetupFinishListener(instanceSwitcher));
-        node.addListener(SetupDiscardEvent.class, new SetupDiscardListener(instanceSwitcher));
+        node.addListener(SetupFinishEvent.class, new SetupFinishListener(instanceSwitcher, this.setupDataService::remove));
+        node.addListener(SetupDiscardEvent.class, new SetupDiscardListener(instanceSwitcher, this.setupDataService::remove));
         node.addListener(SaveValidationPromptEvent.class, new SaveValidationPromptListener(dialogRegistry));
         node.addListener(PlayerGroundBlockSelectEvent.class, new PlayerBlockSelectListener(this.setupDataService::get));
         node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
