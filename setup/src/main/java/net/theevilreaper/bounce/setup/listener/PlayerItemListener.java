@@ -4,11 +4,14 @@ import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.item.ItemStack;
 import net.theevilreaper.bounce.setup.data.BounceData;
+import net.theevilreaper.bounce.setup.event.map.SaveValidationPromptEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -57,6 +60,12 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
 
         if (itemId == 0x04) {
             setupData.openGroundLayerView();
+            return;
+        }
+
+        List<String> missingFields = setupData.getMapBuilder().getMissingFieldNames();
+        if (!missingFields.isEmpty()) {
+            EventDispatcher.call(new SaveValidationPromptEvent(player, missingFields));
             return;
         }
 

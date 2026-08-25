@@ -12,11 +12,13 @@ public class SetupMessages extends Messages {
 
     public static final Component TELEPORT_CLICK;
     public static final Component DELETE_CLICK;
+    public static final Component CLICK_TO_EDIT;
 
     static {
         NO_SPACE_SEPARATOR = Component.text("»", NamedTextColor.GRAY);
         SELECT_MAP_FIRST = withPrefix(Component.text("Please select a map first!", NamedTextColor.RED));
         INVALID_NAME = withPrefix(Component.text("Invalid name for the map", NamedTextColor.RED));
+        CLICK_TO_EDIT = Component.text("Click to edit", NamedTextColor.GRAY);
 
         TELEPORT_CLICK = NO_SPACE_SEPARATOR
                 .append(Component.space())

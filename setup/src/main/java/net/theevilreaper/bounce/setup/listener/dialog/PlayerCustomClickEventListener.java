@@ -4,11 +4,13 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.dialog.*;
 import net.theevilreaper.bounce.setup.dialog.type.*;
+import net.theevilreaper.bounce.setup.event.map.SetupDiscardEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import net.theevilreaper.bounce.setup.util.SetupTags;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +65,7 @@ public class PlayerCustomClickEventListener implements Consumer<PlayerCustomClic
                 case WeightInputDialog ignored -> this.handleWeightUpdate(player, data, dialogData);
                 case ShuffleIntervalInputDialog ignored -> this.handleShuffleIntervalSet(data, dialogData);
                 case ReshufflePercentageInputDialog ignored -> this.handleReshufflePercentageSet(data, dialogData);
+                case SaveValidationDialog ignored -> EventDispatcher.call(new SetupDiscardEvent(data));
                 default ->
                         throw new IllegalStateException("Unexpected dialog type: " + dialogTemplate.getClass().getCanonicalName());
             }
