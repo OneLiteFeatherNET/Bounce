@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Fired when a player discards an in-progress setup instead of saving it, e.g. after confirming a
- * {@link net.theevilreaper.bounce.setup.dialog.type.SaveValidationDialog}.
+ * {@link net.theevilreaper.bounce.setup.dialog.MapDialogs#openSaveValidationDialog}.
  */
 public class SetupDiscardEvent implements Event {
 

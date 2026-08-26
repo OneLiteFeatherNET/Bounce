@@ -14,8 +14,6 @@ import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.bootstrap.ServiceBootstrap;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
 import net.theevilreaper.bounce.setup.command.SetupCommand;
-import net.theevilreaper.bounce.setup.dialog.DialogRegistry;
-import net.theevilreaper.bounce.setup.dialog.SetupDialogRegistry;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
@@ -30,7 +28,7 @@ import net.theevilreaper.bounce.setup.listener.PlayerConfigurationListener;
 import net.theevilreaper.bounce.setup.listener.PlayerDisconnectListener;
 import net.theevilreaper.bounce.setup.listener.PlayerItemListener;
 import net.theevilreaper.bounce.setup.listener.PlayerSpawnListener;
-import net.theevilreaper.bounce.setup.listener.dialog.PlayerCustomClickEventListener;
+import net.theevilreaper.bounce.setup.listener.dialog.DialogPayloadListener;
 import net.theevilreaper.bounce.setup.listener.dialog.PlayerDeletePromptListener;
 import net.theevilreaper.bounce.setup.listener.dialog.PlayerDialogRequestListener;
 import net.theevilreaper.bounce.setup.listener.dialog.SaveValidationPromptListener;
@@ -58,14 +56,12 @@ public final class BounceSetup implements ListenerHandling {
     private final SetupMapProvider mapProvider;
     private final SetupDataService setupDataService;
     private final InventoryService inventoryService;
-    private final DialogRegistry dialogRegistry;
 
     public BounceSetup() {
         Path path = ServiceBootstrap.resolveWorkingDirectory();
         this.mapProvider = new SetupMapProvider(path);
         this.setupDataService = SetupDataService.create();
         this.inventoryService = new InventoryService(this.mapProvider::getEntries);
-        this.dialogRegistry = new SetupDialogRegistry();
         MinecraftServer.getSchedulerManager().buildShutdownTask(this::onShutdown);
         MinecraftServer.getConnectionManager().setPlayerProvider(SetupPlayer::new);
     }
@@ -101,15 +97,15 @@ public final class BounceSetup implements ListenerHandling {
 
         node.addListener(SetupFinishEvent.class, new SetupFinishListener(instanceSwitcher, this.setupDataService::remove));
         node.addListener(SetupDiscardEvent.class, new SetupDiscardListener(instanceSwitcher, this.setupDataService::remove));
-        node.addListener(SaveValidationPromptEvent.class, new SaveValidationPromptListener(dialogRegistry));
+        node.addListener(SaveValidationPromptEvent.class, new SaveValidationPromptListener());
         node.addListener(PlayerGroundBlockSelectEvent.class, new PlayerBlockSelectListener(this.setupDataService::get));
         node.addListener(SetupInventorySwitchEvent.class, new SetupInventorySwitchListener(this.inventoryService, this.setupDataService::get));
         node.addListener(GameMapBuilderStateNotifyEvent.class, new GameMapBuilderStateNotifyListener());
         node.addListener(PlayerPushBlockSelectEvent.class, new PlayerPushBlockSelectListener(this.setupDataService::get));
         node.addListener(PlayerPushIndexChangeEvent.class, new PlayerPushIndexChangeListener(this.setupDataService::get));
-        node.addListener(PlayerDeletePromptEvent.class, new PlayerDeletePromptListener(dialogRegistry));
-        node.addListener(PlayerCustomClickEvent.class, new PlayerCustomClickEventListener(this.dialogRegistry, this.setupDataService::get));
-        node.addListener(PlayerDialogRequestEvent.class, new PlayerDialogRequestListener(this.dialogRegistry));
+        node.addListener(PlayerDeletePromptEvent.class, new PlayerDeletePromptListener());
+        node.addListener(PlayerCustomClickEvent.class, new DialogPayloadListener(this.setupDataService::get));
+        node.addListener(PlayerDialogRequestEvent.class, new PlayerDialogRequestListener());
         node.addListener(AddEntityToInstanceEvent.class, new EntityAddToInstanceListener(instanceSupplier));
 
     }

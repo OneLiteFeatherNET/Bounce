@@ -38,6 +38,7 @@ dependencyResolutionManagement {
             version("luckperms-minestom-loader", "5.6-SNAPSHOT")
             version("minestom-extensions", "2.1.1")
             version("guava", "33.7.1-jre")
+            version("pica", "0.1.0")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
@@ -64,6 +65,7 @@ dependencyResolutionManagement {
             library("minestom-extensions-bom", "net.onelitefeather", "minestom-extensions-bom").versionRef("minestom-extensions")
             library("minestom-extensions", "net.onelitefeather", "minestom-extensions").withoutVersion()
             library("minestom-extensions-processor", "net.onelitefeather", "minestom-extensions-processor").withoutVersion()
+            library("pica", "net.onelitefeather", "pica").versionRef("pica")
 
             library("cloudnet-bom", "eu.cloudnetservice.cloudnet", "bom").versionRef("cloudnet")
             library("cloudnet-driver-api", "eu.cloudnetservice.cloudnet", "driver-api").withoutVersion()
