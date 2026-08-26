@@ -40,4 +40,28 @@ class PushValueInventoryIntegrationTest {
 
         env.destroyInstance(instance, true);
     }
+
+    @Test
+    void testUpdateLayoutBeforeFirstOpenPopulatesData(@NotNull Env env) {
+        Instance instance = env.createFlatInstance();
+        Player player = env.createPlayer(instance);
+        GameMapBuilder gameMapBuilder = new GameMapBuilder();
+
+        PushValueInventory inventory = new PushValueInventory(player, gameMapBuilder);
+        // Mirrors BounceData: register() runs right after construction, before the player ever
+        // navigates here, which already materializes the underlying inventory once.
+        inventory.register();
+        // Mirrors PlayerPushIndexChangeListener: the layout is populated for an index before the
+        // inventory has ever been opened (the player is still viewing GroundViewInventory at this point).
+        inventory.updateLayout(1);
+        inventory.open();
+        env.tick();
+
+        ISlot slot = inventory.getDataLayout().getSlot(WEIGHT_SLOT);
+        assertNotNull(slot, "Weight slot should be populated even though updateLayout() ran before the first open()");
+        ItemStack item = slot.getItem();
+        assertEquals(Material.NETHER_STAR, item.material());
+
+        env.destroyInstance(instance, true);
+    }
 }

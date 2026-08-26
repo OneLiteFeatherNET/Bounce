@@ -72,6 +72,15 @@ public class GroundViewInventory extends PersonalInventoryBuilder {
         });
     }
 
+    // aves only recomputes the data layout on invalidate if the inventory is currently open; otherwise it
+    // relies on the static-layout-valid flag to trigger a refresh on the next open() — but that flag is
+    // already true after the first render, so a later reopen would silently keep showing stale data.
+    @Override
+    public void invalidateDataLayout() {
+        invalidateLayout();
+        super.invalidateDataLayout();
+    }
+
     /**
      * Handles the click on a push button click in the inventory.
      *
