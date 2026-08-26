@@ -12,6 +12,7 @@ public class SetupMessages extends Messages {
 
     public static final Component TELEPORT_CLICK;
     public static final Component DELETE_CLICK;
+    public static final Component SET_CLICK;
     public static final Component CLICK_TO_EDIT;
 
     static {
@@ -19,6 +20,16 @@ public class SetupMessages extends Messages {
         SELECT_MAP_FIRST = withPrefix(Component.text("Please select a map first!", NamedTextColor.RED));
         INVALID_NAME = withPrefix(Component.text("Invalid name for the map", NamedTextColor.RED));
         CLICK_TO_EDIT = Component.text("Click to edit", NamedTextColor.GRAY);
+
+        SET_CLICK = NO_SPACE_SEPARATOR
+                .append(Component.space())
+                .append(Component.text("Left", NamedTextColor.GREEN))
+                .append(Component.space())
+                .append(Component.text("click", NamedTextColor.GRAY))
+                .append(Component.space())
+                .append(Component.text("->", NamedTextColor.GRAY))
+                .append(Component.space())
+                .append(Component.text("set to your position", NamedTextColor.GREEN));
 
         TELEPORT_CLICK = NO_SPACE_SEPARATOR
                 .append(Component.space())

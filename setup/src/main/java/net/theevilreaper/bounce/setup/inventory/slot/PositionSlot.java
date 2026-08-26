@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import static net.theevilreaper.bounce.setup.util.SetupMessages.DELETE_CLICK;
+import static net.theevilreaper.bounce.setup.util.SetupMessages.SET_CLICK;
 import static net.theevilreaper.bounce.setup.util.SetupMessages.TELEPORT_CLICK;
 
 public class PositionSlot<T extends DataType> extends AbstractDataSlot<T> {
@@ -36,17 +37,27 @@ public class PositionSlot<T extends DataType> extends AbstractDataSlot<T> {
     }
 
     private final @Nullable Pos position;
+    private final @Nullable Consumer<Player> onSet;
 
-    public PositionSlot(T type, @Nullable Pos position) {
+    public PositionSlot(T type, @Nullable Pos position, @Nullable Consumer<Player> onSet) {
         super(type);
         this.position = position;
+        this.onSet = onSet;
     }
 
     @Override
     public ItemStack getItem() {
         ItemStack overviewItem = this.type.getItem();
 
-        if (position == null) return overviewItem;
+        if (position == null) {
+            if (onSet == null) return overviewItem;
+
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.empty());
+            lore.add(SET_CLICK);
+            lore.add(Component.empty());
+            return asBuilder(overviewItem).lore(lore).build();
+        }
 
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
@@ -62,7 +73,13 @@ public class PositionSlot<T extends DataType> extends AbstractDataSlot<T> {
     @Override
     protected void click(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
-        if ((!(click instanceof Click.Left || click instanceof Click.Right)) || position == null) return;
+        if (!(click instanceof Click.Left || click instanceof Click.Right)) return;
+
+        if (position == null) {
+            if (click instanceof Click.Left && onSet != null) onSet.accept(player);
+            return;
+        }
+
         if (click instanceof Click.Left) {
             player.closeInventory();
             player.teleport(position);
