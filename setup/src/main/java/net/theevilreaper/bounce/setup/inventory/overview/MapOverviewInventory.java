@@ -64,11 +64,31 @@ public final class MapOverviewInventory extends PersonalInventoryBuilder {
      */
     private ISlot getOverViewItem(OverviewType type) {
         return switch (type) {
-            case SPAWN -> new PositionSlot<>(type, this.builder.getSpawn());
-            case GAME_SPAWN -> new PositionSlot<>(type, this.builder.getGameSpawn());
+            case SPAWN -> new PositionSlot<>(type, this.builder.getSpawn(), this::setSpawnToCurrentPosition);
+            case GAME_SPAWN -> new PositionSlot<>(type, this.builder.getGameSpawn(), this::setGameSpawnToCurrentPosition);
             case NAME -> new StringSlot(type, builder.getName());
             case BUILDER -> new MultiStringSlot(type, builder.getBuilders());
             case AREA -> new AreaOverviewSlot(type, builder.getArea());
         };
+    }
+
+    /**
+     * Sets the spawn position on the {@link GameMapBuilder} to the player's current position and refreshes the layout.
+     *
+     * @param player the player whose position is captured
+     */
+    private void setSpawnToCurrentPosition(Player player) {
+        this.builder.spawn(player.getPosition());
+        this.invalidateDataLayout();
+    }
+
+    /**
+     * Sets the game spawn position on the {@link GameMapBuilder} to the player's current position and refreshes the layout.
+     *
+     * @param player the player whose position is captured
+     */
+    private void setGameSpawnToCurrentPosition(Player player) {
+        this.builder.gameSpawn(player.getPosition());
+        this.invalidateDataLayout();
     }
 }

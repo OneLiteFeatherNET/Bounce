@@ -13,7 +13,6 @@ import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.bootstrap.ServiceBootstrap;
 import net.theevilreaper.bounce.setup.command.GameModeCommand;
-import net.theevilreaper.bounce.setup.command.SetupCommand;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import net.theevilreaper.bounce.setup.event.ground.PlayerGroundBlockSelectEvent;
@@ -71,7 +70,6 @@ public final class BounceSetup implements ListenerHandling {
         registerCancelListener(node);
         registerListener(node);
 
-        MinecraftServer.getCommandManager().register(new SetupCommand(this.setupDataService));
         MinecraftServer.getCommandManager().register(new GameModeCommand());
     }
 
