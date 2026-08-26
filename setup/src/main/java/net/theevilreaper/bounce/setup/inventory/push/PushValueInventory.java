@@ -17,7 +17,6 @@ import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarget;
 import net.theevilreaper.bounce.setup.inventory.slot.SwitchTargetSlot;
 import net.theevilreaper.bounce.setup.util.LoreHelper;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -34,7 +33,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
 
     private final GameMapBuilder gameMapBuilder;
 
-    public PushValueInventory(@NotNull Player player, @NotNull GameMapBuilder mapBuilder) {
+    public PushValueInventory(Player player, GameMapBuilder mapBuilder) {
         super(TITLE, InventoryType.CHEST_3_ROW, player);
         this.gameMapBuilder = mapBuilder;
 
@@ -76,14 +75,14 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         super.invalidateDataLayout();
     }
 
-    private void handleBlockClick(@NotNull Player player, int slot, @NotNull Click clickType, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    private void handleBlockClick(Player player, int slot, Click clickType, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         player.closeInventory();
 
         EventDispatcher.call(new SetupInventorySwitchEvent(player, SwitchTarget.PUSH_BLOCKS_OVERVIEW));
     }
 
-    private void handlePushButtonClick(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    private void handlePushButtonClick(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
 
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
@@ -93,7 +92,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_BOUNCE));
     }
 
-    private void handleWeightButtonClick(@NotNull Player player, int slot, @NotNull Click click, @NotNull ItemStack stack, @NotNull Consumer<ClickHolder> result) {
+    private void handleWeightButtonClick(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 

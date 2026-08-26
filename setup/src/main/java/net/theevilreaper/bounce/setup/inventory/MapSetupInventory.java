@@ -44,7 +44,7 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
     private static final int[] MAP_SLOTS = LayoutCalculator
             .repeat(InventoryType.CHEST_1_ROW.getSize(), InventoryType.CHEST_3_ROW.getSize());
 
-    public MapSetupInventory(@NotNull Supplier<List<MapEntry>> maps) {
+    public MapSetupInventory(Supplier<List<MapEntry>> maps) {
         super(Component.text("Select map"), InventoryType.CHEST_4_ROW);
 
         InventoryLayout layout = InventoryLayout.fromType(getType());
@@ -79,7 +79,7 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
      * @param click      the click event
      * @param result     the consumer to handle the click result
      */
-    private void handleClick(@NotNull MapEntry currentMap, @NotNull Player player, int ignored, @NotNull Click click, @NotNull Consumer<ClickHolder> result) {
+    private void handleClick(MapEntry currentMap, Player player, int ignored, Click click, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
         EventDispatcher.callCancellable(new MapSetupSelectEvent(player, currentMap), player::closeInventory);
@@ -92,7 +92,7 @@ public class MapSetupInventory extends GlobalInventoryBuilder {
      * @return the ItemStack representing the map item
      */
     @Contract(value = "_ -> new", pure = true)
-    private @NotNull ItemStack getMapItem(@NotNull Path path) {
+    private ItemStack getMapItem(Path path) {
         return ItemStack.builder(Material.PAPER)
                 .lore(LORE_COMPONENTS)
                 .customName(Component.text(path.getFileName().toString()))

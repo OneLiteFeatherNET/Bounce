@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.setup.inventory.ground.GroundBlockOverviewInventory;
 import net.theevilreaper.bounce.setup.inventory.push.PushBlockInventory;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -20,7 +19,7 @@ public final class InventoryService {
      *
      * @param entries the list of map entries to be displayed in the map setup inventory
      */
-    public InventoryService(@NotNull Supplier<List<MapEntry>> entries) {
+    public InventoryService(Supplier<List<MapEntry>> entries) {
         this.mapSetupInventory = new MapSetupInventory(entries);
 
         this.groundBlockOverviewInventory = new GroundBlockOverviewInventory();
@@ -45,7 +44,7 @@ public final class InventoryService {
      *
      * @param player the player to open the inventory for
      */
-    public void openMapSetupInventory(@NotNull Player player) {
+    public void openMapSetupInventory(Player player) {
         player.openInventory(this.mapSetupInventory.getInventory());
     }
 
@@ -54,7 +53,7 @@ public final class InventoryService {
      *
      * @param player the player to open the inventory for
      */
-    public void openGroundBlockInventory(@NotNull Player player) {
+    public void openGroundBlockInventory(Player player) {
         player.openInventory(this.groundBlockOverviewInventory.getInventory());
     }
 
@@ -63,7 +62,7 @@ public final class InventoryService {
      *
      * @param player the player to open the inventory for
      */
-    public void openPushBlockInventory(@NotNull Player player) {
+    public void openPushBlockInventory(Player player) {
         player.openInventory(this.pushBlockInventory.getInventory());
     }
 }
