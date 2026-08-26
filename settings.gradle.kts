@@ -34,7 +34,7 @@ dependencyResolutionManagement {
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.18")
             version("falco", "2.1.0")
-            version("luckperms", "5.5")
+            version("luckperms", "6.0.1")
             version("luckperms-minestom-loader", "5.6-SNAPSHOT")
             version("minestom-extensions", "2.1.1")
             version("guava", "33.7.1-jre")
