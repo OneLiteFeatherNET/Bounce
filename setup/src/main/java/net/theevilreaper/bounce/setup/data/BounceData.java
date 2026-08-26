@@ -27,7 +27,6 @@ import java.util.UUID;
 public final class BounceData implements SetupData {
 
     private static final Pos SPAWN_POINT = new Pos(0, 100, 0);
-    private final UUID owner;
     private final MapEntry mapEntry;
     private final Player player;
 
@@ -39,16 +38,9 @@ public final class BounceData implements SetupData {
     private PushValueInventory pushValueInventory;
     private AreaViewInventory areaViewInventory;
 
-    public BounceData(UUID owner, MapEntry mapEntry) {
-        this.owner = owner;
+    public BounceData(Player player, MapEntry mapEntry) {
+        this.player = player;
         this.mapEntry = mapEntry;
-        Player foundPlayer = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(owner);
-
-        if (foundPlayer == null) {
-            throw new IllegalArgumentException("Player with UUID " + owner + " is not online.");
-        }
-
-        this.player = foundPlayer;
         this.loadData();
     }
 
@@ -57,6 +49,9 @@ public final class BounceData implements SetupData {
         player.setInstance(this.instance, spawnPoint);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save() {
         if (mapEntry.getMapFile() == null || !Files.exists(mapEntry.getMapFile())) {
@@ -67,6 +62,9 @@ public final class BounceData implements SetupData {
         EventDispatcher.call(new SetupFinishEvent(this));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         player.removeTag(SetupTags.SETUP_TAG);
@@ -78,7 +76,7 @@ public final class BounceData implements SetupData {
         this.areaViewInventory.unregister();
 
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
-           MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
+            MinecraftServer.getInstanceManager().unregisterInstance(this.instance);
             try {
                 this.loader.close();
             } catch (IOException e) {
@@ -87,6 +85,9 @@ public final class BounceData implements SetupData {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void loadData() {
         if (this.mapEntry.getMapFile() == null) {
@@ -95,7 +96,7 @@ public final class BounceData implements SetupData {
             Optional<GameMap> mapData = GsonUtil.GSON_FILE_HANDLER.load(mapEntry.getMapFile(), GameMap.class);
             // Initialize with a new BaseMap if loading fails
             mapData.ifPresentOrElse(gameMap ->
-                    this.gameMapBuilder = new GameMapBuilder(gameMap),
+                            this.gameMapBuilder = new GameMapBuilder(gameMap),
                     () -> this.gameMapBuilder = new GameMapBuilder()
             );
         }
@@ -190,6 +191,15 @@ public final class BounceData implements SetupData {
      */
     @Override
     public UUID getId() {
-        return this.owner;
+        return this.player.getUuid();
+    }
+
+    /**
+     * Returns the player reference that owns the data.
+     *
+     * @return given player
+     */
+    public Player getPlayer() {
+        return player;
     }
 }

@@ -1,10 +1,8 @@
 package net.theevilreaper.bounce.setup.listener.map;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
-import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
+import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.map.SetupDiscardEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,10 +20,9 @@ public class SetupDiscardListener implements Consumer<SetupDiscardEvent> {
 
     @Override
     public void accept(@NotNull SetupDiscardEvent event) {
-        SetupData setupData = event.getData();
+        BounceData setupData = ((BounceData) event.getData());
 
-        Player player = MinecraftServer.getConnectionManager().getOnlinePlayerByUuid(setupData.getId());
-        this.instanceSwitcher.accept(player);
+        this.instanceSwitcher.accept(setupData.getPlayer());
         setupData.reset();
         this.setupDataRemover.get(setupData.getId());
     }

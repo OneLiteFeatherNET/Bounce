@@ -44,7 +44,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
         }
 
         MapEntry mapEntry = event.getMapEntry();
-        BounceData data = new BounceData(player.getUuid(), mapEntry);
+        BounceData data = new BounceData(player, mapEntry);
 
         Component message = Messages.withPrefix(Component.text("You selected the map: ", NamedTextColor.GRAY))
                 .append(Component.text(mapEntry.getDirectoryRoot().getFileName().toString(), NamedTextColor.AQUA));
@@ -58,9 +58,7 @@ public final class MapSetupSelectListener implements Consumer<MapSetupSelectEven
         this.setupDataService.add(player.getUuid(), data);
 
         player.setTag(SETUP_TAG, 1);
-        getTeleportTask(() -> {
-            data.teleport(player);
-        }).schedule();
+        getTeleportTask(() -> data.teleport(player)).schedule();
     }
 
     private @NotNull Task.Builder getTeleportTask(@NotNull Runnable runnable) {

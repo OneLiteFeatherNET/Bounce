@@ -27,7 +27,7 @@ class GroundSetupItemTest extends SetupItemTestBase {
     void testGroundItemLogic(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         Player player = env.createPlayer(instance);
-        BounceData bounceData = new BounceData(player.getUuid(), testMapEntry);
+        BounceData bounceData = new BounceData(player, testMapEntry);
         setupDataService.add(player.getUuid(), bounceData);
 
         PlayerItemListener playerItemListener = new PlayerItemListener(nopFunction, setupDataService::get);
