@@ -36,7 +36,7 @@ dependencyResolutionManagement {
             version("falco", "2.1.0")
             version("luckperms", "5.5")
             version("luckperms-minestom-loader", "5.6-SNAPSHOT")
-            version("minestom-extensions", "2.1.1")
+            version("minestom-extensions", "2.2.0")
             version("guava", "33.7.1-jre")
             version("pica", "0.1.2")
 
