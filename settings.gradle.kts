@@ -29,7 +29,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             version("shadow", "9.6.1")
-            version("aonyx", "0.8.5")
+            version("aonyx", "0.8.6")
             version("pvp", "2026.05.30-26.1.1")
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.18")
