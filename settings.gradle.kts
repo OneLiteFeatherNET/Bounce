@@ -32,7 +32,7 @@ dependencyResolutionManagement {
             version("aonyx", "0.8.6")
             version("pvp", "2026.05.30-26.1.1")
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
-            version("slf4j", "2.0.18")
+            version("slf4j", "2.0.19")
             version("falco", "2.1.0")
             version("luckperms", "5.5")
             version("luckperms-minestom-loader", "5.6-SNAPSHOT")
