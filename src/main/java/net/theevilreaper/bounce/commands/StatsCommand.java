@@ -7,19 +7,15 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
-import net.theevilreaper.bounce.profile.BounceProfile;
+import net.theevilreaper.bounce.player.BouncePlayer;
 import net.theevilreaper.bounce.util.GameMessages;
-
-import java.util.function.Function;
 
 public class StatsCommand extends Command {
 
-    private final Function<Player, BounceProfile> profileFunction;
     private final ArgumentString playerArgument;
 
-    public StatsCommand(Function<Player, BounceProfile> profileFunction) {
+    public StatsCommand() {
         super("stats");
-        this.profileFunction = profileFunction;
         this.playerArgument = ArgumentType.String("player");
         addSyntax(this::handleOwnStats);
     }
@@ -45,24 +41,19 @@ public class StatsCommand extends Command {
             return;
         }
 
-        BounceProfile profile = profileFunction.apply(targetPlayer);
-
-        if (profile == null) {
+        if (!(targetPlayer instanceof BouncePlayer)) {
             sender.sendMessage(GameMessages.NO_PROFILE);
-            return;
         }
-
     }
 
     private void handleOwnStats(CommandSender sender, CommandContext context) {
         Player player = (Player) sender;
-        BounceProfile profile = profileFunction.apply(player);
 
-        if (profile == null) {
+        if (!(player instanceof BouncePlayer bouncePlayer)) {
             sender.sendMessage(GameMessages.NO_PROFILE);
             return;
         }
 
-        profile.sendStats(false);
+        bouncePlayer.sendStats(false);
     }
 }

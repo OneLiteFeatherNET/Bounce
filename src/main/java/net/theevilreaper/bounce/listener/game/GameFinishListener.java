@@ -3,44 +3,46 @@ package net.theevilreaper.bounce.listener.game;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
-import net.minestom.server.entity.Player;
+import net.minestom.server.MinecraftServer;
 import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
-import net.theevilreaper.bounce.profile.BounceProfile;
-import net.theevilreaper.bounce.profile.ProfileService;
+import net.theevilreaper.bounce.player.BouncePlayer;
 import net.theevilreaper.bounce.util.GameMessages;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class GameFinishListener implements Consumer<BounceGameFinishEvent> {
 
-    private final ProfileService profileService;
-
-    public GameFinishListener(ProfileService profileService) {
-        this.profileService = profileService;
-    }
-
     @Override
     public void accept(BounceGameFinishEvent event) {
         if (event.getReason() == BounceGameFinishEvent.Reason.PLAYER_LEFT) return;
-        BounceProfile winnerProfile = profileService.getWinner();
 
-        if (winnerProfile == null) {
-            profileService.clear(BounceProfile::stopJumpTask);
+        List<BouncePlayer> participants = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+                .map(BouncePlayer.class::cast)
+                .filter(BouncePlayer::isRoundActive)
+                .toList();
+
+        BouncePlayer winner = participants.stream()
+                .max(BouncePlayer::compareStanding)
+                .orElse(null);
+
+        if (winner == null) {
+            participants.forEach(BouncePlayer::endRound);
             return;
         }
 
-        profileService.clear(profile -> {
-            profile.stopJumpTask();
-            Player player = profile.getPlayer();
-            AttributeHelper.resetJumpStrength(player);
-            boolean isWinner = profile.equals(winnerProfile);
-            profile.sendStats(isWinner);
-            Component displayName = winnerProfile.getPlayer().getDisplayName();
-            Title title = Title.title(displayName, GameMessages.WON_COMPONENT, Title.DEFAULT_TIMES);
-            player.sendTitlePart(TitlePart.TITLE, title.title());
-            player.sendTitlePart(TitlePart.SUBTITLE, title.subtitle());
-            player.sendTitlePart(TitlePart.TIMES, title.times());
-        });
+        Component displayName = winner.getDisplayName();
+        Title title = Title.title(displayName, GameMessages.WON_COMPONENT, Title.DEFAULT_TIMES);
+
+        for (BouncePlayer participant : participants) {
+            participant.endRound();
+            AttributeHelper.resetJumpStrength(participant);
+            boolean isWinner = participant.equals(winner);
+            participant.sendStats(isWinner);
+            participant.sendTitlePart(TitlePart.TITLE, title.title());
+            participant.sendTitlePart(TitlePart.SUBTITLE, title.subtitle());
+            participant.sendTitlePart(TitlePart.TIMES, title.times());
+        }
     }
 }

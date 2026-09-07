@@ -22,6 +22,8 @@ import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.bootstrap.ServiceBootstrap;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.config.GameConfigReader;
+import net.theevilreaper.bounce.common.map.GameMap;
+import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.event.GamePrepareEvent;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
@@ -39,8 +41,6 @@ import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
 import net.theevilreaper.bounce.player.BouncePlayer;
-import net.theevilreaper.bounce.profile.BounceProfile;
-import net.theevilreaper.bounce.profile.ProfileService;
 import net.theevilreaper.bounce.timer.PlayingPhase;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.timer.RestartPhase;
@@ -54,20 +54,16 @@ import java.nio.file.Path;
 
 public class Bounce implements ListenerHandling {
 
-    private ProfileService profileService;
     private final GameConfig gameConfig;
     private final BounceScoreboard scoreboard;
     private final BounceMapProvider mapProvider;
     private final LinearPhaseSeries<Phase> phaseSeries;
-    private final PlayerUtil playerUtil;
 
     public Bounce() {
         Path path = ServiceBootstrap.resolveWorkingDirectory();
         this.gameConfig = new GameConfigReader(path.resolve("config")).getConfig();
         this.mapProvider = new BounceMapProvider(path);
         this.phaseSeries = new LinearPhaseSeries<>("Game");
-        this.profileService = new ProfileService();
-        this.playerUtil = new PlayerUtil(this.profileService, (this.mapProvider).getActiveMap().getPushData());
         this.scoreboard = new BounceScoreboard();
         this.registerPhases();
 
@@ -96,17 +92,30 @@ public class Bounce implements ListenerHandling {
     }
 
     public void unload() {
-        profileService.clear();
+        for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            if (onlinePlayer instanceof BouncePlayer bouncePlayer) {
+                bouncePlayer.endRound();
+            }
+        }
         this.mapProvider.cleanUp();
     }
 
     private void registerPhases() {
         this.phaseSeries.add(new LobbyPhase(this.gameConfig.minPlayers(), this.gameConfig.lobbyTime()));
         this.phaseSeries.add(new TeleportPhase(this.mapProvider::teleportToGameSpawn, this.scoreboard::initGameScoreboard));
-        this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName, () ->
-                this.profileService.start(this.mapProvider.getActiveMap(), scoreboard::createPlayerLine))
-        );
+        this.phaseSeries.add(new PlayingPhase(this.scoreboard::updateGameScoreboardDisplayName, this::startRound));
         this.phaseSeries.add(new RestartPhase());
+    }
+
+    private void startRound() {
+        GameMap activeMap = this.mapProvider.getActiveMap();
+        PushData pushData = activeMap.getPushData();
+
+        for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            if (!(onlinePlayer instanceof BouncePlayer bouncePlayer) || !bouncePlayer.isRoundActive()) continue;
+            bouncePlayer.startJumping(activeMap, pushData);
+            scoreboard.createPlayerLine(bouncePlayer);
+        }
     }
 
     private void registerListener(EventNode<Event> node) {
@@ -124,17 +133,17 @@ public class Bounce implements ListenerHandling {
                 this.phaseSeries::getCurrentPhase, this::handleGameLeave
         ));
 
-        node.addListener(GamePrepareEvent.class, new GamePrepareListener(this.playerUtil));
+        node.addListener(GamePrepareEvent.class, new GamePrepareListener());
         node.addListener(PlayerChatEvent.class, new PlayerChatListener());
     }
 
     private void registerGameListener(EventNode<Event> node) {
-        node.addListener(BounceGameFinishEvent.class, new GameFinishListener(profileService));
+        node.addListener(BounceGameFinishEvent.class, new GameFinishListener());
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener());
-        node.addListener(EntityKnockbackEvent.class, new KnockbackListener(this.profileService::get));
-        node.addListener(PlayerLavaEvent.class, new PlayerLavaListener(this.profileService::get, (this.mapProvider).getActiveMap()::getGameSpawn));
+        node.addListener(EntityKnockbackEvent.class, new KnockbackListener());
+        node.addListener(PlayerLavaEvent.class, new PlayerLavaListener((this.mapProvider).getActiveMap()::getGameSpawn));
     }
 
     private void registerCommands() {
@@ -142,11 +151,9 @@ public class Bounce implements ListenerHandling {
     }
 
     private void handleGameLeave(Player player) {
-        BounceProfile profile = this.profileService.remove(player);
-
-        if (profile == null) return;
-
-        profile.stopJumpTask();
+        if (player instanceof BouncePlayer bouncePlayer) {
+            bouncePlayer.endRound();
+        }
         this.scoreboard.removeViewer(player);
     }
 

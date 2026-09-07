@@ -2,25 +2,30 @@ package net.theevilreaper.bounce.util;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.theevilreaper.bounce.common.push.PushData;
-import net.theevilreaper.bounce.profile.BounceProfile;
-import net.theevilreaper.bounce.profile.ProfileService;
+import net.theevilreaper.bounce.player.BouncePlayer;
 
+/**
+ * Utility class for player-related operations.
+ *
+ * @version 1.0.0
+ * @since 0.1.0
+ * @author theEvilReaper
+ */
 public final class PlayerUtil {
 
-    private final ProfileService profileService;
-    private final PushData pushData;
-
-    public PlayerUtil(ProfileService profileService, PushData pushData) {
-        this.profileService = profileService;
-        this.pushData = pushData;
-    }
-
-    public void preparePlayers() {
+    /**
+     * Prepares all online players by setting their level to 0 and starting a round if they are a BouncePlayer.
+     */
+    public static void preparePlayers() {
         for (Player onlinePlayer : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             onlinePlayer.setLevel(0);
-            BounceProfile profile = this.profileService.add(onlinePlayer);
-            profile.registerJumpRunnable(pushData);
+            if (onlinePlayer instanceof BouncePlayer bouncePlayer) {
+                bouncePlayer.startRound();
+            }
         }
+    }
+
+    private PlayerUtil() {
+        throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 }
