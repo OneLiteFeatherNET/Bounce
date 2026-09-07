@@ -12,18 +12,33 @@ import java.util.stream.Collectors;
 /**
  * The {@link PushData} class represents a collection of different push values which are associated with specific blocks.
  *
- * @param push a map where the key is a {@link Block} and the value is a {@code double} representing the push value for that block.
  * @author theEvilReaper
  * @version 1.0.1
  * @since 0.1.0
  */
-public record PushData(List<PushEntry> push) {
+public final class PushData {
 
-    private static Map<Block, Integer> pushMap;
+    private final List<PushEntry> push;
+    private final Map<Block, Integer> pushMap;
 
-    public PushData {
-        pushMap = push.stream()
+    /**
+     * Constructs a new {@link PushData} from the given push entries.
+     *
+     * @param push a map where the key is a {@link Block} and the value is a {@code double} representing the push value for that block.
+     */
+    public PushData(List<PushEntry> push) {
+        this.push = push;
+        this.pushMap = push.stream()
                 .collect(Collectors.toMap(PushEntry::getBlock, PushEntry::getValue, (v1, v2) -> v2));
+    }
+
+    /**
+     * Returns the push entries this instance was constructed with.
+     *
+     * @return the push entries
+     */
+    public List<PushEntry> push() {
+        return push;
     }
 
     /**
