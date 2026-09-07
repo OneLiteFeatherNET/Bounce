@@ -31,8 +31,8 @@ public class GameMessages extends Messages {
     private static final Component POINT_PART;
 
     static {
-        LEAVE_PART = withPrefix(Component.text("left the game!", NamedTextColor.GRAY));
-        JOIN_PART = withPrefix(Component.text("joined the game!", NamedTextColor.GRAY));
+        LEAVE_PART = Component.text("left the game!", NamedTextColor.GRAY);
+        JOIN_PART = Component.text("joined the game!", NamedTextColor.GRAY);
 
         NO_PROFILE = withPrefix(Component.text("You do not have a profile!", NamedTextColor.RED));
         INVALID_PLAYER_NAME = withPrefix(Component.text("Invalid player name!", NamedTextColor.RED));
