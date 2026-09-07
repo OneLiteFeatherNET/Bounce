@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.util.GameMessages;
+import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
 
 import java.time.temporal.ChronoUnit;
@@ -18,6 +19,7 @@ public class RestartPhase extends TimedPhase {
 
     public RestartPhase() {
         super("Restart", ChronoUnit.SECONDS, 1);
+        this.setTickDirection(TickDirection.DOWN);
         this.setCurrentTicks(15);
         this.setEndTicks(-1);
     }

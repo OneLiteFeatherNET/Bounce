@@ -24,7 +24,7 @@ public class LobbyPhase extends TimedPhase {
     public LobbyPhase(int minPlayers, int lobbyPhaseTime) {
         super("Lobby", ChronoUnit.SECONDS, 1);
         this.setPaused(true);
-        this.setCurrentTicks(30);
+        this.setCurrentTicks(lobbyPhaseTime);
         this.setTickDirection(TickDirection.DOWN);
         this.minPlayers = minPlayers;
         this.lobbyPhaseTime = lobbyPhaseTime;
@@ -104,7 +104,7 @@ public class LobbyPhase extends TimedPhase {
     }
 
     public void checkStopCondition() {
-        if (getConnectionManager().getOnlinePlayers().size() - 1 <= this.minPlayers) {
+        if (getConnectionManager().getOnlinePlayers().size() - 1 < this.minPlayers) {
             this.setPaused(true);
             this.setCurrentTicks(this.lobbyPhaseTime);
             setLevel();

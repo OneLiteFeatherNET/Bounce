@@ -67,15 +67,19 @@ public class PlayingPhase extends TimedPhase {
 
     public void handlePlayerCheck() {
         Collection<Player> onlinePlayers = getConnectionManager().getOnlinePlayers();
+        int remaining = onlinePlayers.size() - 1;
 
-        if (onlinePlayers.size() - 1 == 0) {
+        if (remaining <= 0) {
+            setSkipping(true);
             this.reason = BounceGameFinishEvent.Reason.PLAYER_LEFT;
             this.onSkip();
             return;
         }
 
-        setSkipping(true);
-        this.reason = BounceGameFinishEvent.Reason.ONE_PLAYER_LEFT;
-        this.onSkip();
+        if (remaining == 1) {
+            setSkipping(true);
+            this.reason = BounceGameFinishEvent.Reason.ONE_PLAYER_LEFT;
+            this.onSkip();
+        }
     }
 }

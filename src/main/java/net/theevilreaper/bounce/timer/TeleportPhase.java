@@ -6,6 +6,7 @@ import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.aves.util.functional.VoidConsumer;
 import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.util.ItemUtil;
+import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
 
 import java.time.temporal.ChronoUnit;
@@ -18,6 +19,7 @@ public class TeleportPhase extends TimedPhase {
 
     public TeleportPhase(PlayerConsumer teleport, VoidConsumer startTrigger) {
         super("Teleport", ChronoUnit.SECONDS, 1);
+        this.setTickDirection(TickDirection.DOWN);
         this.setCurrentTicks(3);
         this.teleport = teleport;
         this.startTrigger = startTrigger;
