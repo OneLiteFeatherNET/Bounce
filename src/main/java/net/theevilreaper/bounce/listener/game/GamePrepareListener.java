@@ -7,14 +7,8 @@ import java.util.function.Consumer;
 
 public class GamePrepareListener implements Consumer<GamePrepareEvent> {
 
-    private final PlayerUtil playerUtil;
-
-    public GamePrepareListener(PlayerUtil playerUtil) {
-        this.playerUtil = playerUtil;
-    }
-
     @Override
     public void accept(GamePrepareEvent event) {
-        playerUtil.preparePlayers();
+        PlayerUtil.preparePlayers();
     }
 }

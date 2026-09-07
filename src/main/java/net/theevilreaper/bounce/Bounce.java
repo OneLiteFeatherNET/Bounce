@@ -58,14 +58,12 @@ public class Bounce implements ListenerHandling {
     private final BounceScoreboard scoreboard;
     private final BounceMapProvider mapProvider;
     private final LinearPhaseSeries<Phase> phaseSeries;
-    private final PlayerUtil playerUtil;
 
     public Bounce() {
         Path path = ServiceBootstrap.resolveWorkingDirectory();
         this.gameConfig = new GameConfigReader(path.resolve("config")).getConfig();
         this.mapProvider = new BounceMapProvider(path);
         this.phaseSeries = new LinearPhaseSeries<>("Game");
-        this.playerUtil = new PlayerUtil();
         this.scoreboard = new BounceScoreboard();
         this.registerPhases();
 
@@ -135,7 +133,7 @@ public class Bounce implements ListenerHandling {
                 this.phaseSeries::getCurrentPhase, this::handleGameLeave
         ));
 
-        node.addListener(GamePrepareEvent.class, new GamePrepareListener(this.playerUtil));
+        node.addListener(GamePrepareEvent.class, new GamePrepareListener());
         node.addListener(PlayerChatEvent.class, new PlayerChatListener());
     }
 
