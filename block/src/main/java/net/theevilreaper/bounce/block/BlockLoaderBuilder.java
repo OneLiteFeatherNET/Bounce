@@ -94,8 +94,8 @@ public final class BlockLoaderBuilder implements BlockLoader {
     @Override
     public BlockLoader stairs() {
         blockManager.registerHandler(Block.OAK_STAIRS.key(), () -> new StairsBlockHandler(Block.OAK_STAIRS));
-        blockManager.registerHandler(Block.SPRUCE_STAIRS.key(), () -> new StairsBlockHandler(Block.OAK_STAIRS));
-        blockManager.registerHandler(Block.PALE_OAK_STAIRS.key(), () -> new StairsBlockHandler(Block.OAK_STAIRS));
+        blockManager.registerHandler(Block.SPRUCE_STAIRS.key(), () -> new StairsBlockHandler(Block.SPRUCE_STAIRS));
+        blockManager.registerHandler(Block.PALE_OAK_STAIRS.key(), () -> new StairsBlockHandler(Block.PALE_OAK_STAIRS));
         return this;
     }
 
@@ -130,13 +130,12 @@ public final class BlockLoaderBuilder implements BlockLoader {
                 Block.OAK_SLAB.key(), () -> new SlabBlockHandler(Block.OAK_SLAB.key())
         );
         blockManager.registerHandler(
-                Block.OAK_SLAB.key(), () -> new SlabBlockHandler(Block.SPRUCE_SLAB.key())
+                Block.SPRUCE_SLAB.key(), () -> new SlabBlockHandler(Block.SPRUCE_SLAB.key())
         );
         blockManager.registerHandler(
-                Block.OAK_SLAB.key(), () -> new SlabBlockHandler(Block.WARPED_SLAB.key())
+                Block.WARPED_SLAB.key(), () -> new SlabBlockHandler(Block.WARPED_SLAB.key())
         );
         return this;
-
     }
 
     @Override
