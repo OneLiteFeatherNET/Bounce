@@ -15,7 +15,6 @@ import net.theevilreaper.aves.inventory.util.LayoutCalculator;
 import net.theevilreaper.aves.map.MapEntry;
 import net.theevilreaper.bounce.setup.event.map.MapSetupSelectEvent;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.List;

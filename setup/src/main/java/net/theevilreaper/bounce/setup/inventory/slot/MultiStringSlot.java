@@ -9,7 +9,6 @@ import net.theevilreaper.aves.inventory.click.ClickHolder;
 import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.map.PlayerDeletePromptEvent;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;

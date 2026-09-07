@@ -1,11 +1,9 @@
 package net.theevilreaper.bounce.setup.listener.inventory;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventDispatcher;
 import net.onelitefeather.guira.data.SetupData;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
-import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent;
 import net.theevilreaper.bounce.setup.inventory.InventoryService;
 import net.theevilreaper.bounce.setup.util.SetupMessages;

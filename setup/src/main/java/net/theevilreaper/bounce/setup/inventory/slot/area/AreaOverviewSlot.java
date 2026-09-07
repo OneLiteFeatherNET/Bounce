@@ -13,7 +13,6 @@ import net.theevilreaper.bounce.setup.event.SetupInventorySwitchEvent.SwitchTarg
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import net.theevilreaper.bounce.setup.inventory.slot.AbstractDataSlot;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;

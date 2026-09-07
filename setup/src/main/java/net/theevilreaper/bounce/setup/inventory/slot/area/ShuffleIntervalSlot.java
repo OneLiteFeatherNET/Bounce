@@ -11,7 +11,6 @@ import net.theevilreaper.bounce.setup.dialog.event.PlayerDialogRequestEvent;
 import net.theevilreaper.bounce.setup.inventory.area.AreaViewType;
 import net.theevilreaper.bounce.setup.inventory.slot.AbstractDataSlot;
 import net.theevilreaper.bounce.setup.util.SetupMessages;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.function.Consumer;

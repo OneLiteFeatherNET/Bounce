@@ -22,6 +22,6 @@ public final class SaveValidationHandler implements DialogHandler {
     @Override
     public void handle(PlayerCustomClickEvent event, CompoundBinaryTag payload) {
         setupDataGetter.get(event.getPlayer().getUuid()).ifPresent(setupData ->
-                EventDispatcher.call(new SetupDiscardEvent((BounceData) setupData)));
+                EventDispatcher.call(new SetupDiscardEvent(setupData)));
     }
 }
