@@ -38,7 +38,7 @@ public class GameMessages extends Messages {
         INVALID_PLAYER_NAME = withPrefix(Component.text("Invalid player name!", NamedTextColor.RED));
         PLAYER_NOT_FOUND = withPrefix(Component.text("The provided player is not online!", NamedTextColor.RED));
         int forceStartTime = GameConfig.FORCE_START_TIME - 1;
-        ALREADY_FORCE_STARTED = withPrefix(Component.text("Already have a profile!", NamedTextColor.RED));
+        ALREADY_FORCE_STARTED = withPrefix(Component.text("The game has already been force started!", NamedTextColor.RED));
         PHASE_NOT_RUNNING = withPrefix(Component.text("Phase not running!", NamedTextColor.RED));
         PHASE_FORCE_STARTED = withMiniPrefix("<gray>The timer has been set to <color:#09ff00><seconds></color> seconds!",
                 TagResolver.builder().tag("seconds", (argumentQueue, context) -> Tag.preProcessParsed(String.valueOf(forceStartTime))).build());
