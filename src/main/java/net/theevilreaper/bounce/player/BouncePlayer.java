@@ -13,6 +13,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
 import net.theevilreaper.bounce.common.push.PushData;
+import net.theevilreaper.bounce.event.PlayerDeathBlockEvent;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.util.GameMessages;
@@ -96,7 +97,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
 
             if (block == Block.REDSTONE_BLOCK) {
                 lastBlockBelow = block;
-                teleport(bounceMap.getGameSpawn());
+                EventDispatcher.call(new PlayerDeathBlockEvent(this));
                 return;
             }
 
@@ -199,6 +200,15 @@ public final class BouncePlayer extends PermissionAwarePlayer {
      */
     public void resetDamager() {
         this.lastDamager = null;
+    }
+
+    /**
+     * Returns this player's current score.
+     *
+     * @return the current amount of points
+     */
+    public int getPoints() {
+        return points;
     }
 
     /**
