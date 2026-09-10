@@ -26,6 +26,7 @@ import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.event.GamePrepareEvent;
+import net.theevilreaper.bounce.event.PlayerDeathBlockEvent;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.listener.PlayerChatListener;
@@ -37,6 +38,7 @@ import net.theevilreaper.bounce.listener.damage.DamageListener;
 import net.theevilreaper.bounce.listener.damage.KnockbackListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
 import net.theevilreaper.bounce.listener.game.GamePrepareListener;
+import net.theevilreaper.bounce.listener.game.PlayerDeathBlockListener;
 import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
@@ -144,6 +146,7 @@ public class Bounce implements ListenerHandling {
         node.addListener(FinalDamageEvent.class, new DamageListener());
         node.addListener(EntityKnockbackEvent.class, new KnockbackListener());
         node.addListener(PlayerLavaEvent.class, new PlayerLavaListener((this.mapProvider).getActiveMap()::getGameSpawn));
+        node.addListener(PlayerDeathBlockEvent.class, new PlayerDeathBlockListener((this.mapProvider).getActiveMap()::getGameSpawn));
     }
 
     private void registerCommands() {

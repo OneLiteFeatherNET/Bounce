@@ -40,7 +40,15 @@ public class BounceMapProvider extends AbstractMapProvider {
 
         GameMap gameMap = loadedDataMap.get();
         this.activeMap = gameMap;
-        this.activeInstance = new BounceInstance(UUID.randomUUID(), DimensionType.OVERWORLD, gameMap.getArea(), gameMap.getShuffleIntervalTicks(), gameMap.getReshufflePercentage());
+        // Maps saved before these fields existed deserialize them as 0, which would otherwise silently disable
+        // the runtime reshuffle (0 ticks interval or a 0% re-roll both mean "reshuffle nothing, ever").
+        int shuffleIntervalTicks = gameMap.getShuffleIntervalTicks() > 0
+                ? gameMap.getShuffleIntervalTicks()
+                : GameMap.DEFAULT_SHUFFLE_INTERVAL_TICKS;
+        double reshufflePercentage = gameMap.getReshufflePercentage() > 0
+                ? gameMap.getReshufflePercentage()
+                : GameMap.DEFAULT_RESHUFFLE_PERCENTAGE;
+        this.activeInstance = new BounceInstance(UUID.randomUUID(), DimensionType.OVERWORLD, gameMap.getArea(), shuffleIntervalTicks, reshufflePercentage);
         this.falcoAnvilLoader = new FalcoAnvilLoader(mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.activeInstance.setChunkLoader(this.falcoAnvilLoader);
         this.activeInstance.enableAutoChunkLoad(true);
@@ -52,7 +60,7 @@ public class BounceMapProvider extends AbstractMapProvider {
 
         Area area = gameMap.getArea();
         if (area != null) {
-            AreaFiller.fill(this.activeInstance, area);
+            AreaFiller.fill(this.activeInstance, area, gameMap.getGameSpawn());
         }
     }
 
