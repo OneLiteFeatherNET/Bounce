@@ -18,6 +18,18 @@ import java.util.List;
  */
 public final class GameMap extends BaseMap {
 
+    /**
+     * Fallback used when a saved map is missing (or has a non-positive) {@code shuffleIntervalTicks}, e.g. because
+     * it was saved before that field existed.
+     */
+    public static final int DEFAULT_SHUFFLE_INTERVAL_TICKS = 100;
+
+    /**
+     * Fallback used when a saved map is missing (or has a non-positive) {@code reshufflePercentage}, e.g. because
+     * it was saved before that field existed.
+     */
+    public static final double DEFAULT_RESHUFFLE_PERCENTAGE = 0.1;
+
     private final Pos gameSpawn;
     private final PushData pushData;
     private final @Nullable Area area;
