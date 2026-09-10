@@ -36,8 +36,9 @@ public final class GroundArea implements Area {
      */
     @Override
     public void calculatePositions(Instance instance) {
-        // Avoid double calculations
-        if (!this.positions.isEmpty()) return;
+        if (!positions.isEmpty()) {
+            return;
+        }
 
         int minX = (int) Math.floor(Math.min(min.x(), max.x()));
         int maxX = (int) Math.floor(Math.max(min.x(), max.x()));
@@ -45,56 +46,64 @@ public final class GroundArea implements Area {
         int maxZ = (int) Math.floor(Math.max(min.z(), max.z()));
         int targetY = (int) Math.floor(min.y());
 
+        loadChunks(instance, minX, maxX, minZ, maxZ);
+
+        scanPositions(instance, minX, maxX, minZ, maxZ, targetY);
+
+        if (positions.isEmpty()) {
+            scanPositions(instance, minX, maxX, minZ, maxZ, targetY - 1);
+        }
+
+        LOGGER.info(
+                "Calculated positions for area: {} to {} with {} positions",
+                min,
+                max,
+                positions.size()
+        );
+    }
+
+    private void loadChunks(Instance instance, int minX, int maxX, int minZ, int maxZ) {
         int minChunkX = minX >> 4;
         int maxChunkX = maxX >> 4;
         int minChunkZ = minZ >> 4;
         int maxChunkZ = maxZ >> 4;
 
-        List<CompletableFuture<Chunk>> chunkFutures = new ArrayList<>();
-        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
-            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
-                chunkFutures.add(instance.loadChunk(cx, cz));
-            }
-        }
-        CompletableFuture.allOf(chunkFutures.toArray(new CompletableFuture[0])).join();
+        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
 
-        // Scan the single 2D plane at targetY
-        for (int x = minX; x <= maxX; x++) {
-            for (int z = minZ; z <= maxZ; z++) {
-                if (isAreaBlock(instance.getBlock(x, targetY, z))) {
-                    positions.add(new Vec(x, targetY, z));
-                }
+        for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
+            for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
+                futures.add(instance.loadChunk(chunkX, chunkZ));
             }
         }
 
-        // If no positions were found at targetY, try scanning targetY - 1
-        // in case coordinates were captured while standing on top of the ground platform
-        if (positions.isEmpty()) {
-            int scanY = targetY - 1;
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    if (isAreaBlock(instance.getBlock(x, scanY, z))) {
-                        positions.add(new Vec(x, scanY, z));
-                    }
-                }
-            }
-        }
-
-        LOGGER.info("Calculated positions for area: {} to {} with {} positions", min, max, positions.size());
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
     }
 
-    private boolean isAreaBlock(Block block) {
-        if (block.compare(groundBlock) || block.compare(Block.REDSTONE_BLOCK)) {
-            return true;
-        }
-        if (data != null && data.push() != null) {
-            for (var entry : data.push()) {
-                if (block.compare(entry.getBlock())) {
-                    return true;
+    private void scanPositions(
+            Instance instance,
+            int minX,
+            int maxX,
+            int minZ,
+            int maxZ,
+            int y
+    ) {
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                if (isAreaBlock(instance.getBlock(x, y, z))) {
+                    positions.add(new Vec(x, y, z));
                 }
             }
         }
-        return false;
+    }
+
+    /**
+     * Checks if the given block is an area block.
+     *
+     * @param block to check
+     * @return true yes otherwise false
+     */
+    private boolean isAreaBlock(Block block) {
+        return block.compare(groundBlock) || block.compare(Block.REDSTONE_BLOCK) || data.hasBlock(block);
     }
 
     /**
@@ -102,7 +111,7 @@ public final class GroundArea implements Area {
      */
     @Override
     public boolean hasPositions() {
-        return !this.positions.isEmpty();
+        return !positions.isEmpty();
     }
 
     /**
@@ -110,7 +119,7 @@ public final class GroundArea implements Area {
      */
     @Override
     public List<Vec> positions() {
-        return Collections.unmodifiableList(this.positions);
+        return Collections.unmodifiableList(positions);
     }
 
     /**
