@@ -47,7 +47,6 @@ import net.theevilreaper.bounce.timer.PlayingPhase;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.timer.RestartPhase;
 import net.theevilreaper.bounce.timer.TeleportPhase;
-import net.theevilreaper.bounce.util.PlayerUtil;
 import net.theevilreaper.bounce.util.BounceScoreboard;
 import net.theevilreaper.xerus.api.phase.LinearPhaseSeries;
 import net.theevilreaper.xerus.api.phase.Phase;
@@ -80,7 +79,7 @@ public class Bounce implements ListenerHandling {
         registerGameListener(globalEventHandler);
         this.registerCommands();
         this.phaseSeries.start();
-        this.scoreboard.initLobbyLayout((this.mapProvider).getMapName());
+        this.scoreboard.initLobbyLayout(this.mapProvider.getMapName());
 
         CombatFeatureSet featureSet = CombatFeatures.empty()
                 .add(CombatFeatures.VANILLA_ATTACK)
