@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
-import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.map.SetupDiscardEvent;
 import org.jetbrains.annotations.NotNull;
 
