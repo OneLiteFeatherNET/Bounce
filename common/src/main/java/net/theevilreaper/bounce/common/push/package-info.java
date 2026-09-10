@@ -1,4 +1,3 @@
-
 @NotNullByDefault
 package net.theevilreaper.bounce.common.push;
 
