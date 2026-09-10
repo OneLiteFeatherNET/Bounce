@@ -20,7 +20,7 @@ public final class ReshufflePercentageHandler implements DialogHandler {
     @Override
     public void handle(PlayerCustomClickEvent event, CompoundBinaryTag payload) {
         float percentage = payload.getFloat("reshuffle_percentage", 10.0f);
-        double reshufflePercentage = Math.max(0.0, Math.min(1.0, percentage / 100.0));
+        double reshufflePercentage = Math.clamp(percentage / 100.0, 0.0, 1.0);
 
         setupDataGetter.get(event.getPlayer().getUuid()).ifPresent(setupData -> {
             BounceData data = (BounceData) setupData;
