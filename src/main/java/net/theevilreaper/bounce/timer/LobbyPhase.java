@@ -39,10 +39,7 @@ public class LobbyPhase extends TimedPhase {
     public void onUpdate() {
         setLevel();
         switch (getCurrentTicks()) {
-            case 30, 20, 3, 1 -> broadcastTime();
-            case 10, 5 -> {
-                this.broadcastTime();
-            }
+            case 30, 20, 10, 5, 3, 1 -> broadcastTime();
             default -> {
                 // Nothing to do here
             }
