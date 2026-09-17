@@ -23,7 +23,7 @@ public final class WeightHandler implements DialogHandler {
     public void handle(PlayerCustomClickEvent event, CompoundBinaryTag payload) {
         Player player = event.getPlayer();
         float percentage = payload.getFloat("weight_percentage", 5.0f);
-        double weight = Math.max(0.0, Math.min(1.0, Math.round((percentage / 100.0) * 1000.0) / 1000.0));
+        double weight = Math.clamp(Math.round((percentage / 100.0) * 1000.0) / 1000.0, 0.0, 1.0);
         int valueIndex = player.hasTag(SetupTags.PUSH_SLOT_INDEX) ? player.getTag(SetupTags.PUSH_SLOT_INDEX) : 0;
         player.removeTag(SetupTags.PUSH_SLOT_INDEX);
 
