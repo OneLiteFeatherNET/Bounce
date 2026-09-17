@@ -11,7 +11,6 @@ import net.onelitefeather.pica.dialog.DialogTemplate;
 import net.onelitefeather.pica.dialog.type.DialogType;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public final class MapDialogs extends DialogBase {
     public static final Key DELETE_KEY = create("delete_dialog");
     public static final Key SAVE_VALIDATION_KEY = create("save_validation_dialog");
 
-    public static void openNameDialog(@NotNull Player player) {
+    public static void openNameDialog(Player player) {
         DialogTemplate dialogTemplate = DialogType.confirm(NAME_KEY)
                 .meta(dialogMeta -> {
                     dialogMeta.closeWithEscape(false);
@@ -41,7 +40,7 @@ public final class MapDialogs extends DialogBase {
         dialogTemplate.open(player);
     }
 
-    public static void openDeleteDialog(@NotNull Player player, @NotNull OverviewType overviewType) {
+    public static void openDeleteDialog(Player player, OverviewType overviewType) {
         DialogTemplate dialogTemplate = DialogType.confirm(DELETE_KEY)
                 .meta(dialogMeta -> {
                     dialogMeta.closeWithEscape(false);
@@ -61,7 +60,7 @@ public final class MapDialogs extends DialogBase {
         dialogTemplate.open(player);
     }
 
-    public static void openSaveValidationDialog(@NotNull Player player, @NotNull List<String> missingFields) {
+    public static void openSaveValidationDialog(Player player, List<String> missingFields) {
         DialogTemplate dialogTemplate = DialogType.confirm(SAVE_VALIDATION_KEY)
                 .meta(dialogMeta -> {
                     dialogMeta.closeWithEscape(false);
@@ -99,7 +98,7 @@ public final class MapDialogs extends DialogBase {
     }
 
     @Contract(pure = true)
-    private static CompoundBinaryTag getTypePayload(@NotNull OverviewType overviewType) {
+    private static CompoundBinaryTag getTypePayload(OverviewType overviewType) {
         return CompoundBinaryTag.builder().putInt("type", overviewType.ordinal()).build();
     }
 }

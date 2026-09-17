@@ -5,13 +5,12 @@ import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.inventory.overview.OverviewType;
-import org.jetbrains.annotations.NotNull;
 
 public final class DeleteHandler implements DialogHandler {
 
     private final OptionalSetupDataGetter setupDataGetter;
 
-    public DeleteHandler(@NotNull OptionalSetupDataGetter setupDataGetter) {
+    public DeleteHandler(OptionalSetupDataGetter setupDataGetter) {
         this.setupDataGetter = setupDataGetter;
     }
 

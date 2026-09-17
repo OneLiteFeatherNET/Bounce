@@ -6,13 +6,12 @@ import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.util.SetupTags;
-import org.jetbrains.annotations.NotNull;
 
 public final class WeightHandler implements DialogHandler {
 
     private final OptionalSetupDataGetter setupDataGetter;
 
-    public WeightHandler(@NotNull OptionalSetupDataGetter setupDataGetter) {
+    public WeightHandler(OptionalSetupDataGetter setupDataGetter) {
         this.setupDataGetter = setupDataGetter;
     }
 

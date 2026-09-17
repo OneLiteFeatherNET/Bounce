@@ -4,13 +4,12 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.data.BounceData;
-import org.jetbrains.annotations.NotNull;
 
 public final class NameHandler implements DialogHandler {
 
     private final OptionalSetupDataGetter setupDataGetter;
 
-    public NameHandler(@NotNull OptionalSetupDataGetter setupDataGetter) {
+    public NameHandler(OptionalSetupDataGetter setupDataGetter) {
         this.setupDataGetter = setupDataGetter;
     }
 

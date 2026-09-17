@@ -16,7 +16,7 @@ public final class AuthorDialogs extends DialogBase {
     public static final Key AUTHOR_AMOUNT_KEY = create("author_amount_dialog");
     public static final Key AUTHOR_INPUT_KEY = create("bounce_author_setup");
 
-    public static void openAuthorAmountDialog(@NotNull Player player) {
+    public static void openAuthorAmountDialog(Player player) {
         DialogTemplate dialogTemplate = DialogType.confirm(AUTHOR_AMOUNT_KEY)
                 .meta(dialogMeta -> {
                     dialogMeta.closeWithEscape(false);
@@ -40,7 +40,7 @@ public final class AuthorDialogs extends DialogBase {
         dialogTemplate.open(player);
     }
 
-    public static void openAuthorInputDialog(@NotNull Player player, int amount) {
+    public static void openAuthorInputDialog(Player player, int amount) {
         DialogTemplate dialogTemplate = DialogType.confirm(AUTHOR_INPUT_KEY)
                 .meta(dialogMeta -> {
                     dialogMeta.closeWithEscape(false);

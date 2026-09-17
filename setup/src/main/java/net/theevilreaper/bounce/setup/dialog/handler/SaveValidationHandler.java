@@ -5,13 +5,12 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCustomClickEvent;
 import net.onelitefeather.guira.functional.OptionalSetupDataGetter;
 import net.theevilreaper.bounce.setup.event.map.SetupDiscardEvent;
-import org.jetbrains.annotations.NotNull;
 
 public final class SaveValidationHandler implements DialogHandler {
 
     private final OptionalSetupDataGetter setupDataGetter;
 
-    public SaveValidationHandler(@NotNull OptionalSetupDataGetter setupDataGetter) {
+    public SaveValidationHandler(OptionalSetupDataGetter setupDataGetter) {
         this.setupDataGetter = setupDataGetter;
     }
 
