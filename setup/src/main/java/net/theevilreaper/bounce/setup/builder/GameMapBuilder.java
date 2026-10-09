@@ -23,6 +23,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
     private @Nullable Area area;
     private int shuffleIntervalTicks;
     private double reshufflePercentage;
+    private double powerUpHeight;
     private @Nullable Vec pos1;
     private @Nullable Vec pos2;
 
@@ -30,6 +31,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
         super();
         this.shuffleIntervalTicks = DEFAULT_SHUFFLE_INTERVAL_TICKS;
         this.reshufflePercentage = DEFAULT_RESHUFFLE_PERCENTAGE;
+        this.powerUpHeight = GameMap.DEFAULT_POWER_UP_HEIGHT;
         this.pushDataBuilder = PushData.builder();
         this.pushDataBuilder
                 .add(PushEntry.groundEntry(Block.GLASS, 1, 1.0))
@@ -48,6 +50,9 @@ public final class GameMapBuilder extends BaseMapBuilder {
         this.reshufflePercentage = gameMap.getReshufflePercentage() > 0
                 ? gameMap.getReshufflePercentage()
                 : DEFAULT_RESHUFFLE_PERCENTAGE;
+        this.powerUpHeight = gameMap.getPowerUpHeight() > 0
+                ? gameMap.getPowerUpHeight()
+                : GameMap.DEFAULT_POWER_UP_HEIGHT;
 
         if (this.area != null) {
             this.pos1 = this.area.min();
@@ -123,6 +128,17 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
+     * Sets the height above the ground at which power-ups spawn.
+     *
+     * @param powerUpHeight the height in blocks
+     * @return this builder instance for chaining
+     */
+    public GameMapBuilder powerUpHeight(double powerUpHeight) {
+        this.powerUpHeight = powerUpHeight;
+        return this;
+    }
+
+    /**
      * Sets the first captured corner of the ground area.
      *
      * @param pos1 the corner position, or {@code null} to clear it
@@ -151,7 +167,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     @Override
     public GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks, this.reshufflePercentage);
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks, this.reshufflePercentage, this.powerUpHeight);
     }
 
     /**
@@ -188,6 +204,15 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     public double getReshufflePercentage() {
         return reshufflePercentage;
+    }
+
+    /**
+     * Returns the height above the ground at which power-ups spawn.
+     *
+     * @return the height in blocks
+     */
+    public double getPowerUpHeight() {
+        return powerUpHeight;
     }
 
     /**

@@ -13,7 +13,7 @@ import java.util.List;
  * It holds data about the used positions and other things.
  *
  * @author theEvilReaper
- * @version 1.2.0
+ * @version 1.3.0
  * @since 0.1.0
  */
 public final class GameMap extends BaseMap {
@@ -30,11 +30,18 @@ public final class GameMap extends BaseMap {
      */
     public static final double DEFAULT_RESHUFFLE_PERCENTAGE = 0.1;
 
+    /**
+     * Fallback used when a saved map is missing (or has a non-positive) {@code powerUpHeight}, e.g. because
+     * it was saved before that field existed.
+     */
+    public static final double DEFAULT_POWER_UP_HEIGHT = 1.5;
+
     private final Pos gameSpawn;
     private final PushData pushData;
     private final @Nullable Area area;
     private final int shuffleIntervalTicks;
     private final double reshufflePercentage;
+    private final double powerUpHeight;
 
     /**
      * Creates a new reference from the map class.
@@ -47,14 +54,16 @@ public final class GameMap extends BaseMap {
      * @param area                 the ground area which gets dynamically filled, or {@code null} for a fully manual map
      * @param shuffleIntervalTicks the amount of ticks between two runtime reshuffles of the area
      * @param reshufflePercentage  the fraction (0.0-1.0) of the area's positions to re-roll on each reshuffle
+     * @param powerUpHeight        the height above the ground at which power-ups spawn
      */
-    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders, @Nullable Area area, int shuffleIntervalTicks, double reshufflePercentage) {
+    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders, @Nullable Area area, int shuffleIntervalTicks, double reshufflePercentage, double powerUpHeight) {
         super(name, spawn, builders);
         this.gameSpawn = gameSpawn;
         this.pushData = pushData;
         this.area = area;
         this.shuffleIntervalTicks = shuffleIntervalTicks;
         this.reshufflePercentage = reshufflePercentage;
+        this.powerUpHeight = powerUpHeight;
     }
 
     /**
@@ -100,5 +109,14 @@ public final class GameMap extends BaseMap {
      */
     public double getReshufflePercentage() {
         return reshufflePercentage;
+    }
+
+    /**
+     * Returns the height above the ground at which power-ups spawn.
+     *
+     * @return the height in blocks
+     */
+    public double getPowerUpHeight() {
+        return powerUpHeight;
     }
 }

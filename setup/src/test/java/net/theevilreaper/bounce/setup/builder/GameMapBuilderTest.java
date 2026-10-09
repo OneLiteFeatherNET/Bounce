@@ -104,6 +104,16 @@ class GameMapBuilderTest {
     }
 
     @Test
+    void testPowerUpHeightDefaultsAndRoundTripsThroughBuild() {
+        GameMapBuilder builder = new GameMapBuilder();
+        assertEquals(GameMap.DEFAULT_POWER_UP_HEIGHT, builder.getPowerUpHeight());
+
+        builder.powerUpHeight(2.5);
+        assertEquals(2.5, builder.build().getPowerUpHeight());
+        assertEquals(2.5, new GameMapBuilder(builder.build()).getPowerUpHeight());
+    }
+
+    @Test
     void testReloadingExistingMapWithoutAreaKeepsDefaultInterval() {
         GameMap gameMap = new GameMapBuilder().build();
         GameMapBuilder reloaded = new GameMapBuilder(gameMap);
