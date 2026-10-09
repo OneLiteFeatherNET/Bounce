@@ -21,6 +21,7 @@ import java.util.UUID;
 public class BounceMapProvider extends AbstractMapProvider {
 
     private final FalcoAnvilLoader falcoAnvilLoader;
+    private final BounceInstance bounceInstance;
 
     public BounceMapProvider(Path path) {
         super(GsonUtil.GSON_FILE_HANDLER, MapFilters::filterMapsForGame);
@@ -48,7 +49,8 @@ public class BounceMapProvider extends AbstractMapProvider {
         double reshufflePercentage = gameMap.getReshufflePercentage() > 0
                 ? gameMap.getReshufflePercentage()
                 : GameMap.DEFAULT_RESHUFFLE_PERCENTAGE;
-        this.activeInstance = new BounceInstance(UUID.randomUUID(), DimensionType.OVERWORLD, gameMap.getArea(), shuffleIntervalTicks, reshufflePercentage);
+        this.bounceInstance = new BounceInstance(UUID.randomUUID(), DimensionType.OVERWORLD, gameMap.getArea(), shuffleIntervalTicks, reshufflePercentage);
+        this.activeInstance = this.bounceInstance;
         this.falcoAnvilLoader = new FalcoAnvilLoader(mapEntry.getDirectoryRoot(), DimensionType.OVERWORLD.key());
         this.activeInstance.setChunkLoader(this.falcoAnvilLoader);
         this.activeInstance.enableAutoChunkLoad(true);
@@ -83,6 +85,10 @@ public class BounceMapProvider extends AbstractMapProvider {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public BounceInstance getBounceInstance() {
+        return bounceInstance;
     }
 
     public GameMap getActiveMap() {
