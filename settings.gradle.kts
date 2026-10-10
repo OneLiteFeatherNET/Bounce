@@ -33,7 +33,7 @@ dependencyResolutionManagement {
             version("pvp", "2026.05.30-26.1.1")
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.20")
-            version("falco", "3.0.0")
+            version("falco", "3.0.1")
             version("luckperms", "6.0.2")
             version("luckperms-minestom-loader", "6.0.2")
             version("minestom-extensions", "2.2.0")
