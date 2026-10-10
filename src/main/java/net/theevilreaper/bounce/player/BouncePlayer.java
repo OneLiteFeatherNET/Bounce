@@ -100,7 +100,18 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         Instance instance = getInstance();
         if (instance == null) return;
 
-        List<int[]> checkPositions = getCheckPositions();
+        int feetY = (int) Math.floor(getPosition().y());
+
+        // Lava is not solid, so a fast falling player can end up inside it instead of above it
+        for (int[] pos : getCheckPositions(feetY)) {
+            if (isLava(instance.getBlock(pos[0], pos[1], pos[2]))) {
+                lastBlockBelow = Block.LAVA;
+                EventDispatcher.call(new PlayerLavaEvent(this));
+                return;
+            }
+        }
+
+        List<int[]> checkPositions = getCheckPositions(feetY - 1);
         Block foundJumpBlock = null;
 
         for (int[] pos : checkPositions) {
@@ -112,7 +123,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
                 return;
             }
 
-            if (block == Block.LAVA) {
+            if (isLava(block)) {
                 lastBlockBelow = block;
                 EventDispatcher.call(new PlayerLavaEvent(this));
                 return;
@@ -143,14 +154,18 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         lastBlockBelow = foundJumpBlock;
     }
 
-    private List<int[]> getCheckPositions() {
+    private static boolean isLava(Block block) {
+        // compare() ignores the block state, so flowing lava with a level property matches as well
+        return block.compare(Block.LAVA);
+    }
+
+    private List<int[]> getCheckPositions(int y) {
         Pos playerPos = getPosition();
         double halfWidth = 0.3;
         double minX = playerPos.x() - halfWidth;
         double maxX = playerPos.x() + halfWidth;
         double minZ = playerPos.z() - halfWidth;
         double maxZ = playerPos.z() + halfWidth;
-        int y = (int) Math.floor(playerPos.y() - 1);
 
         return List.of(
                 new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(playerPos.z())}, // center
