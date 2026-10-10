@@ -8,7 +8,7 @@ package net.theevilreaper.bounce.common.config;
  * @param minPlayers the minimum number of players required to start a game
  * @param maxPlayers the maximum number of players allowed in the game
  * @param lobbyTime  the time in seconds before the game starts
- * @param gameTime   the maximum duration of a game in minutes
+ * @param gameTime   the maximum duration of a game in seconds
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
@@ -33,7 +33,7 @@ record InternalGameConfig(
      * Holds the reference to the default configuration instance.
      */
     static final class Instances {
-        private static final int MAX_GAME_TIME = 900;
+        private static final int MAX_GAME_TIME = 300;
         private static final int LOBBY_PHASE_TIME = 30;
         private static final int MAX_PLAYERS = 13;
         private static final int MIN_PLAYERS = 1;

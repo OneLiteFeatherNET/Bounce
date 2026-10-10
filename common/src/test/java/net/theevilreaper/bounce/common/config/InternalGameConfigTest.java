@@ -12,4 +12,9 @@ class InternalGameConfigTest {
         assertNotNull(gameConfig);
         assertInstanceOf(InternalGameConfig.class, gameConfig);
     }
+
+    @Test
+    void testDefaultGameTimeIsFiveMinutes() {
+        assertEquals(300, InternalGameConfig.defaultConfig().gameTime(), "A round should last five minutes by default");
+    }
 }
