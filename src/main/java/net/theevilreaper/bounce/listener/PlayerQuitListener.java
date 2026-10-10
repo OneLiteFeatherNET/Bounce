@@ -6,6 +6,7 @@ import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.timer.PlayingPhase;
+import net.theevilreaper.bounce.timer.TeleportPhase;
 import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.Phase;
 
@@ -31,6 +32,7 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
 
         switch (phase) {
             case LobbyPhase lobbyPhase -> handleLobbyQuit(lobbyPhase, player);
+            case TeleportPhase teleportPhase -> handleTeleportQuit(teleportPhase, player);
             case PlayingPhase playingPhase -> handleGameQuit(playingPhase, player);
             default -> this.handleDefaultLeave(player);
         }
@@ -45,6 +47,25 @@ public class PlayerQuitListener implements Consumer<PlayerDisconnectEvent> {
     private void handleLobbyQuit(LobbyPhase lobbyPhase, Player player) {
         lobbyPhase.checkStopCondition();
         Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
+    }
+
+    /**
+     * Handles the quit logic for the {@link TeleportPhase}.
+     * If not enough players remain for a round, the teleport gets skipped and the round ends right after it
+     * started, the same way as a quit during the {@link PlayingPhase}.
+     *
+     * @param teleportPhase the reference from the phase
+     * @param player        the player which is involved
+     */
+    private void handleTeleportQuit(TeleportPhase teleportPhase, Player player) {
+        Audience.audience(getConnectionManager().getOnlinePlayers()).sendMessage(GameMessages.getLeaveMessage(player));
+        this.playerLeave.accept(player);
+        if (getConnectionManager().getOnlinePlayers().size() > 1) return;
+
+        teleportPhase.finish();
+        if (phaseSupplier.get() instanceof PlayingPhase playingPhase) {
+            playingPhase.handlePlayerCheck();
+        }
     }
 
     /**
