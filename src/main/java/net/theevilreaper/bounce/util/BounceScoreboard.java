@@ -2,12 +2,17 @@ package net.theevilreaper.bounce.util;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import net.theevilreaper.aves.util.Strings;
 import net.theevilreaper.aves.util.TimeFormat;
 import net.theevilreaper.bounce.common.util.Messages;
 
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
+
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -93,6 +98,31 @@ public final class BounceScoreboard {
      */
     public void createPlayerLine(Player player) {
         this.sideBar.createLine(new Sidebar.ScoreboardLine(player.getUuid().toString(), player.getDisplayName(), 0));
+    }
+
+    /**
+     * Strikes through the player's line so the score of a player who left stays visible but is marked as
+     * no longer in the game. A no-op if the player has no line yet.
+     *
+     * @param player the player who left
+     */
+    public void markPlayerLeft(Player player) {
+        String id = player.getUuid().toString();
+        if (this.sideBar.getLine(id) == null) return;
+
+        Component name = Objects.requireNonNullElseGet(player.getDisplayName(), () -> Component.text(player.getUsername()));
+        this.sideBar.updateLineContent(id, name.color(NamedTextColor.GRAY).decorate(TextDecoration.STRIKETHROUGH));
+    }
+
+    /**
+     * Returns the line of the given player.
+     *
+     * @param uuid the UUID of the player
+     * @return the line, or {@code null} if the player has no line
+     */
+    @VisibleForTesting
+    @Nullable Sidebar.ScoreboardLine getPlayerLine(UUID uuid) {
+        return this.sideBar.getLine(uuid.toString());
     }
 
     /**
