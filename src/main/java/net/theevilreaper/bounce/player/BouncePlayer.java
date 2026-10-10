@@ -10,16 +10,21 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.PotionEffect;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.PlayerDeathBlockEvent;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
+import net.theevilreaper.bounce.powerup.PowerUpType;
 import net.theevilreaper.bounce.util.GameMessages;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link net.minestom.server.entity.Player} implementation used for the actual game.
@@ -34,6 +39,7 @@ import java.util.List;
 public final class BouncePlayer extends PermissionAwarePlayer {
 
     private static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
+    private static final double SUPER_JUMP_MULTIPLIER = 1.5;
 
     private boolean jumping;
     private @Nullable GameMap map;
@@ -47,6 +53,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     private int deaths;
     private @Nullable Player lastDamager;
     private long firstReachTimestamp;
+    private final Map<PowerUpType, Long> activePowerUps = new EnumMap<>(PowerUpType.class);
 
     public BouncePlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(playerConnection, gameProfile);
@@ -77,6 +84,10 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     @Override
     public void tick(long time) {
         super.tick(time);
+        if (!this.activePowerUps.isEmpty()) {
+            long aliveTicks = getAliveTicks();
+            this.activePowerUps.values().removeIf(expiry -> expiry <= aliveTicks);
+        }
         if (!this.jumping) return;
         onJumpTick();
     }
@@ -121,6 +132,9 @@ public final class BouncePlayer extends PermissionAwarePlayer {
             long now = System.currentTimeMillis();
             if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
                 double pushStrength = data.getPush(foundJumpBlock) * 10D;
+                if (hasPowerUp(PowerUpType.SUPER_JUMP)) {
+                    pushStrength *= SUPER_JUMP_MULTIPLIER;
+                }
                 Vec push = new Vec(0, pushStrength, 0); // Only push upwards
                 setVelocity(push);
                 lastPushTime = now;
@@ -157,6 +171,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         this.deaths = 0;
         this.lastDamager = null;
         this.firstReachTimestamp = 0;
+        clearPowerUps();
         this.roundActive = true;
     }
 
@@ -165,7 +180,39 @@ public final class BouncePlayer extends PermissionAwarePlayer {
      */
     public void endRound() {
         stopJumping();
+        clearPowerUps();
         this.roundActive = false;
+    }
+
+    /**
+     * Activates the given power-up for its configured duration. Picking up an already active power-up
+     * restarts its duration.
+     *
+     * @param type the power-up to activate
+     */
+    public void activatePowerUp(PowerUpType type) {
+        this.activePowerUps.put(type, getAliveTicks() + type.getDurationTicks());
+        if (type == PowerUpType.SPEED) {
+            addEffect(new Potion(PotionEffect.SPEED, 1, type.getDurationTicks()));
+        }
+    }
+
+    /**
+     * Returns whether the given power-up is currently active for this player.
+     *
+     * @param type the power-up to check
+     * @return {@code true} if the power-up is active
+     */
+    public boolean hasPowerUp(PowerUpType type) {
+        Long expiry = this.activePowerUps.get(type);
+        return expiry != null && getAliveTicks() < expiry;
+    }
+
+    private void clearPowerUps() {
+        if (this.activePowerUps.remove(PowerUpType.SPEED) != null) {
+            removeEffect(PotionEffect.SPEED);
+        }
+        this.activePowerUps.clear();
     }
 
     /**
@@ -226,11 +273,15 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     }
 
     /**
-     * Adds points to this player's score and updates the scoreboard.
+     * Adds points to this player's score and updates the scoreboard. The amount gets doubled while
+     * {@link PowerUpType#DOUBLE_POINTS} is active.
      *
      * @param paramPoints the number of points to add
      */
     public void addPoints(int paramPoints) {
+        if (hasPowerUp(PowerUpType.DOUBLE_POINTS)) {
+            paramPoints *= 2;
+        }
         points += paramPoints;
         firstReachTimestamp = System.nanoTime();
         addKill();

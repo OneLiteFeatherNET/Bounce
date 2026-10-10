@@ -22,12 +22,14 @@ import net.theevilreaper.bounce.common.ListenerHandling;
 import net.theevilreaper.bounce.common.bootstrap.ServiceBootstrap;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.config.GameConfigReader;
+import net.theevilreaper.bounce.common.ground.Area;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.BounceGameFinishEvent;
 import net.theevilreaper.bounce.event.GamePrepareEvent;
 import net.theevilreaper.bounce.event.PlayerDeathBlockEvent;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
+import net.theevilreaper.bounce.event.PlayerPowerUpPickupEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
 import net.theevilreaper.bounce.listener.PlayerChatListener;
 import net.theevilreaper.bounce.listener.PlayerConfigurationListener;
@@ -40,9 +42,11 @@ import net.theevilreaper.bounce.listener.game.GameFinishListener;
 import net.theevilreaper.bounce.listener.game.GamePrepareListener;
 import net.theevilreaper.bounce.listener.game.PlayerDeathBlockListener;
 import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
+import net.theevilreaper.bounce.listener.game.PowerUpPickupListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
 import net.theevilreaper.bounce.player.BouncePlayer;
+import net.theevilreaper.bounce.powerup.PowerUpSpawner;
 import net.theevilreaper.bounce.timer.PlayingPhase;
 import net.theevilreaper.bounce.timer.LobbyPhase;
 import net.theevilreaper.bounce.timer.RestartPhase;
@@ -98,6 +102,7 @@ public class Bounce implements ListenerHandling {
                 bouncePlayer.endRound();
             }
         }
+        this.mapProvider.getBounceInstance().stopPowerUps();
         this.mapProvider.cleanUp();
     }
 
@@ -116,6 +121,15 @@ public class Bounce implements ListenerHandling {
             if (!(onlinePlayer instanceof BouncePlayer bouncePlayer) || !bouncePlayer.isRoundActive()) continue;
             bouncePlayer.startJumping(activeMap, pushData);
             scoreboard.createPlayerLine(bouncePlayer);
+        }
+
+        Area area = activeMap.getArea();
+        if (area != null) {
+            // Maps saved before this field existed deserialize it as 0, which would spawn power-ups inside the ground
+            double powerUpHeight = activeMap.getPowerUpHeight() > 0
+                    ? activeMap.getPowerUpHeight()
+                    : GameMap.DEFAULT_POWER_UP_HEIGHT;
+            this.mapProvider.getBounceInstance().startPowerUps(new PowerUpSpawner(area, powerUpHeight));
         }
     }
 
@@ -140,6 +154,8 @@ public class Bounce implements ListenerHandling {
 
     private void registerGameListener(EventNode<Event> node) {
         node.addListener(BounceGameFinishEvent.class, new GameFinishListener());
+        node.addListener(BounceGameFinishEvent.class, event -> this.mapProvider.getBounceInstance().stopPowerUps());
+        node.addListener(PlayerPowerUpPickupEvent.class, new PowerUpPickupListener());
         node.addListener(ScoreUpdateEvent.class, new ScoreUpdateListener(scoreboard::updatePlayerLine));
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener());

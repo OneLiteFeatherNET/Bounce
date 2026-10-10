@@ -7,7 +7,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.minestom.server.entity.Player;
 import net.theevilreaper.bounce.common.config.GameConfig;
 import net.theevilreaper.bounce.common.util.Messages;
+import net.theevilreaper.bounce.powerup.PowerUpType;
 import org.jetbrains.annotations.Contract;
+
+import java.util.Objects;
 
 public class GameMessages extends Messages {
 
@@ -78,6 +81,24 @@ public class GameMessages extends Messages {
     public static Component getCoinComponent(int coins, boolean add) {
         Component base = add ? PLUS_POINTS : MINUS_POINTS;
         return base.append(Component.text(coins, NamedTextColor.GOLD)).append(POINT_PART);
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static Component getPowerUpComponent(PowerUpType type) {
+        return withPrefix(Component.text("You picked up ", NamedTextColor.GRAY)
+                .append(type.getDisplayName())
+                .append(Component.text(" for " + type.getDurationSeconds() + " seconds!", NamedTextColor.GRAY)));
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static Component getBlooperComponent(int seconds) {
+        return withPrefix(Component.text("You inked all other players for " + seconds + " seconds!", NamedTextColor.GRAY));
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static Component getInkedComponent(Player inker) {
+        Component name = Objects.requireNonNullElseGet(inker.getDisplayName(), () -> Component.text(inker.getUsername()));
+        return withPrefix(name.append(Component.text(" blinded you with ink!", NamedTextColor.GRAY)));
     }
 
     private GameMessages() {

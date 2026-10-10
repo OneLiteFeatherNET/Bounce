@@ -19,7 +19,8 @@ public enum AreaViewType implements DataType {
     LEFT_AREA_CORNER("Left Corner", Material.GREEN_WOOL, NamedTextColor.AQUA),
     RIGHT_AREA_CORNER("Right Corner", Material.RED_WOOL, NamedTextColor.AQUA),
     SHUFFLE_INTERVAL("Reshuffle Interval", Material.CLOCK, NamedTextColor.LIGHT_PURPLE),
-    RESHUFFLE_PERCENTAGE("Reshuffle Percentage", Material.TARGET, NamedTextColor.LIGHT_PURPLE)
+    RESHUFFLE_PERCENTAGE("Reshuffle Percentage", Material.TARGET, NamedTextColor.LIGHT_PURPLE),
+    POWER_UP_HEIGHT("Power-Up Height", Material.FEATHER, NamedTextColor.GOLD)
 
     ;
 

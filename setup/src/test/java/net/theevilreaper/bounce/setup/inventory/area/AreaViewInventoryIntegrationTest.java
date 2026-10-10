@@ -1,9 +1,13 @@
 package net.theevilreaper.bounce.setup.inventory.area;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.testing.Env;
 import net.minestom.testing.extension.MicrotusExtension;
@@ -13,15 +17,18 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MicrotusExtension.class)
 class AreaViewInventoryIntegrationTest {
 
-    private static final int SHUFFLE_INTERVAL_SLOT = 14;
-    private static final int POS1_SLOT = 10;
+    private static final int POS1_SLOT = 11;
     private static final int POS2_SLOT = 12;
-    private static final int RESHUFFLE_PERCENTAGE_SLOT = 16;
+    private static final int SHUFFLE_INTERVAL_SLOT = 13;
+    private static final int RESHUFFLE_PERCENTAGE_SLOT = 14;
+    private static final int POWER_UP_HEIGHT_SLOT = 15;
 
     @Test
     void testPosSlotsUseTheAreaViewTypeMaterials(@NotNull Env env) {
@@ -54,6 +61,28 @@ class AreaViewInventoryIntegrationTest {
         InventoryLayout dataLayout = inventory.getDataLayout();
         assertEquals(Material.CLOCK, dataLayout.getSlot(SHUFFLE_INTERVAL_SLOT).getItem().material());
         assertEquals(Material.TARGET, dataLayout.getSlot(RESHUFFLE_PERCENTAGE_SLOT).getItem().material());
+
+        env.destroyInstance(instance, true);
+    }
+
+    @Test
+    void testPowerUpHeightSlotShowsBuilderValue(@NotNull Env env) {
+        Instance instance = env.createFlatInstance();
+        Player player = env.createPlayer(instance);
+        GameMapBuilder gameMapBuilder = new GameMapBuilder();
+        gameMapBuilder.powerUpHeight(2.5);
+
+        AreaViewInventory inventory = new AreaViewInventory(player, gameMapBuilder);
+        inventory.open();
+        env.tick();
+
+        ItemStack item = inventory.getDataLayout().getSlot(POWER_UP_HEIGHT_SLOT).getItem();
+        assertEquals(Material.FEATHER, item.material());
+
+        List<Component> lore = item.get(DataComponents.LORE);
+        assertNotNull(lore);
+        assertTrue(lore.stream().map(PlainTextComponentSerializer.plainText()::serialize).anyMatch(line -> line.contains("2.50 blocks")),
+                "The slot must show the configured height");
 
         env.destroyInstance(instance, true);
     }

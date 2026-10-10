@@ -72,7 +72,11 @@ public class PlayerDialogRequestEvent implements PlayerEvent {
         /**
          * The target for the dialog request is to set up the reshuffle percentage.
          */
-        SETUP_RESHUFFLE_PERCENTAGE
+        SETUP_RESHUFFLE_PERCENTAGE,
+        /**
+         * The target for the dialog request is to set up the power-up height.
+         */
+        SETUP_POWER_UP_HEIGHT
 
         ;
     }

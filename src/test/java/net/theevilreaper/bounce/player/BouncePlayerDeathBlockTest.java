@@ -39,7 +39,7 @@ class BouncePlayerDeathBlockTest {
         attacker.startRound();
         victim.setLastDamager(attacker);
 
-        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0);
+        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0, 0);
         victim.startJumping(map, map.getPushData());
 
         MinecraftServer.getGlobalEventHandler().addListener(PlayerDeathBlockEvent.class, new PlayerDeathBlockListener(() -> gameSpawn));
@@ -65,7 +65,7 @@ class BouncePlayerDeathBlockTest {
         BouncePlayer victim = (BouncePlayer) env.createPlayer(instance, deathBlockPosition);
         victim.startRound();
 
-        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0);
+        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0, 0);
         victim.startJumping(map, map.getPushData());
 
         MinecraftServer.getGlobalEventHandler().addListener(PlayerDeathBlockEvent.class, new PlayerDeathBlockListener(() -> gameSpawn));
