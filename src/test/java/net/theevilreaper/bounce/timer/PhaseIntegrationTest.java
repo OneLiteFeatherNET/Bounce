@@ -59,7 +59,7 @@ class PhaseIntegrationTest {
         env.createPlayer(instance);
         env.createPlayer(instance);
 
-        PlayingPhase playingPhase = new PlayingPhase(time -> {}, () -> {});
+        PlayingPhase playingPhase = new PlayingPhase(300, time -> {}, () -> {});
 
         // 2 players remain online -> game should continue
         playingPhase.handlePlayerCheck();
@@ -76,7 +76,7 @@ class PhaseIntegrationTest {
         FlexibleListener<BounceGameFinishEvent> listen = env.listen(BounceGameFinishEvent.class);
         listen.followup(event -> assertEquals(BounceGameFinishEvent.Reason.ONE_PLAYER_LEFT, event.getReason()));
 
-        PlayingPhase playingPhase = new PlayingPhase(time -> {}, () -> {});
+        PlayingPhase playingPhase = new PlayingPhase(300, time -> {}, () -> {});
 
         // 1 player remains online -> ONE_PLAYER_LEFT
         playingPhase.handlePlayerCheck();
@@ -92,7 +92,7 @@ class PhaseIntegrationTest {
         FlexibleListener<BounceGameFinishEvent> listen = env.listen(BounceGameFinishEvent.class);
         listen.followup(event -> assertEquals(BounceGameFinishEvent.Reason.PLAYER_LEFT, event.getReason()));
 
-        PlayingPhase playingPhase = new PlayingPhase(time -> {}, () -> {});
+        PlayingPhase playingPhase = new PlayingPhase(300, time -> {}, () -> {});
 
         // 0 players remain online -> PLAYER_LEFT
         playingPhase.handlePlayerCheck();
@@ -111,7 +111,7 @@ class PhaseIntegrationTest {
         listen.followup(event -> assertEquals(BounceGameFinishEvent.Reason.ONE_PLAYER_LEFT, event.getReason(),
                 "With 2 real players online, one real disconnect must leave exactly 1 player -> ONE_PLAYER_LEFT, not PLAYER_LEFT"));
 
-        PlayingPhase playingPhase = new PlayingPhase(time -> {}, () -> {});
+        PlayingPhase playingPhase = new PlayingPhase(300, time -> {}, () -> {});
         // LinearPhaseSeries#startCurrentPhase() wires this callback to advance to the next phase
         // (RestartPhase in production, which eventually stops the server). If handlePlayerCheck()
         // never actually finishes the phase, this callback - and therefore the server stop - never
@@ -133,6 +133,14 @@ class PhaseIntegrationTest {
         assertTrue(advancedToNextPhase.get(), "The phase series must be notified so it advances (and the server eventually stops)");
 
         env.destroyInstance(instance, true);
+    }
+
+    @Test
+    void testPlayingPhaseUsesTheConfiguredGameTime() {
+        PlayingPhase playingPhase = new PlayingPhase(120, time -> {}, () -> {});
+
+        assertEquals(120, playingPhase.getCurrentTicks(), "PlayingPhase should start with the configured game time");
+        assertEquals(TickDirection.DOWN, playingPhase.getTickDirection());
     }
 
     @Test

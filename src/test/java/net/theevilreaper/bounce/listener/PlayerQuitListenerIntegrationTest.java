@@ -35,7 +35,7 @@ class PlayerQuitListenerIntegrationTest {
     private static LinearPhaseSeries<Phase> createSeries() {
         LinearPhaseSeries<Phase> series = new LinearPhaseSeries<>("Game");
         series.add(new TeleportPhase(player -> {}, () -> {}));
-        series.add(new PlayingPhase(time -> {}, () -> {}));
+        series.add(new PlayingPhase(300, time -> {}, () -> {}));
         series.add(new RestartPhase());
         series.start();
         return series;

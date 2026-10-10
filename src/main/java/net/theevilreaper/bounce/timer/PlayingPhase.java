@@ -22,10 +22,10 @@ public class PlayingPhase extends TimedPhase {
     private final VoidConsumer startTrigger;
     private @Nullable BounceGameFinishEvent.Reason reason;
 
-    public PlayingPhase(IntConsumer timeUpdater, VoidConsumer startTrigger) {
+    public PlayingPhase(int gameTime, IntConsumer timeUpdater, VoidConsumer startTrigger) {
         super("GamePhase", ChronoUnit.SECONDS, 1);
         this.setTickDirection(TickDirection.DOWN);
-        this.setCurrentTicks(300);
+        this.setCurrentTicks(gameTime);
 
         this.timeUpdater = timeUpdater;
         this.startTrigger = startTrigger;
