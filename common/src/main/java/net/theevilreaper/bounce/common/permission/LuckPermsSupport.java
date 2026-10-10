@@ -1,9 +1,13 @@
 package net.theevilreaper.bounce.common.permission;
 
+import me.lucko.luckperms.minestom.app.LuckPermsMinestomHandle;
+import me.lucko.luckperms.minestom.app.LuckPermsMinestomOptions;
 import me.lucko.luckperms.minestom.loader.MinestomLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -81,7 +85,14 @@ public final class LuckPermsSupport {
      * {@link #bootstrap()} itself is being verified.
      */
     private static void startLuckPerms() {
-        MinestomLoader.get().load().registerShutdownHook().start();
+        LuckPermsMinestomHandle luckPerms = MinestomLoader.create(
+                        LuckPermsMinestomOptions.builder()
+                                .dataDirectory(Path.of("data"))
+                                .commandAliases(List.of("luckperms", "lp", "perm", "perms", "permission", "permissions"))
+                                .registerShutdownHook(true)
+                                .build())
+                .load()
+                .enable();
     }
 
     /**
