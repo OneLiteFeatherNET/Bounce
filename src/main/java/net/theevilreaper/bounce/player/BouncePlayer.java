@@ -227,6 +227,8 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         if (this.activePowerUps.remove(PowerUpType.SPEED) != null) {
             removeEffect(PotionEffect.SPEED);
         }
+        // Applied by an opponent's blooper, so it is not tracked as an own power-up
+        removeEffect(PotionEffect.BLINDNESS);
         this.activePowerUps.clear();
     }
 

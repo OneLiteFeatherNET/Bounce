@@ -3,6 +3,7 @@ package net.theevilreaper.bounce.player;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.testing.Env;
 import net.minestom.testing.extension.MicrotusExtension;
@@ -67,5 +68,15 @@ class BouncePlayerPowerUpTest {
         assertFalse(player.hasPowerUp(PowerUpType.SPEED));
         assertFalse(player.hasPowerUp(PowerUpType.DOUBLE_POINTS));
         assertFalse(player.hasEffect(PotionEffect.SPEED), "The speed effect must not outlive the round");
+    }
+
+    @Test
+    void testEndingTheRoundRemovesBlooperBlindness(@NotNull Env env) {
+        BouncePlayer player = createPlayer(env);
+        player.addEffect(new Potion(PotionEffect.BLINDNESS, 0, PowerUpType.BLOOPER.getDurationTicks()));
+
+        player.endRound();
+
+        assertFalse(player.hasEffect(PotionEffect.BLINDNESS), "The blindness of a blooper must not outlive the round");
     }
 }
