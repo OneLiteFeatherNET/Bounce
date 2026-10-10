@@ -18,6 +18,7 @@ public final class ValueDialogs extends DialogBase {
     public static final Key WEIGHT_KEY = create("weight_setup_dialog");
     public static final Key SHUFFLE_INTERVAL_KEY = create("shuffle_interval_setup_dialog");
     public static final Key RESHUFFLE_PERCENTAGE_KEY = create("reshuffle_percentage_setup_dialog");
+    public static final Key POWER_UP_HEIGHT_KEY = create("power_up_height_setup_dialog");
 
     public static void openBounceValue(Player player) {
         open(player, VALUE_KEY, "Change block boost", "How much the block should bounce?",
@@ -37,6 +38,11 @@ public final class ValueDialogs extends DialogBase {
     public static void openReshufflePercentage(Player player) {
         open(player, RESHUFFLE_PERCENTAGE_KEY, "Change reshuffle percentage", "Percentage of the area re-rolled\non each reshuffle (0 - 100%):",
                 "reshuffle_percentage", "Percentage", "options.percent_value", 0, 100, 10, 0.1f, 320);
+    }
+
+    public static void openPowerUpHeight(Player player) {
+        open(player, POWER_UP_HEIGHT_KEY, "Change power-up height", "Height in blocks above the ground\nat which power-ups float:",
+                "power_up_height", "Height", "options.generic_value", 0.5f, 5, 1.5f, 0.25f, 320);
     }
 
     private static void open(
