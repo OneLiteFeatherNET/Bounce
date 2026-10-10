@@ -30,4 +30,35 @@ class BouncePlayerScoreTest {
 
         assertEquals(0, player.getPoints(), "The score must never drop below zero");
     }
+
+    @Test
+    void testLastDamagerIsKeptWithinTheExpiryTime(@NotNull Env env) {
+        MinecraftServer.getConnectionManager().setPlayerProvider(BouncePlayer::new);
+        Instance instance = env.createFlatInstance();
+        BouncePlayer victim = createPlayer(env, instance);
+        BouncePlayer attacker = createPlayer(env, instance);
+
+        victim.setLastDamager(attacker);
+        for (int i = 0; i < BouncePlayer.DAMAGER_EXPIRY_TICKS; i++) {
+            env.tick();
+        }
+
+        assertSame(attacker, victim.getLastDamager());
+    }
+
+    @Test
+    void testLastDamagerExpiresAfterFiveSeconds(@NotNull Env env) {
+        MinecraftServer.getConnectionManager().setPlayerProvider(BouncePlayer::new);
+        Instance instance = env.createFlatInstance();
+        BouncePlayer victim = createPlayer(env, instance);
+        BouncePlayer attacker = createPlayer(env, instance);
+
+        victim.setLastDamager(attacker);
+        for (int i = 0; i <= BouncePlayer.DAMAGER_EXPIRY_TICKS; i++) {
+            env.tick();
+        }
+
+        assertEquals(100, BouncePlayer.DAMAGER_EXPIRY_TICKS);
+        assertNull(victim.getLastDamager(), "A hit older than five seconds must not count for a kill");
+    }
 }

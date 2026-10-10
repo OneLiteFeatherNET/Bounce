@@ -2,6 +2,7 @@ package net.theevilreaper.bounce.player;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
@@ -40,6 +41,8 @@ public final class BouncePlayer extends PermissionAwarePlayer {
 
     private static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
     private static final double SUPER_JUMP_MULTIPLIER = 1.5;
+    // A hit only counts for a kill if the player dies within this time
+    static final int DAMAGER_EXPIRY_TICKS = 5 * ServerFlag.SERVER_TICKS_PER_SECOND;
 
     private boolean jumping;
     private @Nullable GameMap map;
@@ -52,6 +55,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     private int kills;
     private int deaths;
     private @Nullable Player lastDamager;
+    private long lastDamageTick;
     private long firstReachTimestamp;
     private final Map<PowerUpType, Long> activePowerUps = new EnumMap<>(PowerUpType.class);
 
@@ -248,14 +252,18 @@ public final class BouncePlayer extends PermissionAwarePlayer {
      */
     public void setLastDamager(Player paramPlayer) {
         this.lastDamager = paramPlayer;
+        this.lastDamageTick = getAliveTicks();
     }
 
     /**
-     * Returns the last player who damaged this player.
+     * Returns the last player who damaged this player within the last {@link #DAMAGER_EXPIRY_TICKS}.
      *
-     * @return the last damager, or null if no player has damaged this player
+     * @return the last damager, or null if no player has damaged this player recently
      */
     public @Nullable Player getLastDamager() {
+        if (lastDamager != null && getAliveTicks() - lastDamageTick > DAMAGER_EXPIRY_TICKS) {
+            lastDamager = null;
+        }
         return lastDamager;
     }
 
