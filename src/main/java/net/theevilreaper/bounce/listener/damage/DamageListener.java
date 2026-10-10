@@ -10,6 +10,11 @@ import java.util.function.Consumer;
 
 public class DamageListener implements Consumer<FinalDamageEvent> {
 
+    /**
+     * How long a player can't be hit again after a hit (20 ticks = 1 second).
+     */
+    static final int INVULNERABILITY_TICKS = 20;
+
     public DamageListener() {
     }
 
@@ -40,6 +45,6 @@ public class DamageListener implements Consumer<FinalDamageEvent> {
             originPlayer.setFireTicks(0);
         }
 
-        event.setInvulnerabilityTicks(100);
+        event.setInvulnerabilityTicks(INVULNERABILITY_TICKS);
     }
 }
