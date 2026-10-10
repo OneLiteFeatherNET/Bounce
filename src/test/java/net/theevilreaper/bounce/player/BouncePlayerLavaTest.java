@@ -44,4 +44,41 @@ class BouncePlayerLavaTest {
 
         assertNotEquals(lavaPosition, player.getPosition(), "Player should have been teleported away from the lava position");
     }
+
+    @Test
+    void testStandingInsideLavaTeleportsPlayerToSpawn(@NotNull Env env) {
+        assertTeleportedWhenInside(env, Block.LAVA);
+    }
+
+    @Test
+    void testStandingInsideFlowingLavaTeleportsPlayerToSpawn(@NotNull Env env) {
+        assertTeleportedWhenInside(env, Block.LAVA.withProperty("level", "3"));
+    }
+
+    /**
+     * A fast falling player skips the window above the lava and ends up inside it, with the feet on the
+     * block below the lava. The check must still detect the lava in that case.
+     */
+    private static void assertTeleportedWhenInside(Env env, Block lava) {
+        MinecraftServer.getConnectionManager().setPlayerProvider(BouncePlayer::new);
+
+        Instance instance = env.createFlatInstance();
+        instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        instance.setBlock(0, 40, 0, lava);
+
+        Pos gameSpawn = new Pos(10.5, 45, 10.5);
+        Pos insideLavaPosition = new Pos(0.5, 40, 0.5);
+        BouncePlayer player = (BouncePlayer) env.createPlayer(instance, insideLavaPosition);
+        player.startRound();
+
+        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0);
+        player.startJumping(map, map.getPushData());
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerLavaEvent.class, new PlayerLavaListener(() -> gameSpawn));
+
+        env.tick();
+        env.tick();
+
+        assertNotEquals(insideLavaPosition, player.getPosition(), "Player inside the lava should have been teleported away");
+    }
 }
