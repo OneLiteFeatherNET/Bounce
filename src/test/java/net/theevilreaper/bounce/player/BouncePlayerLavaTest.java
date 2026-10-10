@@ -71,7 +71,7 @@ class BouncePlayerLavaTest {
         BouncePlayer player = (BouncePlayer) env.createPlayer(instance, insideLavaPosition);
         player.startRound();
 
-        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0);
+        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0, 0);
         player.startJumping(map, map.getPushData());
 
         MinecraftServer.getGlobalEventHandler().addListener(PlayerLavaEvent.class, new PlayerLavaListener(() -> gameSpawn));
