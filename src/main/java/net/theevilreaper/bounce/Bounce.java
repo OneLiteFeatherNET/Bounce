@@ -156,6 +156,7 @@ public class Bounce implements ListenerHandling {
         if (player instanceof BouncePlayer bouncePlayer) {
             bouncePlayer.endRound();
         }
+        this.scoreboard.markPlayerLeft(player);
         this.scoreboard.removeViewer(player);
     }
 
