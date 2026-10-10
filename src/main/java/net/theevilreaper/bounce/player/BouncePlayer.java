@@ -307,16 +307,17 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     }
 
     /**
-     * Removes points from this player's score.
+     * Removes points from this player's score. The score never drops below zero.
      *
      * @param paramPoints the number of points to remove
      */
     public void removePoints(int paramPoints) {
         addDeath();
-        if (points > 0) {
-            points -= paramPoints;
+        int removed = Math.min(points, paramPoints);
+        if (removed > 0) {
+            points -= removed;
             updateScoreboard();
-            sendActionBar(GameMessages.getCoinComponent(paramPoints, false));
+            sendActionBar(GameMessages.getCoinComponent(removed, false));
         }
     }
 
