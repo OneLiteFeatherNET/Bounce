@@ -133,7 +133,9 @@ public final class BouncePlayer extends PermissionAwarePlayer {
                 return;
             }
 
-            if (data.hasBlock(block) && !block.compare(lastBlockBelow)) {
+            // Standing on several pads at once uses the strongest one, independent of the check order
+            if (data.hasBlock(block) && !block.compare(lastBlockBelow)
+                    && (foundJumpBlock == null || data.getPush(block) > data.getPush(foundJumpBlock))) {
                 foundJumpBlock = block;
             }
         }
@@ -167,17 +169,17 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     private List<int[]> getCheckPositions(int y) {
         Pos playerPos = getPosition();
         double halfWidth = 0.3;
-        double minX = playerPos.x() - halfWidth;
-        double maxX = playerPos.x() + halfWidth;
-        double minZ = playerPos.z() - halfWidth;
-        double maxZ = playerPos.z() + halfWidth;
+        int minX = (int) Math.floor(playerPos.x() - halfWidth);
+        int maxX = (int) Math.floor(playerPos.x() + halfWidth);
+        int minZ = (int) Math.floor(playerPos.z() - halfWidth);
+        int maxZ = (int) Math.floor(playerPos.z() + halfWidth);
 
+        // The hitbox is narrower than a block, so its four corners cover every block it can touch
         return List.of(
-                new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(playerPos.z())}, // center
-                new int[]{(int) Math.floor(minX), y, (int) Math.floor(playerPos.z())},         // minX
-                new int[]{(int) Math.floor(maxX), y, (int) Math.floor(playerPos.z())},         // maxX
-                new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(minZ)},         // minZ
-                new int[]{(int) Math.floor(playerPos.x()), y, (int) Math.floor(maxZ)}          // maxZ
+                new int[]{minX, y, minZ},
+                new int[]{maxX, y, minZ},
+                new int[]{minX, y, maxZ},
+                new int[]{maxX, y, maxZ}
         );
     }
 

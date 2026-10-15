@@ -109,4 +109,30 @@ class BouncePlayerDeathBlockTest {
         assertEquals(0, attacker.getPoints(), "An attacker who left the round must not be awarded points");
         assertNull(victim.getLastDamager(), "The last damager must be reset after the death");
     }
+
+    @Test
+    void testDeathBlockUnderTheHitboxCornerTeleportsPlayer(@NotNull Env env) {
+        MinecraftServer.getConnectionManager().setPlayerProvider(BouncePlayer::new);
+
+        Instance instance = env.createFlatInstance();
+        instance.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.STONE));
+        // Only the diagonal block touches the hitbox corner of a player standing at x/z 0.8
+        instance.setBlock(1, 40, 1, Block.REDSTONE_BLOCK);
+
+        Pos gameSpawn = new Pos(10.5, 45, 10.5);
+        Pos cornerPosition = new Pos(0.8, 41, 0.8);
+
+        BouncePlayer victim = (BouncePlayer) env.createPlayer(instance, cornerPosition);
+        victim.startRound();
+
+        GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0, 0);
+        victim.startJumping(map, map.getPushData());
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerDeathBlockEvent.class, new PlayerHazardListener(() -> gameSpawn)::accept);
+
+        env.tick();
+        env.tick();
+
+        assertNotEquals(cornerPosition, victim.getPosition(), "A death block under the hitbox corner must teleport the player");
+    }
 }
