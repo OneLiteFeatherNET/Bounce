@@ -1,5 +1,7 @@
 package net.theevilreaper.bounce.common.config;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * The {@link GameConfigImpl} is the implementation of the {@link GameConfig} interface.
  * It represents a configuration which is used to adjust some settings for the game.
@@ -9,6 +11,7 @@ package net.theevilreaper.bounce.common.config;
  * @param maxPlayers the maximum number of players allowed in the game
  * @param lobbyTime  the time in seconds before the game starts
  * @param gameTime   the maximum duration of a game in minutes
+ * @param sentryDsn  the DSN Sentry reports to, or {@code null} to keep the integration off
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
@@ -17,7 +20,8 @@ public record GameConfigImpl(
         int minPlayers,
         int maxPlayers,
         int lobbyTime,
-        int gameTime
+        int gameTime,
+        @Nullable String sentryDsn
 ) implements GameConfig {
 
 }

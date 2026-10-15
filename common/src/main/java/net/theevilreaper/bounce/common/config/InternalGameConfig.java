@@ -1,5 +1,7 @@
 package net.theevilreaper.bounce.common.config;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * The {@link InternalGameConfig} is the fallback configuration if no other configuration is available.
  * It provides default values for the game configuration.
@@ -9,6 +11,7 @@ package net.theevilreaper.bounce.common.config;
  * @param maxPlayers the maximum number of players allowed in the game
  * @param lobbyTime  the time in seconds before the game starts
  * @param gameTime   the maximum duration of a game in seconds
+ * @param sentryDsn  the DSN Sentry reports to, or {@code null} to keep the integration off
  * @author theEvilReaper
  * @version 1.0.0
  * @since 1.0.0
@@ -17,7 +20,8 @@ record InternalGameConfig(
         int minPlayers,
         int maxPlayers,
         int lobbyTime,
-        int gameTime
+        int gameTime,
+        @Nullable String sentryDsn
 ) implements GameConfig {
 
     /**
@@ -45,7 +49,9 @@ record InternalGameConfig(
                     MIN_PLAYERS,
                     MAX_PLAYERS,
                     LOBBY_PHASE_TIME,
-                    MAX_GAME_TIME
+                    MAX_GAME_TIME,
+                    // Sentry is opt-in, so a local run reports to nothing
+                    null
             );
         }
 

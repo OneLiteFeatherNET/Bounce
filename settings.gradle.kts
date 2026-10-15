@@ -39,6 +39,7 @@ dependencyResolutionManagement {
             version("minestom-extensions", "2.2.0")
             version("guava", "33.7.2-jre")
             version("pica", "0.1.5")
+            version("sentry", "8.60.0")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
@@ -61,6 +62,7 @@ dependencyResolutionManagement {
             library("luckperms.api", "net.luckperms", "api").versionRef("luckperms")
             library("luckperms.minestom.loader", "net.luckperms", "minestom-loader").versionRef("luckperms-minestom-loader")
             library("guava", "com.google.guava", "guava").versionRef("guava")
+            library("sentry", "io.sentry", "sentry").versionRef("sentry")
 
             library("minestom-extensions-bom", "net.onelitefeather", "minestom-extensions-bom").versionRef("minestom-extensions")
             library("minestom-extensions", "net.onelitefeather", "minestom-extensions").withoutVersion()

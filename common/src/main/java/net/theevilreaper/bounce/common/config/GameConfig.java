@@ -1,6 +1,7 @@
 package net.theevilreaper.bounce.common.config;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The {@link GameConfig} interface represents the structure for a configuration which is used by the game.
@@ -57,6 +58,13 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
     int gameTime();
 
     /**
+     * Returns the DSN of the Sentry project errors are reported to.
+     *
+     * @return the DSN, or {@code null} to keep error reporting off
+     */
+    @Nullable String sentryDsn();
+
+    /**
      * The {@link Builder} interface is used to create a new game configuration.
      * It provides methods to set the values for the configuration.
      *
@@ -98,6 +106,14 @@ public sealed interface GameConfig permits GameConfigImpl, InternalGameConfig {
          * @return the builder instance
          */
         Builder gameTime(int gameTime);
+
+        /**
+         * Sets the DSN of the Sentry project errors are reported to.
+         *
+         * @param sentryDsn the DSN, or {@code null} to keep error reporting off
+         * @return the builder instance
+         */
+        Builder sentryDsn(@Nullable String sentryDsn);
 
         /**
          * Builds the game configuration.

@@ -1,5 +1,7 @@
 package net.theevilreaper.bounce.common.config;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Concrete implementation of the {@link GameConfig.Builder} interface.
  *
@@ -13,6 +15,7 @@ public final class GameConfigBuilder implements GameConfig.Builder {
     private int maxPlayers;
     private int lobbyTime;
     private int maxGameTime;
+    private @Nullable String sentryDsn;
 
     GameConfigBuilder() {
         // Hide the public constructor
@@ -61,7 +64,16 @@ public final class GameConfigBuilder implements GameConfig.Builder {
      * {@inheritDoc}
      */
     @Override
+    public GameConfig.Builder sentryDsn(@Nullable String sentryDsn) {
+        this.sentryDsn = sentryDsn;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GameConfig build() {
-        return new GameConfigImpl(minPlayers, maxPlayers, lobbyTime, maxGameTime);
+        return new GameConfigImpl(minPlayers, maxPlayers, lobbyTime, maxGameTime, sentryDsn);
     }
 }

@@ -31,6 +31,9 @@ dependencies {
     // Guava used to arrive transitively through CloudNet; bundle it explicitly now that CloudNet
     // is no longer a direct dependency of this module (it loads as an extension at runtime instead).
     implementation(libs.guava)
+
+    // Crash reporting. Only ever set up when a DSN is configured, see SentrySupport.
+    implementation(libs.sentry)
     compileOnly(libs.luckperms.api)
     runtimeOnly(libs.luckperms.minestom.loader)
 

@@ -60,6 +60,27 @@ class GameConfigReaderTest {
     }
 
     @Test
+    void testSentryDsnIsRead() throws IOException {
+        Files.writeString(tempDir.resolve("config.properties"), "sentryDsn=https://publickey@sentry.example.com/1\n");
+        GameConfig config = new GameConfigReader(tempDir).getConfig();
+        assertEquals("https://publickey@sentry.example.com/1", config.sentryDsn());
+    }
+
+    @Test
+    void testMissingSentryDsnKeepsReportingOff() throws IOException {
+        Files.writeString(tempDir.resolve("config.properties"), "minPlayers=2\n");
+        GameConfig config = new GameConfigReader(tempDir).getConfig();
+        assertNull(config.sentryDsn());
+    }
+
+    @Test
+    void testBlankSentryDsnKeepsReportingOff() throws IOException {
+        Files.writeString(tempDir.resolve("config.properties"), "minPlayers=2\nsentryDsn=   \n");
+        GameConfig config = new GameConfigReader(tempDir).getConfig();
+        assertNull(config.sentryDsn());
+    }
+
+    @Test
     @DisabledOnOs(OS.WINDOWS)
     void testUnreadableFileReturnsDefaultConfig() throws IOException {
         Path config = tempDir.resolve("config.properties");

@@ -19,6 +19,7 @@ import java.util.Properties;
  *     <li>maxPlayers</li>
  *     <li>lobbyTime</li>
  *     <li>gameTime</li>
+ *     <li>sentryDsn</li>
  * </ul>
  * <p>
  * If a property cannot be found in the file, the default value will be used.
@@ -96,10 +97,17 @@ public final class GameConfigReader {
             maxGameTime = Integer.parseInt(properties.getProperty("gameTime"));
         }
 
+        // A blank entry counts as no entry, so an emptied-out line keeps reporting off
+        String sentryDsn = properties.getProperty("sentryDsn");
+        if (sentryDsn != null && sentryDsn.isBlank()) {
+            sentryDsn = null;
+        }
+
         configBuilder.minPlayers(minPlayers)
                 .maxPlayers(maxPlayers)
                 .lobbyTime(lobbyTime)
-                .gameTime(maxGameTime);
+                .gameTime(maxGameTime)
+                .sentryDsn(sentryDsn);
         return configBuilder.build();
     }
 }
