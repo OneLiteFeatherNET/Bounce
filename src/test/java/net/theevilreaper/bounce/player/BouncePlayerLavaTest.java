@@ -9,7 +9,7 @@ import net.minestom.testing.extension.MicrotusExtension;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.push.PushData;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
-import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
+import net.theevilreaper.bounce.listener.game.PlayerHazardListener;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ class BouncePlayerLavaTest {
         GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0, 0);
         player.startJumping(map, map.getPushData());
 
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerLavaEvent.class, new PlayerLavaListener(() -> gameSpawn));
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerLavaEvent.class, new PlayerHazardListener(() -> gameSpawn)::accept);
 
         env.tick();
         env.tick();
@@ -74,7 +74,7 @@ class BouncePlayerLavaTest {
         GameMap map = new GameMap("test", gameSpawn, gameSpawn, new PushData(List.of()), List.of(), null, 0, 0, 0);
         player.startJumping(map, map.getPushData());
 
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerLavaEvent.class, new PlayerLavaListener(() -> gameSpawn));
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerLavaEvent.class, new PlayerHazardListener(() -> gameSpawn)::accept);
 
         env.tick();
         env.tick();

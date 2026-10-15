@@ -40,8 +40,7 @@ import net.theevilreaper.bounce.listener.damage.DamageListener;
 import net.theevilreaper.bounce.listener.damage.KnockbackListener;
 import net.theevilreaper.bounce.listener.game.GameFinishListener;
 import net.theevilreaper.bounce.listener.game.GamePrepareListener;
-import net.theevilreaper.bounce.listener.game.PlayerDeathBlockListener;
-import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
+import net.theevilreaper.bounce.listener.game.PlayerHazardListener;
 import net.theevilreaper.bounce.listener.game.PowerUpPickupListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
@@ -164,8 +163,9 @@ public class Bounce implements ListenerHandling {
         node.addListener(FinalAttackEvent.class, new AttackListener(this.phaseSeries::getCurrentPhase));
         node.addListener(FinalDamageEvent.class, new DamageListener());
         node.addListener(EntityKnockbackEvent.class, new KnockbackListener());
-        node.addListener(PlayerLavaEvent.class, new PlayerLavaListener((this.mapProvider).getActiveMap()::getGameSpawn));
-        node.addListener(PlayerDeathBlockEvent.class, new PlayerDeathBlockListener((this.mapProvider).getActiveMap()::getGameSpawn));
+        PlayerHazardListener hazardListener = new PlayerHazardListener(this.mapProvider.getActiveMap()::getGameSpawn);
+        node.addListener(PlayerLavaEvent.class, hazardListener::accept);
+        node.addListener(PlayerDeathBlockEvent.class, hazardListener::accept);
     }
 
     private void registerCommands() {
