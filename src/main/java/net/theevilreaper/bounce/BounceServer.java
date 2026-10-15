@@ -15,7 +15,7 @@ public class BounceServer {
         // minestom-extensions loads platform extensions - the CloudNet bridge and our
         // :bridge permission extension among them - from the extensions/ folder. Running
         // standalone simply loads none. This also performs MinecraftServer.init().
-        ExtensionBootstrap bootstrap = ExtensionBootstrap.init();
+        ExtensionBootstrap bootstrap = ExtensionBootstrap.init(ServiceBootstrap.resolveAuth());
         LuckPermsSupport.bootstrap();
         MinestomPvP.init();
         Bounce bounce = new Bounce();
