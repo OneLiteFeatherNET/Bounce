@@ -38,7 +38,7 @@ dependencyResolutionManagement {
             version("luckperms-minestom-loader", "6.0.2")
             version("minestom-extensions", "2.2.0")
             version("guava", "33.7.2-jre")
-            version("pica", "0.1.4")
+            version("pica", "0.1.5")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
