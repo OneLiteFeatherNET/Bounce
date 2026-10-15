@@ -39,7 +39,7 @@ import java.util.Map;
  */
 public final class BouncePlayer extends PermissionAwarePlayer {
 
-    private static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
+    static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
     private static final double SUPER_JUMP_MULTIPLIER = 1.5;
     // A hit only counts for a kill if the player dies within this time
     static final int DAMAGER_EXPIRY_TICKS = 5 * ServerFlag.SERVER_TICKS_PER_SECOND;
@@ -153,9 +153,10 @@ public final class BouncePlayer extends PermissionAwarePlayer {
                 Vec push = new Vec(0, pushStrength, 0); // Only push upwards
                 setVelocity(push);
                 lastPushTime = now;
+                // Only remember the pad once it actually pushed, otherwise standing on it blocks every later push
+                lastBlockBelow = foundJumpBlock;
             }
         }
-        lastBlockBelow = foundJumpBlock;
     }
 
     private static boolean isLava(Block block) {
