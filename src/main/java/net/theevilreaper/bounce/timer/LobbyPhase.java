@@ -103,6 +103,7 @@ public class LobbyPhase extends TimedPhase {
     public void checkStopCondition() {
         if (getConnectionManager().getOnlinePlayers().size() < this.minPlayers) {
             this.setPaused(true);
+            this.forceStarted = false;
             this.setCurrentTicks(this.lobbyPhaseTime);
             setLevel();
         }

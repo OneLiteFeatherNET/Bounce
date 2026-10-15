@@ -51,6 +51,25 @@ class PhaseIntegrationTest {
     }
 
     @Test
+    void testLobbyPhaseStopConditionResetsForceStart(@NotNull Env env) {
+        int configuredTime = 45;
+        LobbyPhase lobbyPhase = new LobbyPhase(2, configuredTime);
+        Instance instance = env.createFlatInstance();
+        Player player = env.createPlayer(instance);
+
+        lobbyPhase.setPaused(false);
+        lobbyPhase.setForceStarted(true);
+        // Only 1 player remains -> below minPlayers -> the countdown restarts from the configured time
+        lobbyPhase.checkStopCondition();
+
+        assertFalse(lobbyPhase.isForceStarted(), "A reset countdown must allow another force start");
+        lobbyPhase.updatePlayerValues(player);
+        assertEquals(1f, player.getExp(), "The exp bar must be full again after the countdown got reset");
+
+        env.destroyInstance(instance, true);
+    }
+
+    @Test
     void testPlayingPhasePlayerCheckKeepsGameRunningWithMultiplePlayers(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         // The leaving player is already gone from getOnlinePlayers() by the time this runs
