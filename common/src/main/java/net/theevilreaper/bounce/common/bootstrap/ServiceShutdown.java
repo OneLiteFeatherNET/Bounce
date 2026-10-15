@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 /**
- * The single way Cygnus ends its own process.
+ * The single way Bounce ends its own process.
  * <p>
  * Every caller that wants the service gone - the {@link StopCommand} CloudNet reaches through its
  * stdin {@code stop} line, and the restart phase at the end of a round - goes through here, so a
@@ -65,8 +65,8 @@ public final class ServiceShutdown {
      */
     static final long WATCHDOG_TIMEOUT_SECONDS = 30;
 
-    static final String SHUTDOWN_THREAD_NAME = "cygnus-shutdown";
-    static final String WATCHDOG_THREAD_NAME = "cygnus-shutdown-watchdog";
+    static final String SHUTDOWN_THREAD_NAME = "bounce-shutdown";
+    static final String WATCHDOG_THREAD_NAME = "bounce-shutdown-watchdog";
     static final int EXIT_CODE = 0;
 
     private static final ServiceShutdown INSTANCE = new ServiceShutdown(
@@ -92,8 +92,8 @@ public final class ServiceShutdown {
      * @param halt            what ends the JVM without running hooks, normally {@link Runtime#halt(int)}
      * @param watchdogTimeout how long the orderly path gets before {@code halt} is used
      */
-    ServiceShutdown(@NotNull Runnable stopServer, @NotNull IntConsumer exit, @NotNull IntConsumer halt,
-                    @NotNull Duration watchdogTimeout) {
+    ServiceShutdown(Runnable stopServer, IntConsumer exit, IntConsumer halt,
+                    Duration watchdogTimeout) {
         this.stopServer = stopServer;
         this.exit = exit;
         this.halt = halt;
@@ -108,7 +108,7 @@ public final class ServiceShutdown {
      *
      * @param observer who is told about the shutdown
      */
-    public static void observe(@NotNull ShutdownObserver observer) {
+    public static void observe(ShutdownObserver observer) {
         INSTANCE.observer = observer;
     }
 
@@ -118,7 +118,7 @@ public final class ServiceShutdown {
      *
      * @param observer who is told about the shutdown
      */
-    void setObserver(@NotNull ShutdownObserver observer) {
+    void setObserver(ShutdownObserver observer) {
         this.observer = observer;
     }
 
