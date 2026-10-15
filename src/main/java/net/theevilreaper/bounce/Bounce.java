@@ -45,6 +45,7 @@ import net.theevilreaper.bounce.listener.game.PlayerLavaListener;
 import net.theevilreaper.bounce.listener.game.PowerUpPickupListener;
 import net.theevilreaper.bounce.listener.game.ScoreUpdateListener;
 import net.theevilreaper.bounce.map.BounceMapProvider;
+import net.theevilreaper.bounce.monitoring.SentrySupport;
 import net.theevilreaper.bounce.player.BouncePlayer;
 import net.theevilreaper.bounce.powerup.PowerUpSpawner;
 import net.theevilreaper.bounce.timer.PlayingPhase;
@@ -67,6 +68,9 @@ public class Bounce implements ListenerHandling {
     public Bounce() {
         Path path = ServiceBootstrap.resolveWorkingDirectory();
         this.gameConfig = new GameConfigReader(path.resolve("config")).getConfig();
+        // Set up as early as possible so anything that goes wrong while the rest of the game is
+        // being wired up is already covered. Stays off entirely when no DSN is configured.
+        SentrySupport.init(this.gameConfig.sentryDsn());
         this.mapProvider = new BounceMapProvider(path);
         this.phaseSeries = new LinearPhaseSeries<>("Game");
         this.scoreboard = new BounceScoreboard();
