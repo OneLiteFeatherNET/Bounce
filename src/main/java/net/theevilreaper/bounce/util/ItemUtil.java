@@ -35,6 +35,7 @@ public final class ItemUtil {
      */
     public static void setItem(Player paramPlayer) {
         paramPlayer.getInventory().addItemStack(FEATHER);
+        paramPlayer.setHeldItemSlot((byte) 0x00);
     }
 
     private ItemUtil() {
