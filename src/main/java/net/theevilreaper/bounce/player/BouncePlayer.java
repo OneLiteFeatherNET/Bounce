@@ -325,6 +325,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         int removed = Math.min(points, paramPoints);
         if (removed > 0) {
             points -= removed;
+            firstReachTimestamp = System.nanoTime();
             updateScoreboard();
             sendActionBar(GameMessages.getCoinComponent(removed, false));
         }
@@ -359,7 +360,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
 
     /**
      * Compares two players by round standing: higher score wins, ties broken by
-     * {@link #firstReachTimestamp} (later reach wins the tie).
+     * {@link #firstReachTimestamp} (whoever reached the current score first wins the tie).
      *
      * @param other the player to compare against
      * @return a negative, zero, or positive number as this player ranks below, equal to, or
@@ -369,7 +370,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         int pointComparison = Integer.compare(this.points, other.points);
         if (pointComparison != 0) return pointComparison;
 
-        return Long.compare(this.firstReachTimestamp, other.firstReachTimestamp);
+        return Long.compare(other.firstReachTimestamp, this.firstReachTimestamp);
     }
 
     private void updateScoreboard() {
