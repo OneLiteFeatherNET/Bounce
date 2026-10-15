@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.8.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.7.0...v0.8.0) (2026-10-15)
+
+
+### Features
+
+* **auth:** add velocity handling ([f4a5fb3](https://github.com/OneLiteFeatherNET/Bounce/commit/f4a5fb38dd1e83bed391b65ec3769813afa3158a))
+
+
+### Bug Fixes
+
+* **deps:** update dependency net.luckperms:api to v6 ([#107](https://github.com/OneLiteFeatherNET/Bounce/issues/107)) ([bab9f95](https://github.com/OneLiteFeatherNET/Bounce/commit/bab9f955c931c93e26ff047d19e2a03437ba8718))
+* **deps:** update dependency net.luckperms:api to v6.0.2 ([#141](https://github.com/OneLiteFeatherNET/Bounce/issues/141)) ([784de12](https://github.com/OneLiteFeatherNET/Bounce/commit/784de121bcbef9049f6aad2c5b88d3350c4a8296))
+* **deps:** update dependency net.onelitefeather:aonyx-bom to v0.8.9 ([#143](https://github.com/OneLiteFeatherNET/Bounce/issues/143)) ([4252dde](https://github.com/OneLiteFeatherNET/Bounce/commit/4252dde6f1f0f8263280a1f1d5c06d2c08f5e026))
+* **deps:** update dependency net.onelitefeather:falco-bom to v3.0.1 ([#142](https://github.com/OneLiteFeatherNET/Bounce/issues/142)) ([d1ac4e7](https://github.com/OneLiteFeatherNET/Bounce/commit/d1ac4e771f39e4c267d6adc4d331c20214903cd8))
+* **deps:** update dependency net.onelitefeather:pica to v0.1.4 ([#140](https://github.com/OneLiteFeatherNET/Bounce/issues/140)) ([8c29b20](https://github.com/OneLiteFeatherNET/Bounce/commit/8c29b202ea5cec120378388e62c30d2cbec0842a))
+* **deps:** update dependency net.onelitefeather:pica to v0.1.5 ([#144](https://github.com/OneLiteFeatherNET/Bounce/issues/144)) ([3df2a3c](https://github.com/OneLiteFeatherNET/Bounce/commit/3df2a3c882fd41be07aff71771da7247edf046f5))
+* **deps:** update luckperms minestom-loader to 6.0.2 ([#139](https://github.com/OneLiteFeatherNET/Bounce/issues/139)) ([7359065](https://github.com/OneLiteFeatherNET/Bounce/commit/73590654f365cd3dbe3ce9bc55cc9ed8d886c676))
+* **lobby:** reset force start when the countdown gets reset ([54251ce](https://github.com/OneLiteFeatherNET/Bounce/commit/54251ce9a153022966a480ba44d894202666ade7))
+* **player:** keep pads usable after a push was blocked by the cooldown ([1b77ab2](https://github.com/OneLiteFeatherNET/Bounce/commit/1b77ab2a0824f5e00c207ac3857e768aee3af22a))
+* **player:** let the player who reached a tied score first win ([0cc4819](https://github.com/OneLiteFeatherNET/Bounce/commit/0cc4819f49e63cf053c4f0bccd91c662aec17e42))
+
 ## [0.7.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.6.0...v0.7.0) (2026-10-10)
 
 
