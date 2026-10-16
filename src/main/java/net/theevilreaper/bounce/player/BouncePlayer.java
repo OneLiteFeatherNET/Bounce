@@ -6,9 +6,6 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -16,6 +13,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
 import net.theevilreaper.bounce.common.push.PushData;
@@ -44,9 +42,6 @@ public final class BouncePlayer extends PermissionAwarePlayer {
 
     static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
     private static final double SUPER_JUMP_MULTIPLIER = 1.5;
-    // Turns the default gravity of 0.08 into -0.02, which lets the player slowly float upwards
-    private static final AttributeModifier GRAVITY_FLIP_MODIFIER =
-            new AttributeModifier("bounce:gravity_flip", -0.1, AttributeOperation.ADD_VALUE);
     // A hit only counts for a kill if the player dies within this time
     static final int DAMAGER_EXPIRY_TICKS = 5 * ServerFlag.SERVER_TICKS_PER_SECOND;
 
@@ -247,7 +242,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
      * @param durationTicks how long the gravity stays reversed
      */
     public void flipGravity(int durationTicks) {
-        getAttribute(Attribute.GRAVITY).addModifier(GRAVITY_FLIP_MODIFIER);
+        AttributeHelper.flipGravity(this);
         this.gravityFlipExpiry = getAliveTicks() + durationTicks;
     }
 
@@ -261,7 +256,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     }
 
     private void resetGravity() {
-        getAttribute(Attribute.GRAVITY).removeModifier(GRAVITY_FLIP_MODIFIER.id());
+        AttributeHelper.resetGravity(this);
         this.gravityFlipExpiry = 0;
     }
 
