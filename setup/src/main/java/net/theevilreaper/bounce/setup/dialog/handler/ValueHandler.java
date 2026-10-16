@@ -22,13 +22,17 @@ public final class ValueHandler implements DialogHandler {
     public void handle(PlayerCustomClickEvent event, CompoundBinaryTag payload) {
         Player player = event.getPlayer();
         int amount = payload.getInt("bounce_amount", 0);
-        int valueIndex = player.getTag(SetupTags.PUSH_SLOT_INDEX);
+        int valueIndex = player.hasTag(SetupTags.PUSH_SLOT_INDEX) ? player.getTag(SetupTags.PUSH_SLOT_INDEX) : 0;
         player.removeTag(SetupTags.PUSH_SLOT_INDEX);
 
         setupDataGetter.get(player.getUuid()).ifPresent(setupData -> {
             BounceData data = (BounceData) setupData;
             data.getMapBuilder().getPushDataBuilder().getPushValues().get(valueIndex).setValue(amount);
-            data.triggerPushValueUpdate(valueIndex);
+            if (valueIndex == 0) {
+                data.triggerGroundViewUpdate();
+            } else {
+                data.triggerPushValueUpdate(valueIndex);
+            }
         });
     }
 }

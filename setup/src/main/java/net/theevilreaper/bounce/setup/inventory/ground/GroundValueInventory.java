@@ -22,6 +22,7 @@ import net.theevilreaper.bounce.setup.util.LoreHelper;
 import java.util.function.Consumer;
 
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
+import static net.theevilreaper.bounce.setup.util.SetupTags.PUSH_SLOT_INDEX;
 
 public class GroundValueInventory extends PersonalInventoryBuilder {
 
@@ -73,23 +74,15 @@ public class GroundValueInventory extends PersonalInventoryBuilder {
         result.accept(ClickHolder.cancelClick());
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 
-        int oldValue = this.pushEntry.getValue();
-        if (click instanceof Click.Left) {
-            this.pushEntry.incrementValue();
-        } else {
-            this.pushEntry.decrementValue();
-        }
-
-        if (this.pushEntry.getValue() != oldValue) {
-            this.invalidateDataLayout();
-        }
+        player.setTag(PUSH_SLOT_INDEX, 0);
+        EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_BOUNCE));
     }
 
     private void handleWeightButtonClick(Player player, int slot, Click click, ItemStack stack, Consumer<ClickHolder> result) {
         result.accept(ClickHolder.cancelClick());
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 
-        player.setTag(net.theevilreaper.bounce.setup.util.SetupTags.PUSH_SLOT_INDEX, 0);
+        player.setTag(PUSH_SLOT_INDEX, 0);
         EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_WEIGHT));
     }
 }
