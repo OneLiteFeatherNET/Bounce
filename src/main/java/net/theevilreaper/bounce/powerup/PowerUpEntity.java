@@ -31,6 +31,8 @@ public final class PowerUpEntity extends Entity {
     private static final double AMPLITUDE = 0.25;
     private static final Vec UP = new Vec(0, AMPLITUDE, 0);
     private static final Vec DOWN = new Vec(0, -AMPLITUDE, 0);
+    // Quaternion (x, y, z, w) for -90° around the x-axis, lays the item flat so its face points upwards
+    private static final float[] FACE_UP = {(float) -Math.sqrt(0.5), 0f, 0f, (float) Math.sqrt(0.5)};
     // Centered around the entity position and tall enough to cover the whole bobbing range
     private static final BoundingBox PICKUP_BOX = new BoundingBox(1.0, 1.0, 1.0, new Vec(-0.5, -0.5, -0.5));
 
@@ -49,7 +51,8 @@ public final class PowerUpEntity extends Entity {
         setGlowing(true);
         editEntityMeta(ItemDisplayMeta.class, meta -> {
             meta.setItemStack(type.getIcon());
-            meta.setBillboardRenderConstraints(AbstractDisplayMeta.BillboardConstraints.VERTICAL);
+            meta.setBillboardRenderConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
+            meta.setLeftRotation(FACE_UP);
         });
     }
 
