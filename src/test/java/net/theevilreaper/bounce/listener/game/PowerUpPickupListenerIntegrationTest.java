@@ -2,6 +2,7 @@ package net.theevilreaper.bounce.listener.game;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.testing.Env;
@@ -48,5 +49,24 @@ class PowerUpPickupListenerIntegrationTest {
         assertFalse(picker.hasEffect(PotionEffect.BLINDNESS), "The picker must not ink themselves");
         assertFalse(spectator.hasEffect(PotionEffect.BLINDNESS), "Players outside the round must not get inked");
         assertFalse(picker.hasPowerUp(PowerUpType.BLOOPER), "The blooper is instant and must not stay active");
+    }
+
+    @Test
+    void testGravityFlipAffectsAllRoundActivePlayers(@NotNull Env env) {
+        MinecraftServer.getConnectionManager().setPlayerProvider(BouncePlayer::new);
+        Instance instance = env.createFlatInstance();
+        BouncePlayer picker = (BouncePlayer) env.createPlayer(instance, new Pos(0, 41, 0));
+        picker.startRound();
+        BouncePlayer opponent = (BouncePlayer) env.createPlayer(instance, new Pos(3, 41, 0));
+        opponent.startRound();
+        BouncePlayer spectator = (BouncePlayer) env.createPlayer(instance, new Pos(6, 41, 0));
+
+        listener.accept(new PlayerPowerUpPickupEvent(picker, PowerUpType.GRAVITY_FLIP));
+
+        assertTrue(opponent.isGravityFlipped(), "Opponents must get their gravity flipped");
+        assertTrue(opponent.getAttributeValue(Attribute.GRAVITY) < 0, "The gravity of opponents must be negative");
+        assertTrue(picker.isGravityFlipped(), "The picker must get their gravity flipped as well");
+        assertFalse(spectator.isGravityFlipped(), "Players outside the round must not get flipped");
+        assertFalse(picker.hasPowerUp(PowerUpType.GRAVITY_FLIP), "The gravity flip is instant and must not stay active");
     }
 }

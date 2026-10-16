@@ -101,6 +101,17 @@ public class GameMessages extends Messages {
         return withPrefix(name.append(Component.text(" blinded you with ink!", NamedTextColor.GRAY)));
     }
 
+    @Contract(value = "_ -> new", pure = true)
+    public static Component getGravityFlipComponent(int seconds) {
+        return withPrefix(Component.text("You flipped the gravity of all players for " + seconds + " seconds!", NamedTextColor.GRAY));
+    }
+
+    @Contract(value = "_ -> new", pure = true)
+    public static Component getGravityFlippedComponent(Player flipper) {
+        Component name = Objects.requireNonNullElseGet(flipper.getDisplayName(), () -> Component.text(flipper.getUsername()));
+        return withPrefix(name.append(Component.text(" flipped your gravity!", NamedTextColor.GRAY)));
+    }
+
     private GameMessages() {
 
     }

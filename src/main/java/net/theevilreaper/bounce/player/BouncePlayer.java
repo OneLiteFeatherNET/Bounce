@@ -6,6 +6,9 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeModifier;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -41,6 +44,9 @@ public final class BouncePlayer extends PermissionAwarePlayer {
 
     static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
     private static final double SUPER_JUMP_MULTIPLIER = 1.5;
+    // Turns the default gravity of 0.08 into -0.02, which lets the player slowly float upwards
+    private static final AttributeModifier GRAVITY_FLIP_MODIFIER =
+            new AttributeModifier("bounce:gravity_flip", -0.1, AttributeOperation.ADD_VALUE);
     // A hit only counts for a kill if the player dies within this time
     static final int DAMAGER_EXPIRY_TICKS = 5 * ServerFlag.SERVER_TICKS_PER_SECOND;
 
@@ -58,6 +64,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     private long lastDamageTick;
     private long firstReachTimestamp;
     private final Map<PowerUpType, Long> activePowerUps = new EnumMap<>(PowerUpType.class);
+    private long gravityFlipExpiry;
 
     public BouncePlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(playerConnection, gameProfile);
@@ -91,6 +98,9 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         if (!this.activePowerUps.isEmpty()) {
             long aliveTicks = getAliveTicks();
             this.activePowerUps.values().removeIf(expiry -> expiry <= aliveTicks);
+        }
+        if (this.gravityFlipExpiry != 0 && getAliveTicks() >= this.gravityFlipExpiry) {
+            resetGravity();
         }
         if (!this.jumping) return;
         onJumpTick();
@@ -230,12 +240,39 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         return expiry != null && getAliveTicks() < expiry;
     }
 
+    /**
+     * Reverses the gravity of this player for the given duration. Flipping an already flipped player
+     * restarts the duration.
+     *
+     * @param durationTicks how long the gravity stays reversed
+     */
+    public void flipGravity(int durationTicks) {
+        getAttribute(Attribute.GRAVITY).addModifier(GRAVITY_FLIP_MODIFIER);
+        this.gravityFlipExpiry = getAliveTicks() + durationTicks;
+    }
+
+    /**
+     * Returns whether the gravity of this player is currently reversed.
+     *
+     * @return {@code true} if the gravity is reversed
+     */
+    public boolean isGravityFlipped() {
+        return this.gravityFlipExpiry != 0;
+    }
+
+    private void resetGravity() {
+        getAttribute(Attribute.GRAVITY).removeModifier(GRAVITY_FLIP_MODIFIER.id());
+        this.gravityFlipExpiry = 0;
+    }
+
     private void clearPowerUps() {
         if (this.activePowerUps.remove(PowerUpType.SLOW_FALLING) != null) {
             removeEffect(PotionEffect.SLOW_FALLING);
         }
         // Applied by an opponent's blooper, so it is not tracked as an own power-up
         removeEffect(PotionEffect.BLINDNESS);
+        // Applied to every player by a gravity flip pickup, so it is not tracked as an own power-up either
+        resetGravity();
         this.activePowerUps.clear();
     }
 

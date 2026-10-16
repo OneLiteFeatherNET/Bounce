@@ -17,6 +17,7 @@ public final class PowerUpPickupListener implements Consumer<PlayerPowerUpPickup
 
     private static final Sound PICKUP_SOUND = Sound.sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Sound.Source.PLAYER, 1f, 1.5f);
     private static final Sound INK_SOUND = Sound.sound(SoundEvent.ENTITY_SQUID_SQUIRT, Sound.Source.PLAYER, 1f, 1f);
+    private static final Sound GRAVITY_FLIP_SOUND = Sound.sound(SoundEvent.ENTITY_SHULKER_SHOOT, Sound.Source.PLAYER, 1f, 1f);
 
     @Override
     public void accept(PlayerPowerUpPickupEvent event) {
@@ -25,6 +26,10 @@ public final class PowerUpPickupListener implements Consumer<PlayerPowerUpPickup
         bouncePlayer.playSound(PICKUP_SOUND);
         if (event.getType() == PowerUpType.BLOOPER) {
             inkOpponents(bouncePlayer);
+            return;
+        }
+        if (event.getType() == PowerUpType.GRAVITY_FLIP) {
+            flipEveryone(bouncePlayer);
             return;
         }
 
@@ -44,5 +49,21 @@ public final class PowerUpPickupListener implements Consumer<PlayerPowerUpPickup
             opponent.sendMessage(GameMessages.getInkedComponent(inker));
         }
         inker.sendMessage(GameMessages.getBlooperComponent(PowerUpType.BLOOPER.getDurationSeconds()));
+    }
+
+    private void flipEveryone(BouncePlayer flipper) {
+        Instance instance = flipper.getInstance();
+        if (instance == null) return;
+
+        // Unlike the blooper, the picker is affected as well
+        for (Player player : instance.getPlayers()) {
+            if (!(player instanceof BouncePlayer target) || !target.isRoundActive()) continue;
+            target.flipGravity(PowerUpType.GRAVITY_FLIP.getDurationTicks());
+            target.playSound(GRAVITY_FLIP_SOUND);
+            if (target != flipper) {
+                target.sendMessage(GameMessages.getGravityFlippedComponent(flipper));
+            }
+        }
+        flipper.sendMessage(GameMessages.getGravityFlipComponent(PowerUpType.GRAVITY_FLIP.getDurationSeconds()));
     }
 }

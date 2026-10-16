@@ -41,7 +41,12 @@ public enum PowerUpType {
      * Blinds every other player of the round. Unlike the other types, it affects the opponents instead of the
      * player who picked it up.
      */
-    BLOOPER(Material.INK_SAC, "Blooper", NamedTextColor.DARK_GRAY, 4);
+    BLOOPER(Material.INK_SAC, "Blooper", NamedTextColor.DARK_GRAY, 4),
+    /**
+     * Reverses the gravity of every player of the round, including the player who picked it up,
+     * so everyone floats upwards for a short time.
+     */
+    GRAVITY_FLIP(Material.PHANTOM_MEMBRANE, "Gravity Flip", NamedTextColor.LIGHT_PURPLE, 3);
 
     private final ItemStack icon;
     private final Component displayName;
