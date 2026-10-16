@@ -15,11 +15,16 @@ public class SetupMessages extends Messages {
     public static final Component SET_CLICK;
     public static final Component CLICK_TO_EDIT;
 
+    public static final Component PREVIEW_RUNNING;
+    public static final Component PREVIEW_NO_BLOCKS;
+
     static {
         NO_SPACE_SEPARATOR = Component.text("»", NamedTextColor.GRAY);
         SELECT_MAP_FIRST = withPrefix(Component.text("Please select a map first!", NamedTextColor.RED));
         INVALID_NAME = withPrefix(Component.text("Invalid name for the map", NamedTextColor.RED));
         CLICK_TO_EDIT = Component.text("Click to edit", NamedTextColor.GRAY);
+        PREVIEW_RUNNING = withPrefix(Component.text("Wait until the current preview is finished!", NamedTextColor.RED));
+        PREVIEW_NO_BLOCKS = withPrefix(Component.text("There are no push blocks to preview!", NamedTextColor.RED));
 
         SET_CLICK = NO_SPACE_SEPARATOR
                 .append(Component.space())

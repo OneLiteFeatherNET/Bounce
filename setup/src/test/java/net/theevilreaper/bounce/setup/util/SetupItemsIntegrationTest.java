@@ -53,6 +53,10 @@ class SetupItemsIntegrationTest {
         assertNotNull(groundItem);
         assertEquals(Material.CARTOGRAPHY_TABLE, groundItem.material());
 
+        ItemStack previewItem = player.getInventory().getItemStack(0x08);
+        assertEquals(Material.SLIME_BALL, previewItem.material());
+        assertEquals(SetupItems.PREVIEW_FLAG, previewItem.getTag(ITEM_TAG));
+
         env.destroyInstance(instance, true);
     }
 }
