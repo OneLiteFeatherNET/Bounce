@@ -14,28 +14,29 @@ import net.minestom.server.entity.attribute.AttributeOperation;
  */
 public final class AttributeHelper {
 
-    private static final int ZERO_JUMP = 0;
-    private static final double DEFAULT_JUMP_HEIGHT = 0.41999998688697815;
+    // Multiplies the total jump strength by zero, which keeps the base value untouched
+    private static final AttributeModifier DISABLE_JUMP_MODIFIER =
+            new AttributeModifier("bounce:disable_jump", -1, AttributeOperation.ADD_MULTIPLIED_TOTAL);
     // Turns the default gravity of 0.08 into -0.02, which lets the player slowly float upwards
     private static final AttributeModifier GRAVITY_FLIP_MODIFIER =
             new AttributeModifier("bounce:gravity_flip", -0.1, AttributeOperation.ADD_VALUE);
 
     /**
-     * Disables the jump strength of the player by setting it to zero.
+     * Disables the jump strength of the player by reducing it to zero.
      *
      * @param player the player whose jump strength is to be disabled
      */
     public static void disableJumpStrength(Player player) {
-        player.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(ZERO_JUMP);
+        player.getAttribute(Attribute.JUMP_STRENGTH).addModifier(DISABLE_JUMP_MODIFIER);
     }
 
     /**
-     * Resets the jump strength of the player to the default value.
+     * Resets the jump strength of the player by removing a previously applied jump block.
      *
      * @param player the player whose jump strength is to be reset
      */
     public static void resetJumpStrength(Player player) {
-        player.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(DEFAULT_JUMP_HEIGHT);
+        player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(DISABLE_JUMP_MODIFIER.id());
     }
 
     /**

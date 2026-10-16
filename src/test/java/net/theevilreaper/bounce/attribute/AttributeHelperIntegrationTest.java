@@ -19,15 +19,18 @@ class AttributeHelperIntegrationTest {
     void testJumpStrengthAttributeChange(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         Player player = env.createPlayer(instance);
+        double defaultJumpStrength = player.getAttributeValue(Attribute.JUMP_STRENGTH);
 
         AttributeHelper.disableJumpStrength(player);
 
-        assertEquals(0, player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue(),
-                "Jump strength should be set to zero after disabling");
+        assertEquals(0, player.getAttributeValue(Attribute.JUMP_STRENGTH),
+                "Jump strength should be zero after disabling");
+        assertEquals(defaultJumpStrength, player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue(),
+                "Disabling the jump strength must not touch the base value");
 
         AttributeHelper.resetJumpStrength(player);
 
-        assertEquals(0.41999998688697815, player.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue(),
+        assertEquals(defaultJumpStrength, player.getAttributeValue(Attribute.JUMP_STRENGTH),
                 "Jump strength should be reset to default value");
 
         env.destroyInstance(instance, true);
