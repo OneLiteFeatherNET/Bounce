@@ -32,6 +32,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
     private static final int VALUE_SLOT = 15;
 
     private final GameMapBuilder gameMapBuilder;
+    private int pushIndex;
 
     public PushValueInventory(Player player, GameMapBuilder mapBuilder) {
         super(TITLE, InventoryType.CHEST_3_ROW, player);
@@ -48,6 +49,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         if (index < 0 || index >= this.gameMapBuilder.getPushDataBuilder().getPushValues().size()) {
             throw new IndexOutOfBoundsException("Invalid push entry index: " + index);
         }
+        this.pushIndex = index;
         this.setDataLayoutFunction(dataLayoutFunction -> {
             InventoryLayout dataLayout = dataLayoutFunction == null ? InventoryLayout.fromType(getType()) : dataLayoutFunction;
 
@@ -87,8 +89,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
 
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 
-        int index = player.getTag(PUSH_SLOT_INDEX);
-        player.setTag(PUSH_SLOT_INDEX, index);
+        player.setTag(PUSH_SLOT_INDEX, this.pushIndex);
         EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_BOUNCE));
     }
 
@@ -96,8 +97,7 @@ public final class PushValueInventory extends PersonalInventoryBuilder {
         result.accept(ClickHolder.cancelClick());
         if ((!(click instanceof Click.Left || click instanceof Click.Right))) return;
 
-        int index = player.getTag(PUSH_SLOT_INDEX);
-        player.setTag(PUSH_SLOT_INDEX, index);
+        player.setTag(PUSH_SLOT_INDEX, this.pushIndex);
         EventDispatcher.call(new PlayerDialogRequestEvent(player, PlayerDialogRequestEvent.Target.SETUP_BLOCK_WEIGHT));
     }
 }
