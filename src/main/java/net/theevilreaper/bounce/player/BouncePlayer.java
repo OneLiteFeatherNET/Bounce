@@ -16,6 +16,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
 import net.theevilreaper.bounce.common.push.PushData;
+import net.theevilreaper.bounce.common.push.PushPhysics;
 import net.theevilreaper.bounce.event.PlayerDeathBlockEvent;
 import net.theevilreaper.bounce.event.PlayerLavaEvent;
 import net.theevilreaper.bounce.event.ScoreUpdateEvent;
@@ -148,7 +149,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         if (getVelocity().y() < 0) {
             long now = System.currentTimeMillis();
             if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
-                double pushStrength = data.getPush(foundJumpBlock) * 10D;
+                double pushStrength = PushPhysics.velocity(data.getPush(foundJumpBlock));
                 if (hasPowerUp(PowerUpType.SUPER_JUMP)) {
                     pushStrength *= SUPER_JUMP_MULTIPLIER;
                 }
