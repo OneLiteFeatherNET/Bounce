@@ -74,9 +74,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         this.map = bounceMap;
         this.pushData = pushData;
         // Maps saved before this field existed deserialize it as 0, which would cancel every super jump push
-        this.superJumpMultiplier = bounceMap.getSuperJumpMultiplier() > 0
-                ? bounceMap.getSuperJumpMultiplier()
-                : GameMap.DEFAULT_SUPER_JUMP_MULTIPLIER;
+        this.superJumpMultiplier = bounceMap.getSuperJumpMultiplier();
         this.lastBlockBelow = Block.AIR;
         this.jumping = true;
     }
