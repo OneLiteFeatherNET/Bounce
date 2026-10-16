@@ -27,12 +27,12 @@ class PowerUpEntityIntegrationTest {
     void testBobsUpAndDownViaInterpolatedTranslation(@NotNull Env env) {
         Instance instance = env.createFlatInstance();
         instance.loadChunk(0, 0).join();
-        PowerUpEntity entity = new PowerUpEntity(PowerUpType.SPEED);
+        PowerUpEntity entity = new PowerUpEntity(PowerUpType.SLOW_FALLING);
         entity.setInstance(instance, POWER_UP_POSITION).join();
 
         env.tick();
         ItemDisplayMeta meta = (ItemDisplayMeta) entity.getEntityMeta();
-        assertEquals(PowerUpType.SPEED.getIcon(), meta.getItemStack());
+        assertEquals(PowerUpType.SLOW_FALLING.getIcon(), meta.getItemStack());
         assertEquals(PowerUpEntity.HALF_PERIOD_TICKS, meta.getTransformationInterpolationDuration());
         assertTrue(meta.getTranslation().y() > 0, "The first half period must move the power-up upwards");
 

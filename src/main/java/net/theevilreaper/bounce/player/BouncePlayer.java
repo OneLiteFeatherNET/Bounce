@@ -13,6 +13,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
 import net.theevilreaper.bounce.common.push.PushData;
@@ -59,6 +60,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     private long lastDamageTick;
     private long firstReachTimestamp;
     private final Map<PowerUpType, Long> activePowerUps = new EnumMap<>(PowerUpType.class);
+    private long gravityFlipExpiry;
 
     public BouncePlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(playerConnection, gameProfile);
@@ -92,6 +94,9 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         if (!this.activePowerUps.isEmpty()) {
             long aliveTicks = getAliveTicks();
             this.activePowerUps.values().removeIf(expiry -> expiry <= aliveTicks);
+        }
+        if (this.gravityFlipExpiry != 0 && getAliveTicks() >= this.gravityFlipExpiry) {
+            resetGravity();
         }
         if (!this.jumping) return;
         onJumpTick();
@@ -215,8 +220,8 @@ public final class BouncePlayer extends PermissionAwarePlayer {
      */
     public void activatePowerUp(PowerUpType type) {
         this.activePowerUps.put(type, getAliveTicks() + type.getDurationTicks());
-        if (type == PowerUpType.SPEED) {
-            addEffect(new Potion(PotionEffect.SPEED, 1, type.getDurationTicks()));
+        if (type == PowerUpType.SLOW_FALLING) {
+            addEffect(new Potion(PotionEffect.SLOW_FALLING, 0, type.getDurationTicks()));
         }
     }
 
@@ -231,12 +236,39 @@ public final class BouncePlayer extends PermissionAwarePlayer {
         return expiry != null && getAliveTicks() < expiry;
     }
 
+    /**
+     * Reverses the gravity of this player for the given duration. Flipping an already flipped player
+     * restarts the duration.
+     *
+     * @param durationTicks how long the gravity stays reversed
+     */
+    public void flipGravity(int durationTicks) {
+        AttributeHelper.flipGravity(this);
+        this.gravityFlipExpiry = getAliveTicks() + durationTicks;
+    }
+
+    /**
+     * Returns whether the gravity of this player is currently reversed.
+     *
+     * @return {@code true} if the gravity is reversed
+     */
+    public boolean isGravityFlipped() {
+        return this.gravityFlipExpiry != 0;
+    }
+
+    private void resetGravity() {
+        AttributeHelper.resetGravity(this);
+        this.gravityFlipExpiry = 0;
+    }
+
     private void clearPowerUps() {
-        if (this.activePowerUps.remove(PowerUpType.SPEED) != null) {
-            removeEffect(PotionEffect.SPEED);
+        if (this.activePowerUps.remove(PowerUpType.SLOW_FALLING) != null) {
+            removeEffect(PotionEffect.SLOW_FALLING);
         }
         // Applied by an opponent's blooper, so it is not tracked as an own power-up
         removeEffect(PotionEffect.BLINDNESS);
+        // Applied to every player by a gravity flip pickup, so it is not tracked as an own power-up either
+        resetGravity();
         this.activePowerUps.clear();
     }
 
