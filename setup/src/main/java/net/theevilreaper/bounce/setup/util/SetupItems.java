@@ -73,10 +73,10 @@ public final class SetupItems {
      */
     public static void setSetupItems(Player player) {
         player.getInventory().clear();
-        player.getInventory().setItemStack(0x06, SAVE);
-        player.getInventory().setItemStack(0x04, GROUND_ITEM);
-        player.getInventory().setItemStack(0x02, VIEW_ITEM);
-        player.getInventory().setItemStack(0x08, PREVIEW_ITEM);
+        player.getInventory().setItemStack(0x01, VIEW_ITEM);
+        player.getInventory().setItemStack(0x03, GROUND_ITEM);
+        player.getInventory().setItemStack(0x05, PREVIEW_ITEM);
+        player.getInventory().setItemStack(0x07, SAVE);
         player.setHeldItemSlot((byte) 0);
     }
 
