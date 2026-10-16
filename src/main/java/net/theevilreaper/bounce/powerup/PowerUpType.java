@@ -22,9 +22,9 @@ public enum PowerUpType {
      */
     SUPER_JUMP(Material.RABBIT_FOOT, "Super Jump", NamedTextColor.GREEN, 10),
     /**
-     * Grants the speed potion effect.
+     * Grants the slow falling potion effect.
      */
-    SPEED(Material.SUGAR, "Speed", NamedTextColor.AQUA, 10),
+    SLOW_FALLING(Material.FEATHER, "Slow Falling", NamedTextColor.AQUA, 10),
     /**
      * Increases the knockback the player deals to other players.
      */

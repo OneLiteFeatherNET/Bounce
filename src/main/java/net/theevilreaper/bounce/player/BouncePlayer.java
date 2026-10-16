@@ -214,8 +214,8 @@ public final class BouncePlayer extends PermissionAwarePlayer {
      */
     public void activatePowerUp(PowerUpType type) {
         this.activePowerUps.put(type, getAliveTicks() + type.getDurationTicks());
-        if (type == PowerUpType.SPEED) {
-            addEffect(new Potion(PotionEffect.SPEED, 1, type.getDurationTicks()));
+        if (type == PowerUpType.SLOW_FALLING) {
+            addEffect(new Potion(PotionEffect.SLOW_FALLING, 0, type.getDurationTicks()));
         }
     }
 
@@ -231,8 +231,8 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     }
 
     private void clearPowerUps() {
-        if (this.activePowerUps.remove(PowerUpType.SPEED) != null) {
-            removeEffect(PotionEffect.SPEED);
+        if (this.activePowerUps.remove(PowerUpType.SLOW_FALLING) != null) {
+            removeEffect(PotionEffect.SLOW_FALLING);
         }
         // Applied by an opponent's blooper, so it is not tracked as an own power-up
         removeEffect(PotionEffect.BLINDNESS);

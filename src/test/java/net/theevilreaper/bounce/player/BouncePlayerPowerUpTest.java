@@ -50,24 +50,24 @@ class BouncePlayerPowerUpTest {
     }
 
     @Test
-    void testSpeedAppliesThePotionEffect(@NotNull Env env) {
+    void testSlowFallingAppliesThePotionEffect(@NotNull Env env) {
         BouncePlayer player = createPlayer(env);
-        player.activatePowerUp(PowerUpType.SPEED);
+        player.activatePowerUp(PowerUpType.SLOW_FALLING);
 
-        assertTrue(player.hasEffect(PotionEffect.SPEED));
+        assertTrue(player.hasEffect(PotionEffect.SLOW_FALLING));
     }
 
     @Test
     void testEndingTheRoundClearsPowerUps(@NotNull Env env) {
         BouncePlayer player = createPlayer(env);
-        player.activatePowerUp(PowerUpType.SPEED);
+        player.activatePowerUp(PowerUpType.SLOW_FALLING);
         player.activatePowerUp(PowerUpType.DOUBLE_POINTS);
 
         player.endRound();
 
-        assertFalse(player.hasPowerUp(PowerUpType.SPEED));
+        assertFalse(player.hasPowerUp(PowerUpType.SLOW_FALLING));
         assertFalse(player.hasPowerUp(PowerUpType.DOUBLE_POINTS));
-        assertFalse(player.hasEffect(PotionEffect.SPEED), "The speed effect must not outlive the round");
+        assertFalse(player.hasEffect(PotionEffect.SLOW_FALLING), "The slow falling effect must not outlive the round");
     }
 
     @Test
