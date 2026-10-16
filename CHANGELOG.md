@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.8.0...v0.9.0) (2026-10-16)
+
+
+### Features
+
+* **config:** configure Sentry through config.properties ([#147](https://github.com/OneLiteFeatherNET/Bounce/issues/147)) ([4a7ebc2](https://github.com/OneLiteFeatherNET/Bounce/commit/4a7ebc2b2cae1cf34edb517ea48ead9150262747))
+
+
+### Bug Fixes
+
+* **cloud:** improve shutdown handling ([a476054](https://github.com/OneLiteFeatherNET/Bounce/commit/a47605431370fb0f34e6ee21a7ca36724cd90784))
+* **deps:** update dependency io.sentry:sentry to v8.61.0 ([#148](https://github.com/OneLiteFeatherNET/Bounce/issues/148)) ([7bee2c9](https://github.com/OneLiteFeatherNET/Bounce/commit/7bee2c955198c5e188aedba6334c1b5f4bf54e3a))
+* **game:** ignore damagers who left the round ([5f5e868](https://github.com/OneLiteFeatherNET/Bounce/commit/5f5e868b7217958b6c5f99dc7cc13cea05ff7914))
+* **item:** update held item slot ([a57f430](https://github.com/OneLiteFeatherNET/Bounce/commit/a57f430707b42e3cec969d27bbf32bb91be7260d))
+* **player:** detect blocks under hitbox corners ([#149](https://github.com/OneLiteFeatherNET/Bounce/issues/149)) ([9aaf23d](https://github.com/OneLiteFeatherNET/Bounce/commit/9aaf23d0a12307738efabc58050c8af21f026bc4))
+
 ## [0.8.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.7.0...v0.8.0) (2026-10-15)
 
 
