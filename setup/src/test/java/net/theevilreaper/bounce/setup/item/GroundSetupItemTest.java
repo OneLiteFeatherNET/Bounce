@@ -36,11 +36,11 @@ class GroundSetupItemTest extends SetupItemTestBase {
 
         SetupItems.setSetupItems(player);
         player.setTag(SETUP_TAG, 1);
-        ItemStack stack = player.getInventory().getItemStack(0x04);
+        ItemStack stack = player.getInventory().getItemStack(0x03);
         assertNotEquals(ItemStack.AIR, stack);
         assertEquals(Material.CARTOGRAPHY_TABLE, stack.material());
 
-        player.setHeldItemSlot((byte) 0x04);
+        player.setHeldItemSlot((byte) 0x03);
 
         // Simulate using the item
         ClientUseItemPacket packet = new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f);

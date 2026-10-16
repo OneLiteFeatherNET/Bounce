@@ -7,8 +7,11 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.item.ItemStack;
+import net.theevilreaper.bounce.common.push.PushEntry;
 import net.theevilreaper.bounce.setup.data.BounceData;
 import net.theevilreaper.bounce.setup.event.map.SaveValidationPromptEvent;
+import net.theevilreaper.bounce.setup.preview.PushPreviewEntity;
+import net.theevilreaper.bounce.setup.util.SetupMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.function.Consumer;
 
 import static net.theevilreaper.bounce.setup.util.SetupItems.ITEM_TAG;
 import static net.theevilreaper.bounce.setup.util.SetupItems.OVERVIEW_FLAG;
+import static net.theevilreaper.bounce.setup.util.SetupItems.PREVIEW_FLAG;
 import static net.theevilreaper.bounce.setup.util.SetupTags.SETUP_TAG;
 
 public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
@@ -63,6 +67,11 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
             return;
         }
 
+        if (itemId == PREVIEW_FLAG) {
+            launchPreview(player, setupData.getMapBuilder().getPushDataBuilder().getPushValues());
+            return;
+        }
+
         List<String> missingFields = setupData.getMapBuilder().getMissingFieldNames();
         if (!missingFields.isEmpty()) {
             EventDispatcher.call(new SaveValidationPromptEvent(player, missingFields));
@@ -71,5 +80,17 @@ public final class PlayerItemListener implements Consumer<PlayerUseItemEvent> {
 
         setupData.save();
         player.getInventory().setItemStack(0x0, ItemStack.AIR);
+    }
+
+    private void launchPreview(Player player, List<PushEntry> entries) {
+        if (entries.isEmpty()) {
+            player.sendMessage(SetupMessages.PREVIEW_NO_BLOCKS);
+            return;
+        }
+        if (PushPreviewEntity.isRunning(player)) {
+            player.sendMessage(SetupMessages.PREVIEW_RUNNING);
+            return;
+        }
+        PushPreviewEntity.launchAll(player, entries);
     }
 }

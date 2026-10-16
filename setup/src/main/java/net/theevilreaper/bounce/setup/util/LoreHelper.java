@@ -5,10 +5,12 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.theevilreaper.bounce.common.push.PushEntry;
+import net.theevilreaper.bounce.common.push.PushPhysics;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
@@ -18,12 +20,14 @@ public final class LoreHelper {
     private static final Component DISPLAY_NAME = Component.text("Boost Value", NamedTextColor.GREEN);
     private static final Component WEIGHT_DISPLAY_NAME = Component.text("Weight", NamedTextColor.LIGHT_PURPLE);
     private static final Component CURRENT_VALUE = Component.text("Current:", NamedTextColor.GRAY).append(Component.space());
+    private static final Component HEIGHT = Component.text("Height:", NamedTextColor.GRAY).append(Component.space());
     private static final Component LEFT_CLICK = miniMessage().deserialize("<yellow>Left-click</yellow><gray>: <green>Increase</green> the value");
 
     public static ItemStack getPushValue(PushEntry pushEntry) {
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
         lore.add(CURRENT_VALUE.append(Component.text(pushEntry.getValue(), NamedTextColor.YELLOW)));
+        lore.add(getHeight(pushEntry));
         lore.add(Component.empty());
         lore.add(LEFT_CLICK);
         lore.add(Component.empty());
@@ -36,7 +40,7 @@ public final class LoreHelper {
     public static ItemStack getWeight(PushEntry pushEntry) {
         List<Component> lore = new ArrayList<>();
         lore.add(Component.empty());
-        String formatted = String.format(java.util.Locale.ROOT, "%.1f%% (%.3f)", pushEntry.getWeight() * 100.0, pushEntry.getWeight());
+        String formatted = String.format(Locale.ROOT, "%.1f%% (%.3f)", pushEntry.getWeight() * 100.0, pushEntry.getWeight());
         lore.add(CURRENT_VALUE.append(Component.text(formatted, NamedTextColor.YELLOW)));
         lore.add(Component.empty());
         lore.add(miniMessage().deserialize("<yellow>Click</yellow><gray>: <green>Open dialog</green> to edit chance"));
@@ -45,6 +49,11 @@ public final class LoreHelper {
                 .customName(WEIGHT_DISPLAY_NAME)
                 .lore(lore)
                 .build();
+    }
+
+    private static Component getHeight(PushEntry pushEntry) {
+        String formatted = String.format(Locale.ROOT, "~%.1f blocks", PushPhysics.peakHeight(pushEntry.getValue()));
+        return HEIGHT.append(Component.text(formatted, NamedTextColor.YELLOW));
     }
 
     private LoreHelper() {

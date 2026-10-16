@@ -20,6 +20,7 @@ import net.minestom.server.tag.Tag;
 public final class SetupItems {
 
     public static final int OVERVIEW_FLAG = 0x02;
+    public static final int PREVIEW_FLAG = 0x08;
     public static final Tag<Integer> ITEM_TAG = Tag.Integer("item_tag");
     public static final ItemStack DECORATION = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE)
             .customName(Component.empty())
@@ -29,6 +30,7 @@ public final class SetupItems {
     private static final ItemStack SAVE;
     private static final ItemStack VIEW_ITEM;
     private static final ItemStack GROUND_ITEM;
+    private static final ItemStack PREVIEW_ITEM;
 
     static  {
         OVERVIEW = ItemStack.builder(Material.CHEST)
@@ -46,6 +48,10 @@ public final class SetupItems {
         GROUND_ITEM = ItemStack.builder(Material.CARTOGRAPHY_TABLE)
                 .customName(Component.text("Ground Layer", NamedTextColor.GREEN))
                 .set(ITEM_TAG, 0x04)
+                .build();
+        PREVIEW_ITEM = ItemStack.builder(Material.SLIME_BALL)
+                .customName(Component.text("Bounce preview", NamedTextColor.YELLOW))
+                .set(ITEM_TAG, PREVIEW_FLAG)
                 .build();
     }
 
@@ -67,9 +73,10 @@ public final class SetupItems {
      */
     public static void setSetupItems(Player player) {
         player.getInventory().clear();
-        player.getInventory().setItemStack(0x06, SAVE);
-        player.getInventory().setItemStack(0x04, GROUND_ITEM);
-        player.getInventory().setItemStack(0x02, VIEW_ITEM);
+        player.getInventory().setItemStack(0x01, VIEW_ITEM);
+        player.getInventory().setItemStack(0x03, GROUND_ITEM);
+        player.getInventory().setItemStack(0x05, PREVIEW_ITEM);
+        player.getInventory().setItemStack(0x07, SAVE);
         player.setHeldItemSlot((byte) 0);
     }
 

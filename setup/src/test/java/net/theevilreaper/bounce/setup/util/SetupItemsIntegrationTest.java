@@ -41,7 +41,7 @@ class SetupItemsIntegrationTest {
         assertNotNull(player);
 
         SetupItems.setSetupItems(player);
-        ItemStack saveItem = player.getInventory().getItemStack(0x06);
+        ItemStack saveItem = player.getInventory().getItemStack(0x07);
         assertNotNull(saveItem);
         assertNotEquals(Material.AIR, saveItem.material());
         assertEquals(Material.BELL, saveItem.material());
@@ -49,9 +49,13 @@ class SetupItemsIntegrationTest {
         assertEquals(0x01, saveItem.getTag(ITEM_TAG).byteValue());
         assertEquals(0x00, player.getHeldSlot());
 
-        ItemStack groundItem = player.getInventory().getItemStack(0x04);
+        ItemStack groundItem = player.getInventory().getItemStack(0x03);
         assertNotNull(groundItem);
         assertEquals(Material.CARTOGRAPHY_TABLE, groundItem.material());
+
+        ItemStack previewItem = player.getInventory().getItemStack(0x05);
+        assertEquals(Material.SLIME_BALL, previewItem.material());
+        assertEquals(SetupItems.PREVIEW_FLAG, previewItem.getTag(ITEM_TAG));
 
         env.destroyInstance(instance, true);
     }
