@@ -114,6 +114,16 @@ class GameMapBuilderTest {
     }
 
     @Test
+    void testSuperJumpMultiplierDefaultsAndRoundTripsThroughBuild() {
+        GameMapBuilder builder = new GameMapBuilder();
+        assertEquals(GameMap.DEFAULT_SUPER_JUMP_MULTIPLIER, builder.getSuperJumpMultiplier());
+
+        builder.superJumpMultiplier(2.5);
+        assertEquals(2.5, builder.build().getSuperJumpMultiplier());
+        assertEquals(2.5, new GameMapBuilder(builder.build()).getSuperJumpMultiplier());
+    }
+
+    @Test
     void testReloadingExistingMapWithoutAreaKeepsDefaultInterval() {
         GameMap gameMap = new GameMapBuilder().build();
         GameMapBuilder reloaded = new GameMapBuilder(gameMap);

@@ -19,6 +19,7 @@ public final class ValueDialogs extends DialogBase {
     public static final Key SHUFFLE_INTERVAL_KEY = create("shuffle_interval_setup_dialog");
     public static final Key RESHUFFLE_PERCENTAGE_KEY = create("reshuffle_percentage_setup_dialog");
     public static final Key POWER_UP_HEIGHT_KEY = create("power_up_height_setup_dialog");
+    public static final Key SUPER_JUMP_MULTIPLIER_KEY = create("super_jump_multiplier_setup_dialog");
 
     public static void openBounceValue(Player player) {
         open(player, VALUE_KEY, "Change block boost", "How much the block should bounce?",
@@ -43,6 +44,11 @@ public final class ValueDialogs extends DialogBase {
     public static void openPowerUpHeight(Player player) {
         open(player, POWER_UP_HEIGHT_KEY, "Change power-up height", "Height in blocks above the ground\nat which power-ups float:",
                 "power_up_height", "Height", "options.generic_value", 0.5f, 5, 1.5f, 0.25f, 320);
+    }
+
+    public static void openSuperJumpMultiplier(Player player) {
+        open(player, SUPER_JUMP_MULTIPLIER_KEY, "Change jump multiplier", "How much stronger bounce pads push\nwhile super jump is active:",
+                "super_jump_multiplier", "Multiplier", "options.generic_value", 1, 3, 1.5f, 0.1f, 320);
     }
 
     private static void open(

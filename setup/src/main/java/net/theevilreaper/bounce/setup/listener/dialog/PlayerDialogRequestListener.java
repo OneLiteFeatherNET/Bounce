@@ -23,6 +23,7 @@ public final class PlayerDialogRequestListener implements Consumer<PlayerDialogR
             case SETUP_SHUFFLE_INTERVAL -> ValueDialogs.openShuffleInterval(player);
             case SETUP_RESHUFFLE_PERCENTAGE -> ValueDialogs.openReshufflePercentage(player);
             case SETUP_POWER_UP_HEIGHT -> ValueDialogs.openPowerUpHeight(player);
+            case SETUP_SUPER_JUMP_MULTIPLIER -> ValueDialogs.openSuperJumpMultiplier(player);
         }
     }
 }

@@ -24,6 +24,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
     private int shuffleIntervalTicks;
     private double reshufflePercentage;
     private double powerUpHeight;
+    private double superJumpMultiplier;
     private @Nullable Vec pos1;
     private @Nullable Vec pos2;
 
@@ -32,6 +33,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
         this.shuffleIntervalTicks = DEFAULT_SHUFFLE_INTERVAL_TICKS;
         this.reshufflePercentage = DEFAULT_RESHUFFLE_PERCENTAGE;
         this.powerUpHeight = GameMap.DEFAULT_POWER_UP_HEIGHT;
+        this.superJumpMultiplier = GameMap.DEFAULT_SUPER_JUMP_MULTIPLIER;
         this.pushDataBuilder = PushData.builder();
         this.pushDataBuilder
                 .add(PushEntry.groundEntry(Block.GLASS, 1, 1.0))
@@ -53,6 +55,9 @@ public final class GameMapBuilder extends BaseMapBuilder {
         this.powerUpHeight = gameMap.getPowerUpHeight() > 0
                 ? gameMap.getPowerUpHeight()
                 : GameMap.DEFAULT_POWER_UP_HEIGHT;
+        this.superJumpMultiplier = gameMap.getSuperJumpMultiplier() > 0
+                ? gameMap.getSuperJumpMultiplier()
+                : GameMap.DEFAULT_SUPER_JUMP_MULTIPLIER;
 
         if (this.area != null) {
             this.pos1 = this.area.min();
@@ -139,6 +144,17 @@ public final class GameMapBuilder extends BaseMapBuilder {
     }
 
     /**
+     * Sets the factor applied to the bounce-pad push while the super jump power-up is active.
+     *
+     * @param superJumpMultiplier the multiplier
+     * @return this builder instance for chaining
+     */
+    public GameMapBuilder superJumpMultiplier(double superJumpMultiplier) {
+        this.superJumpMultiplier = superJumpMultiplier;
+        return this;
+    }
+
+    /**
      * Sets the first captured corner of the ground area.
      *
      * @param pos1 the corner position, or {@code null} to clear it
@@ -167,7 +183,7 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     @Override
     public GameMap build() {
-        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks, this.reshufflePercentage, this.powerUpHeight, GameMap.DEFAULT_SUPER_JUMP_MULTIPLIER);
+        return new GameMap(this.name, this.spawn, this.gameSpawn, pushDataBuilder.build(), this.builders, this.area, this.shuffleIntervalTicks, this.reshufflePercentage, this.powerUpHeight, this.superJumpMultiplier);
     }
 
     /**
@@ -213,6 +229,15 @@ public final class GameMapBuilder extends BaseMapBuilder {
      */
     public double getPowerUpHeight() {
         return powerUpHeight;
+    }
+
+    /**
+     * Returns the factor applied to the bounce-pad push while the super jump power-up is active.
+     *
+     * @return the multiplier
+     */
+    public double getSuperJumpMultiplier() {
+        return superJumpMultiplier;
     }
 
     /**

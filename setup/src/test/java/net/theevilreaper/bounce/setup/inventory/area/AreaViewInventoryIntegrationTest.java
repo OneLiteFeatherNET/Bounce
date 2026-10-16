@@ -29,6 +29,7 @@ class AreaViewInventoryIntegrationTest {
     private static final int SHUFFLE_INTERVAL_SLOT = 13;
     private static final int RESHUFFLE_PERCENTAGE_SLOT = 14;
     private static final int POWER_UP_HEIGHT_SLOT = 15;
+    private static final int SUPER_JUMP_MULTIPLIER_SLOT = 16;
 
     @Test
     void testPosSlotsUseTheAreaViewTypeMaterials(@NotNull Env env) {
@@ -83,6 +84,28 @@ class AreaViewInventoryIntegrationTest {
         assertNotNull(lore);
         assertTrue(lore.stream().map(PlainTextComponentSerializer.plainText()::serialize).anyMatch(line -> line.contains("2.50 blocks")),
                 "The slot must show the configured height");
+
+        env.destroyInstance(instance, true);
+    }
+
+    @Test
+    void testSuperJumpMultiplierSlotShowsBuilderValue(@NotNull Env env) {
+        Instance instance = env.createFlatInstance();
+        Player player = env.createPlayer(instance);
+        GameMapBuilder gameMapBuilder = new GameMapBuilder();
+        gameMapBuilder.superJumpMultiplier(2.0);
+
+        AreaViewInventory inventory = new AreaViewInventory(player, gameMapBuilder);
+        inventory.open();
+        env.tick();
+
+        ItemStack item = inventory.getDataLayout().getSlot(SUPER_JUMP_MULTIPLIER_SLOT).getItem();
+        assertEquals(Material.RABBIT_FOOT, item.material());
+
+        List<Component> lore = item.get(DataComponents.LORE);
+        assertNotNull(lore);
+        assertTrue(lore.stream().map(PlainTextComponentSerializer.plainText()::serialize).anyMatch(line -> line.contains("2.00x")),
+                "The slot must show the configured multiplier");
 
         env.destroyInstance(instance, true);
     }

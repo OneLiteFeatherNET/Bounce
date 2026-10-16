@@ -15,6 +15,7 @@ import net.theevilreaper.bounce.setup.dialog.handler.DeleteHandler;
 import net.theevilreaper.bounce.setup.dialog.handler.DialogHandler;
 import net.theevilreaper.bounce.setup.dialog.handler.NameHandler;
 import net.theevilreaper.bounce.setup.dialog.handler.PowerUpHeightHandler;
+import net.theevilreaper.bounce.setup.dialog.handler.SuperJumpMultiplierHandler;
 import net.theevilreaper.bounce.setup.dialog.handler.ReshufflePercentageHandler;
 import net.theevilreaper.bounce.setup.dialog.handler.SaveValidationHandler;
 import net.theevilreaper.bounce.setup.dialog.handler.ShuffleIntervalHandler;
@@ -41,7 +42,8 @@ public final class DialogPayloadListener implements Consumer<PlayerCustomClickEv
                 Map.entry(ValueDialogs.WEIGHT_KEY, new WeightHandler(setupDataGetter)),
                 Map.entry(ValueDialogs.SHUFFLE_INTERVAL_KEY, new ShuffleIntervalHandler(setupDataGetter)),
                 Map.entry(ValueDialogs.RESHUFFLE_PERCENTAGE_KEY, new ReshufflePercentageHandler(setupDataGetter)),
-                Map.entry(ValueDialogs.POWER_UP_HEIGHT_KEY, new PowerUpHeightHandler(setupDataGetter))
+                Map.entry(ValueDialogs.POWER_UP_HEIGHT_KEY, new PowerUpHeightHandler(setupDataGetter)),
+                Map.entry(ValueDialogs.SUPER_JUMP_MULTIPLIER_KEY, new SuperJumpMultiplierHandler(setupDataGetter))
         );
     }
 
