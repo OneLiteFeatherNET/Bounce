@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.10.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.9.0...v0.10.0) (2026-10-16)
+
+
+### Features
+
+* **map:** configure super jump multiplier per map ([#154](https://github.com/OneLiteFeatherNET/Bounce/issues/154)) ([7d64749](https://github.com/OneLiteFeatherNET/Bounce/commit/7d6474904b083ddfe5cc10225706b9e82c32dcc7))
+* **powerup:** change rotation ([d6c2bfc](https://github.com/OneLiteFeatherNET/Bounce/commit/d6c2bfc8218b99dd7b0226e7fe84cdf0f85313c5))
+* **powerup:** replace speed with slow falling and add gravity flip ([#153](https://github.com/OneLiteFeatherNET/Bounce/issues/153)) ([4a855c1](https://github.com/OneLiteFeatherNET/Bounce/commit/4a855c10c5768737aef1a83c1f2f695c63456647))
+* **setup:** add bounce preview for push blocks ([#152](https://github.com/OneLiteFeatherNET/Bounce/issues/152)) ([e147785](https://github.com/OneLiteFeatherNET/Bounce/commit/e1477856a3cbfe251fc4c02150aca95f9925b1c3))
+
+
+### Bug Fixes
+
+* **setup:** cache pushIndex through layout rebuilds ([5f5c53c](https://github.com/OneLiteFeatherNET/Bounce/commit/5f5c53cd7fcdaffdda5d164ae05590ae976500ee))
+* **setup:** use push value dialog in each case ([8c3b72a](https://github.com/OneLiteFeatherNET/Bounce/commit/8c3b72a12b58b29a41fed15c1bed92782facfe5e))
+
 ## [0.9.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.8.0...v0.9.0) (2026-10-16)
 
 
