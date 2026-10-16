@@ -3,8 +3,8 @@ package net.theevilreaper.bounce.timer;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.theevilreaper.bounce.common.bootstrap.ServiceShutdown;
 import net.theevilreaper.bounce.util.GameMessages;
 import net.theevilreaper.xerus.api.phase.TickDirection;
 import net.theevilreaper.xerus.api.phase.TimedPhase;
@@ -26,7 +26,7 @@ public class RestartPhase extends TimedPhase {
 
     @Override
     protected void onFinish() {
-        MinecraftServer.stopCleanly();
+        ServiceShutdown.request();
     }
 
     @Override
