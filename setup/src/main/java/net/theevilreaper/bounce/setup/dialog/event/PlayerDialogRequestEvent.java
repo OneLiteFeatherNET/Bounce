@@ -76,7 +76,11 @@ public class PlayerDialogRequestEvent implements PlayerEvent {
         /**
          * The target for the dialog request is to set up the power-up height.
          */
-        SETUP_POWER_UP_HEIGHT
+        SETUP_POWER_UP_HEIGHT,
+        /**
+         * The target for the dialog request is to set up the super jump multiplier.
+         */
+        SETUP_SUPER_JUMP_MULTIPLIER
 
         ;
     }

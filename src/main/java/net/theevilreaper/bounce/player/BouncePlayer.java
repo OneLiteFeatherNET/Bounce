@@ -42,13 +42,13 @@ import java.util.Map;
 public final class BouncePlayer extends PermissionAwarePlayer {
 
     static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
-    private static final double SUPER_JUMP_MULTIPLIER = 1.5;
     // A hit only counts for a kill if the player dies within this time
     static final int DAMAGER_EXPIRY_TICKS = 5 * ServerFlag.SERVER_TICKS_PER_SECOND;
 
     private boolean jumping;
     private @Nullable GameMap map;
     private @Nullable PushData pushData;
+    private double superJumpMultiplier = GameMap.DEFAULT_SUPER_JUMP_MULTIPLIER;
     private Block lastBlockBelow = Block.AIR; // Track previous block below the player
     private long lastPushTime = 0;
 
@@ -75,6 +75,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
     public void startJumping(GameMap bounceMap, PushData pushData) {
         this.map = bounceMap;
         this.pushData = pushData;
+        this.superJumpMultiplier = bounceMap.getSuperJumpMultiplier();
         this.lastBlockBelow = Block.AIR;
         this.jumping = true;
     }
@@ -156,7 +157,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
             if (now - lastPushTime >= PUSH_COOLDOWN_MS) {
                 double pushStrength = PushPhysics.velocity(data.getPush(foundJumpBlock));
                 if (hasPowerUp(PowerUpType.SUPER_JUMP)) {
-                    pushStrength *= SUPER_JUMP_MULTIPLIER;
+                    pushStrength *= superJumpMultiplier;
                 }
                 Vec push = new Vec(0, pushStrength, 0); // Only push upwards
                 setVelocity(push);

@@ -13,7 +13,7 @@ import java.util.List;
  * It holds data about the used positions and other things.
  *
  * @author theEvilReaper
- * @version 1.3.0
+ * @version 1.4.0
  * @since 0.1.0
  */
 public final class GameMap extends BaseMap {
@@ -36,12 +36,19 @@ public final class GameMap extends BaseMap {
      */
     public static final double DEFAULT_POWER_UP_HEIGHT = 1.5;
 
+    /**
+     * Fallback used when a saved map is missing (or has a non-positive) {@code superJumpMultiplier}, e.g. because
+     * it was saved before that field existed.
+     */
+    public static final double DEFAULT_SUPER_JUMP_MULTIPLIER = 1.5;
+
     private final Pos gameSpawn;
     private final PushData pushData;
     private final @Nullable Area area;
     private final int shuffleIntervalTicks;
     private final double reshufflePercentage;
     private final double powerUpHeight;
+    private final double superJumpMultiplier;
 
     /**
      * Creates a new reference from the map class.
@@ -55,8 +62,9 @@ public final class GameMap extends BaseMap {
      * @param shuffleIntervalTicks the amount of ticks between two runtime reshuffles of the area
      * @param reshufflePercentage  the fraction (0.0-1.0) of the area's positions to re-roll on each reshuffle
      * @param powerUpHeight        the height above the ground at which power-ups spawn
+     * @param superJumpMultiplier  the factor applied to the bounce-pad push while the super jump power-up is active
      */
-    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders, @Nullable Area area, int shuffleIntervalTicks, double reshufflePercentage, double powerUpHeight) {
+    public GameMap(String name, Pos spawn, Pos gameSpawn, PushData pushData, List<String> builders, @Nullable Area area, int shuffleIntervalTicks, double reshufflePercentage, double powerUpHeight, double superJumpMultiplier) {
         super(name, spawn, builders);
         this.gameSpawn = gameSpawn;
         this.pushData = pushData;
@@ -64,6 +72,7 @@ public final class GameMap extends BaseMap {
         this.shuffleIntervalTicks = shuffleIntervalTicks;
         this.reshufflePercentage = reshufflePercentage;
         this.powerUpHeight = powerUpHeight;
+        this.superJumpMultiplier = superJumpMultiplier;
     }
 
     /**
@@ -118,5 +127,16 @@ public final class GameMap extends BaseMap {
      */
     public double getPowerUpHeight() {
         return powerUpHeight;
+    }
+
+    /**
+     * Returns the factor applied to the bounce-pad push while the super jump power-up is active.
+     *
+     * Falls back to {@link #DEFAULT_SUPER_JUMP_MULTIPLIER} if the stored value is not positive.
+     *
+     * @return the multiplier
+     */
+    public double getSuperJumpMultiplier() {
+        return superJumpMultiplier > 0 ? superJumpMultiplier : DEFAULT_SUPER_JUMP_MULTIPLIER;
     }
 }

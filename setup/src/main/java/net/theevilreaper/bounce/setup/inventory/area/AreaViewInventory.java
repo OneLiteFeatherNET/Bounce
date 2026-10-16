@@ -19,6 +19,7 @@ import net.theevilreaper.bounce.setup.inventory.slot.area.AreaCornerSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.area.PowerUpHeightSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.area.ReshufflePercentageSlot;
 import net.theevilreaper.bounce.setup.inventory.slot.area.ShuffleIntervalSlot;
+import net.theevilreaper.bounce.setup.inventory.slot.area.SuperJumpMultiplierSlot;
 import org.jetbrains.annotations.Contract;
 
 import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
@@ -26,7 +27,7 @@ import static net.theevilreaper.bounce.setup.util.SetupItems.DECORATION;
 public final class AreaViewInventory extends PersonalInventoryBuilder {
 
     private static final Component TITLE = Component.text("Setup area");
-    private static final int[] SLOTS = new int[]{11, 12, 13, 14, 15};
+    private static final int[] SLOTS = new int[]{11, 12, 13, 14, 15, 16};
 
     private final GameMapBuilder gameMapBuilder;
 
@@ -67,6 +68,7 @@ public final class AreaViewInventory extends PersonalInventoryBuilder {
             case SHUFFLE_INTERVAL -> new ShuffleIntervalSlot(AreaViewType.SHUFFLE_INTERVAL, gameMapBuilder.getShuffleIntervalTicks());
             case RESHUFFLE_PERCENTAGE ->  new ReshufflePercentageSlot(AreaViewType.RESHUFFLE_PERCENTAGE, gameMapBuilder.getReshufflePercentage());
             case POWER_UP_HEIGHT -> new PowerUpHeightSlot(AreaViewType.POWER_UP_HEIGHT, gameMapBuilder.getPowerUpHeight());
+            case SUPER_JUMP_MULTIPLIER -> new SuperJumpMultiplierSlot(AreaViewType.SUPER_JUMP_MULTIPLIER, gameMapBuilder.getSuperJumpMultiplier());
         };
     }
 
