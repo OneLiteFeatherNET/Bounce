@@ -132,9 +132,11 @@ public final class GameMap extends BaseMap {
     /**
      * Returns the factor applied to the bounce-pad push while the super jump power-up is active.
      *
+     * Falls back to {@link #DEFAULT_SUPER_JUMP_MULTIPLIER} if the stored value is not positive.
+     *
      * @return the multiplier
      */
     public double getSuperJumpMultiplier() {
-        return superJumpMultiplier;
+        return superJumpMultiplier > 0 ? superJumpMultiplier : DEFAULT_SUPER_JUMP_MULTIPLIER;
     }
 }
