@@ -30,7 +30,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("shadow", "9.6.1")
             version("aonyx", "0.8.9")
-            version("pvp", "2026.05.30-26.1.1")
+            version("pvp", "2026.09.12-26.2")
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.20")
             version("falco", "3.0.1")
@@ -48,7 +48,7 @@ dependencyResolutionManagement {
 
             library("slf4j.api", "org.slf4j", "slf4j-api").versionRef("slf4j")
             library("slf4j.simple", "org.slf4j", "slf4j-simple").versionRef("slf4j")
-            library("pvp", "io.github.togar2", "MinestomPvP").versionRef("pvp")
+            library("pvp", "rocks.minestom", "pvp").versionRef("pvp")
             library("minestom", "net.minestom", "minestom").withoutVersion()
             library("adventure", "net.kyori", "adventure-text-minimessage").withoutVersion()
             library("cyano", "net.onelitefeather", "cyano").withoutVersion()
