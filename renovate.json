@@ -3,5 +3,12 @@
   "extends": [
     "github>OneLiteFeatherNET/renovate:default(OneLiteFeatherNET/core-team)",
     "github>OneLiteFeatherNET/renovate:minestom"
+  ],
+  "packageRules": [
+    {
+      "description": "Vibenilla PvP is updated manually",
+      "matchPackageNames": ["rocks.minestom:pvp"],
+      "enabled": false
+    }
   ]
 }
