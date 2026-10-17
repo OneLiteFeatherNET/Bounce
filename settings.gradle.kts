@@ -30,7 +30,7 @@ dependencyResolutionManagement {
         create("libs") {
             version("shadow", "9.6.1")
             version("aonyx", "0.8.9")
-            version("pvp", "2026.09.12-26.2")
+            version("pvp", "2026.10.13-26.3")
             version("cloudnet", "4.0.0-RC18-SNAPSHOT")
             version("slf4j", "2.0.20")
             version("falco", "3.0.1")
