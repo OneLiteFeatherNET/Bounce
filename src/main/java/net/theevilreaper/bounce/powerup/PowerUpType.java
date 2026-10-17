@@ -3,9 +3,9 @@ package net.theevilreaper.bounce.powerup;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.property.ServerProperties;
 
 /**
  * The {@link PowerUpType} enum contains every power-up which can spawn during a round.
@@ -91,6 +91,6 @@ public enum PowerUpType {
      * @return the duration in ticks
      */
     public int getDurationTicks() {
-        return durationSeconds * ServerFlag.SERVER_TICKS_PER_SECOND;
+        return durationSeconds * ServerProperties.SERVER_TICKS_PER_SECOND.get();
     }
 }

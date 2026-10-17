@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.player;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
@@ -13,6 +12,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.property.ServerProperties;
 import net.theevilreaper.bounce.attribute.AttributeHelper;
 import net.theevilreaper.bounce.common.map.GameMap;
 import net.theevilreaper.bounce.common.player.PermissionAwarePlayer;
@@ -43,7 +43,7 @@ public final class BouncePlayer extends PermissionAwarePlayer {
 
     static final long PUSH_COOLDOWN_MS = 200; // 200 ms cooldown
     // A hit only counts for a kill if the player dies within this time
-    static final int DAMAGER_EXPIRY_TICKS = 5 * ServerFlag.SERVER_TICKS_PER_SECOND;
+    static final int DAMAGER_EXPIRY_TICKS = 5 * ServerProperties.SERVER_TICKS_PER_SECOND.get();
 
     private boolean jumping;
     private @Nullable GameMap map;

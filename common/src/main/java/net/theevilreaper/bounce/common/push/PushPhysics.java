@@ -1,6 +1,6 @@
 package net.theevilreaper.bounce.common.push;
 
-import net.minestom.server.ServerFlag;
+import net.minestom.server.property.ServerProperties;
 
 /**
  * The {@link PushPhysics} class contains the values which are used to convert a push value into an upwards velocity.
@@ -44,7 +44,7 @@ public final class PushPhysics {
      * @return the velocity in blocks per tick
      */
     public static double velocityPerTick(double pushValue) {
-        return velocity(pushValue) / ServerFlag.SERVER_TICKS_PER_SECOND;
+        return velocity(pushValue) / ServerProperties.SERVER_TICKS_PER_SECOND.get();
     }
 
     /**
