@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.10.0...v0.10.1) (2026-10-18)
+
+
+### Bug Fixes
+
+* **config:** update min player count to two ([d0a2ff8](https://github.com/OneLiteFeatherNET/Bounce/commit/d0a2ff8c619fc26bef4e50eec8974da8b3675af9))
+* **physic:** avoid deprecated code ([4878df2](https://github.com/OneLiteFeatherNET/Bounce/commit/4878df2b33e1ffddaf3f8bcf3a515666ef0b4c24))
+
 ## [0.10.0](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.9.0...v0.10.0) (2026-10-16)
 
 
