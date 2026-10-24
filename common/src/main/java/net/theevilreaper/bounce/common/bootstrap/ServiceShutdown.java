@@ -1,7 +1,6 @@
 package net.theevilreaper.bounce.common.bootstrap;
 
 import net.minestom.server.MinecraftServer;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

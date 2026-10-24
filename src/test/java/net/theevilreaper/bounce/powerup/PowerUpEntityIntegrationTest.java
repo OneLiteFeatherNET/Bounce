@@ -2,7 +2,6 @@ package net.theevilreaper.bounce.powerup;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.testing.Env;

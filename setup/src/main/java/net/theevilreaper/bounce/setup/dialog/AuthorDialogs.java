@@ -9,7 +9,6 @@ import net.minestom.server.dialog.DialogAfterAction;
 import net.minestom.server.entity.Player;
 import net.onelitefeather.pica.dialog.DialogTemplate;
 import net.onelitefeather.pica.dialog.type.DialogType;
-import org.jetbrains.annotations.NotNull;
 
 public final class AuthorDialogs extends DialogBase {
 
