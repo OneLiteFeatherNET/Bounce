@@ -37,7 +37,7 @@ dependencyResolutionManagement {
             version("luckperms", "6.0.2")
             version("luckperms-minestom-loader", "6.0.2")
             version("minestom-extensions", "2.2.0")
-            version("guava", "33.7.2-jre")
+            version("guava", "33.8.0-jre")
             version("pica", "0.1.6")
             version("sentry", "8.62.0")
 
