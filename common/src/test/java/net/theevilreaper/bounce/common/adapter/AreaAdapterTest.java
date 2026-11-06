@@ -66,7 +66,6 @@ class AreaAdapterTest {
         Area area = new GroundArea(Vec.ZERO, new Vec(5, 0, 5), Block.GRASS_BLOCK, data);
         assertNotNull(area);
         String json = GsonUtil.GSON.toJson(area, Area.class);
-        System.out.println(json);
         assertNotNull(json);
         assertAll(
                 "Contains checks for the json",
