@@ -136,7 +136,7 @@ class PhaseIntegrationTest {
         // never actually finishes the phase, this callback - and therefore the server stop - never
         // happens, even though the round visibly "ended" via the BounceGameFinishEvent.
         AtomicBoolean advancedToNextPhase = new AtomicBoolean(false);
-        playingPhase.setFinishedCallback(() -> advancedToNextPhase.set(true));
+        playingPhase.addFinishedCallback(() -> advancedToNextPhase.set(true));
 
         // Mirrors production net.minestom.server.network.player.PlayerConnection#disconnect():
         // it calls ConnectionManager#removePlayer(connection) synchronously and only *schedules*

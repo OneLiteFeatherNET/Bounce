@@ -3,7 +3,6 @@ package net.theevilreaper.bounce.setup.item;
 import net.minestom.testing.extension.MicrotusExtension;
 import net.onelitefeather.guira.SetupDataService;
 import net.theevilreaper.aves.file.FileHandler;
-import net.theevilreaper.aves.file.GsonFileHandler;
 import net.theevilreaper.aves.util.functional.PlayerConsumer;
 import net.theevilreaper.bounce.common.util.GsonUtil;
 import net.theevilreaper.bounce.setup.inventory.MapDataTestBase;
@@ -29,7 +28,7 @@ public abstract class SetupItemTestBase extends MapDataTestBase {
 
     @BeforeAll
     static void setUp() {
-        fileHandler = new GsonFileHandler(GsonUtil.GSON);
+        fileHandler = GsonUtil.GSON_FILE_HANDLER;
         setupDataService = SetupDataService.create();
     }
 }
