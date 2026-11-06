@@ -39,7 +39,7 @@ dependencyResolutionManagement {
             version("minestom-extensions", "2.2.0")
             version("guava", "33.8.0-jre")
             version("pica", "0.1.6")
-            version("sentry", "8.62.0")
+            version("sentry", "8.63.0")
 
             library("aonyx.bom", "net.onelitefeather", "aonyx-bom").versionRef("aonyx")
 
