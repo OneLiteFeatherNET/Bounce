@@ -21,9 +21,11 @@ public final class ValueDialogs extends DialogBase {
     public static final Key POWER_UP_HEIGHT_KEY = create("power_up_height_setup_dialog");
     public static final Key SUPER_JUMP_MULTIPLIER_KEY = create("super_jump_multiplier_setup_dialog");
 
+    private static final String OPTIONS_LABEL = "options.generic_value";
+
     public static void openBounceValue(Player player) {
         open(player, VALUE_KEY, "Change block boost", "How much the block should bounce?",
-                "bounce_amount", "Amount", "options.generic_value", 1, 10, 1, 1, 200);
+                "bounce_amount", "Amount", OPTIONS_LABEL, 1, 10, 1, 1, 200);
     }
 
     public static void openWeight(Player player) {
@@ -33,7 +35,7 @@ public final class ValueDialogs extends DialogBase {
 
     public static void openShuffleInterval(Player player) {
         open(player, SHUFFLE_INTERVAL_KEY, "Change shuffle interval", "Reshuffle interval in ticks (20 ticks = 1 second):",
-                "interval_ticks", "Interval", "options.generic_value", 20, 600, 100, 10, 320);
+                "interval_ticks", "Interval", OPTIONS_LABEL, 20, 600, 100, 10, 320);
     }
 
     public static void openReshufflePercentage(Player player) {
@@ -43,12 +45,12 @@ public final class ValueDialogs extends DialogBase {
 
     public static void openPowerUpHeight(Player player) {
         open(player, POWER_UP_HEIGHT_KEY, "Change power-up height", "Height in blocks above the ground\nat which power-ups float:",
-                "power_up_height", "Height", "options.generic_value", 0.5f, 5, 1.5f, 0.25f, 320);
+                "power_up_height", "Height", OPTIONS_LABEL, 0.5f, 5, 1.5f, 0.25f, 320);
     }
 
     public static void openSuperJumpMultiplier(Player player) {
         open(player, SUPER_JUMP_MULTIPLIER_KEY, "Change jump multiplier", "How much stronger bounce pads push\nwhile super jump is active:",
-                "super_jump_multiplier", "Multiplier", "options.generic_value", 1, 3, 1.5f, 0.1f, 320);
+                "super_jump_multiplier", "Multiplier", OPTIONS_LABEL, 1, 3, 1.5f, 0.1f, 320);
     }
 
     private static void open(
