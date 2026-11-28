@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.10.2](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.10.1...v0.10.2) (2026-11-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v33.8.0 ([#165](https://github.com/OneLiteFeatherNET/Bounce/issues/165)) ([47437b6](https://github.com/OneLiteFeatherNET/Bounce/commit/47437b69438d93d749e1f2730feada31309a823d))
+* **deps:** update dependency io.sentry:sentry to v8.61.1 ([#161](https://github.com/OneLiteFeatherNET/Bounce/issues/161)) ([6eae376](https://github.com/OneLiteFeatherNET/Bounce/commit/6eae376b6458878c712b40bc7b580dfdc2135969))
+* **deps:** update dependency io.sentry:sentry to v8.62.0 ([#164](https://github.com/OneLiteFeatherNET/Bounce/issues/164)) ([307f551](https://github.com/OneLiteFeatherNET/Bounce/commit/307f551bcc4814e79a658f62f036f3ddcfd56260))
+* **deps:** update dependency io.sentry:sentry to v8.63.0 ([#166](https://github.com/OneLiteFeatherNET/Bounce/issues/166)) ([ff9fdc0](https://github.com/OneLiteFeatherNET/Bounce/commit/ff9fdc0510cbd6af042587a4f522fadbf0f39852))
+* **deps:** update dependency io.sentry:sentry to v8.64.0 ([#170](https://github.com/OneLiteFeatherNET/Bounce/issues/170)) ([4409627](https://github.com/OneLiteFeatherNET/Bounce/commit/440962756c830cc3372a14196230d4c34a943721))
+* **deps:** update dependency io.sentry:sentry to v8.65.0 ([#171](https://github.com/OneLiteFeatherNET/Bounce/issues/171)) ([d7d7c1e](https://github.com/OneLiteFeatherNET/Bounce/commit/d7d7c1ec5a822af0713d2881cd17cddce5bc8c6c))
+* **deps:** update dependency io.sentry:sentry to v8.65.1 ([#175](https://github.com/OneLiteFeatherNET/Bounce/issues/175)) ([dc918c1](https://github.com/OneLiteFeatherNET/Bounce/commit/dc918c1c62424a074ce8d4888cbd45cfd11338f7))
+* **deps:** update dependency io.sentry:sentry to v8.66.0 ([#176](https://github.com/OneLiteFeatherNET/Bounce/issues/176)) ([bd68b46](https://github.com/OneLiteFeatherNET/Bounce/commit/bd68b46339386a05919a452bb5e183a61aee01a3))
+* **deps:** update dependency net.onelitefeather:falco-bom to v3.0.2 ([#173](https://github.com/OneLiteFeatherNET/Bounce/issues/173)) ([77d35c5](https://github.com/OneLiteFeatherNET/Bounce/commit/77d35c52ea14318786f528d792c18961ce360453))
+* **deps:** update dependency net.onelitefeather:pica to v0.1.6 ([#162](https://github.com/OneLiteFeatherNET/Bounce/issues/162)) ([0c74718](https://github.com/OneLiteFeatherNET/Bounce/commit/0c747180417071bf248701bd7bb5a4549d2e9717))
+* **deps:** update dependency net.onelitefeather:pica to v0.1.7 ([#177](https://github.com/OneLiteFeatherNET/Bounce/issues/177)) ([6822e2f](https://github.com/OneLiteFeatherNET/Bounce/commit/6822e2f974862a4b32d26292a25ff0526d2c9f59))
+
 ## [0.10.1](https://github.com/OneLiteFeatherNET/Bounce/compare/v0.10.0...v0.10.1) (2026-10-18)
 
 
